@@ -7,9 +7,18 @@ def getScript():
     ["CHAPTER", {"number": 1, "title": "Sudden Complications"}],
     ["BGM", {"file": "filename.mp3"}],
     ["SFX", {"file": "filename.mp3"}],
-    ["TEXT", {"speaker": "Bob", "body": "Text body goes here."}],
-    ["TEXT", {"speaker": "Jane", "body": "Ah."}],
-    ["TEXT", {"speaker": "Jane", "body": "That's not right."}],
+    ["TEXT", {
+      "speaker": "Bob", 
+      "body": "Text body goes here.", 
+      "size": "small"}],
+    ["TEXT", {
+      "speaker": "Jane", 
+      "body": "Ah.", 
+      "size": "small"}],
+    ["TEXT", {
+      "speaker": "Jane", 
+      "body": "That's not right.", 
+      "size": "small"}],
     ["CHAPTER", {"number": 2, "title": "Everything's Better Now"}]
   ]
 

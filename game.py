@@ -13,7 +13,7 @@ except:
   pygame.QUIT
 
 try:
-  title_assets = assets_file.getTitleAssets()
+  assets = assets_file.getAssets()
 except:
   print("An error occurred when retrieving the title assets\nExiting...")
   pygame.QUIT
@@ -65,24 +65,24 @@ volume_sfx = 0.5
 
 # Title assets
 TITLE_BACKGROUND = pygame.image.load(
-    BG_PATH + title_assets["TITLE_BG"])
+    BG_PATH + assets["TITLE_BG"])
 TITLE_BTN_START = pygame.image.load(
-    SPRITE_PATH + title_assets["TITLE_START_BTN"]).convert()
+    SPRITE_PATH + assets["TITLE_START_BTN"]).convert()
 TITLE_BTN_LOAD = pygame.image.load(
-    SPRITE_PATH + title_assets["TITLE_LOAD_BTN"]).convert()
+    SPRITE_PATH + assets["TITLE_LOAD_BTN"]).convert()
 TITLE_BTN_SETTINGS = pygame.image.load(
-    SPRITE_PATH + title_assets["TITLE_SETTINGS_BTN"]).convert()
+    SPRITE_PATH + assets["TITLE_SETTINGS_BTN"]).convert()
 TITLE_BTN_QUIT = pygame.image.load(
-    SPRITE_PATH + title_assets["TITLE_QUIT_BTN"]).convert()
+    SPRITE_PATH + assets["TITLE_QUIT_BTN"]).convert()
 
 title_start = TITLE_BTN_START.get_rect(
-    topleft=title_assets["TITLE_START_BTN_ORIGIN"])
+    topleft=assets["TITLE_START_BTN_ORIGIN"])
 title_load = TITLE_BTN_LOAD.get_rect(
-    topleft=title_assets["TITLE_LOAD_BTN_ORIGIN"])
+    topleft=assets["TITLE_LOAD_BTN_ORIGIN"])
 title_settings = TITLE_BTN_SETTINGS.get_rect(
-    topleft=title_assets["TITLE_SETTINGS_BTN_ORIGIN"])
+    topleft=assets["TITLE_SETTINGS_BTN_ORIGIN"])
 title_quit = TITLE_BTN_QUIT.get_rect(
-    topleft=title_assets["TITLE_QUIT_BTN_ORIGIN"])
+    topleft=assets["TITLE_QUIT_BTN_ORIGIN"])
 
 title_bgm_playing = False
 
@@ -107,6 +107,8 @@ while RUNNING:
   # Draw black screen
   screen.fill(BLACK)
 
+  # Use number keys to quickly switch between states for testing
+
   ################################################################################
   #
   # TITLE SCREEN
@@ -115,7 +117,7 @@ while RUNNING:
   if current_state == State.TITLE:
     # Set BG music
     if not(title_bgm_playing):
-      mixer.music.load(BGM_PATH + title_assets["TITLE_BGM"])
+      mixer.music.load(BGM_PATH + assets["TITLE_BGM"])
       mixer.music.set_volume(volume_bgm)
       mixer.music.play(-1)
 
@@ -125,10 +127,10 @@ while RUNNING:
     screen.blit(TITLE_BACKGROUND, (0, 0))
 
     # Draw buttons
-    screen.blit(TITLE_BTN_START, title_assets["TITLE_START_BTN_ORIGIN"])
-    screen.blit(TITLE_BTN_LOAD, title_assets["TITLE_LOAD_BTN_ORIGIN"])
-    screen.blit(TITLE_BTN_SETTINGS, title_assets["TITLE_SETTINGS_BTN_ORIGIN"])
-    screen.blit(TITLE_BTN_QUIT, title_assets["TITLE_QUIT_BTN_ORIGIN"])
+    screen.blit(TITLE_BTN_START, assets["TITLE_START_BTN_ORIGIN"])
+    screen.blit(TITLE_BTN_LOAD, assets["TITLE_LOAD_BTN_ORIGIN"])
+    screen.blit(TITLE_BTN_SETTINGS, assets["TITLE_SETTINGS_BTN_ORIGIN"])
+    screen.blit(TITLE_BTN_QUIT, assets["TITLE_QUIT_BTN_ORIGIN"])
 
     for event in pygame.event.get():
       # Stop RUNNING if QUIT event detected
@@ -158,6 +160,28 @@ while RUNNING:
 
   ################################################################################
   #
+  # LOAD SCREEN
+  #
+  ################################################################################
+  elif current_state == State.LOAD:
+    for event in pygame.event.get():
+      # Stop RUNNING if QUIT event detected
+      if event.type == pygame.QUIT:
+        RUNNING = False
+
+  ################################################################################
+  #
+  # SAVE SCREEN
+  #
+  ################################################################################
+  elif current_state == State.SAVE:
+    for event in pygame.event.get():
+      # Stop RUNNING if QUIT event detected
+      if event.type == pygame.QUIT:
+        RUNNING = False
+
+  ################################################################################
+  #
   # GAME SCREEN
   #
   ################################################################################
@@ -183,6 +207,28 @@ while RUNNING:
           # Make sure to stop any music playing before returning to title
 
           current_state = State.TITLE
+
+  ################################################################################
+  #
+  # SAVE SCREEN
+  #
+  ################################################################################
+  elif current_state == State.SETTINGS:
+    for event in pygame.event.get():
+      # Stop RUNNING if QUIT event detected
+      if event.type == pygame.QUIT:
+        RUNNING = False
+
+  ################################################################################
+  #
+  # CREDITS SCREEN
+  #
+  ################################################################################
+  else:
+    for event in pygame.event.get():
+      # Stop RUNNING if QUIT event detected
+      if event.type == pygame.QUIT:
+        RUNNING = False
 
     ################################################################################
     # Run through game script
