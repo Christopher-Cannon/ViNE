@@ -1,5 +1,5 @@
-import script as script_file
-import assets as assets_file
+import script as s
+import assets as a  # Should really be called game config or something
 import pygame
 from pygame import mixer
 from enum import Enum
@@ -7,27 +7,20 @@ from enum import Enum
 pygame.init()
 
 try:
-  script = script_file.getScript()
+  script = s.getScript()
 except:
   print("An error occurred when retrieving the script\nExiting...")
   pygame.QUIT
 
-try:
-  assets = assets_file.getAssets()
-except:
-  print("An error occurred when retrieving the title assets\nExiting...")
-  pygame.QUIT
-
-# Where are we in the script
+# Our current position in the script
 current_index = 0
 
-WIDTH = 800
-HEIGHT = 600
+WIDTH = 960
+HEIGHT = 720
 
-# Create screen of 800 wide and 600 height
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-RUNNING = True
+running = True
 
 class State:
   TITLE = 0
@@ -39,59 +32,41 @@ class State:
 
 current_state = State.TITLE
 
-# Paths to assets
-BG_PATH = 'backgrounds/'
-FONT_PATH = 'fonts/'
-BGM_PATH = 'music/'
-SFX_PATH = 'sounds/'
-SPRITE_PATH = 'sprites/'
-
-# Various commands that can be included in scripts
-TEXT = "TEXT"
-BG_IMG = "BG_IMG"
-SPRITE = "SPRITE"
-BGM = "BGM"
-SFX = "SFX"
-CHAPTER = "CHAPTER"
-
-# Colours
-WHITE = (255, 255, 255)
-GREY = (100, 100, 100)
-BLACK = (0, 0, 0)
+# Title assets
+TITLE_BACKGROUND = pygame.image.load(
+    a.BG_PATH + a.assets["TITLE_BG"])
+TITLE_BTN_START = pygame.image.load(
+    a.SPRITE_PATH + a.assets["TITLE_START_BTN"]).convert()
+TITLE_BTN_LOAD = pygame.image.load(
+    a.SPRITE_PATH + a.assets["TITLE_LOAD_BTN"]).convert()
+TITLE_BTN_SETTINGS = pygame.image.load(
+    a.SPRITE_PATH + a.assets["TITLE_SETTINGS_BTN"]).convert()
+TITLE_BTN_QUIT = pygame.image.load(
+    a.SPRITE_PATH + a.assets["TITLE_QUIT_BTN"]).convert()
 
 # Game settings - move to config file?
 volume_bgm = 0
 volume_sfx = 0.5
 
-# Title assets
-TITLE_BACKGROUND = pygame.image.load(
-    BG_PATH + assets["TITLE_BG"])
-TITLE_BTN_START = pygame.image.load(
-    SPRITE_PATH + assets["TITLE_START_BTN"]).convert()
-TITLE_BTN_LOAD = pygame.image.load(
-    SPRITE_PATH + assets["TITLE_LOAD_BTN"]).convert()
-TITLE_BTN_SETTINGS = pygame.image.load(
-    SPRITE_PATH + assets["TITLE_SETTINGS_BTN"]).convert()
-TITLE_BTN_QUIT = pygame.image.load(
-    SPRITE_PATH + assets["TITLE_QUIT_BTN"]).convert()
-
 title_start = TITLE_BTN_START.get_rect(
-    topleft=assets["TITLE_START_BTN_ORIGIN"])
+    topleft=a.assets["TITLE_START_BTN_ORIGIN"])
 title_load = TITLE_BTN_LOAD.get_rect(
-    topleft=assets["TITLE_LOAD_BTN_ORIGIN"])
+    topleft=a.assets["TITLE_LOAD_BTN_ORIGIN"])
 title_settings = TITLE_BTN_SETTINGS.get_rect(
-    topleft=assets["TITLE_SETTINGS_BTN_ORIGIN"])
+    topleft=a.assets["TITLE_SETTINGS_BTN_ORIGIN"])
 title_quit = TITLE_BTN_QUIT.get_rect(
-    topleft=assets["TITLE_QUIT_BTN_ORIGIN"])
+    topleft=a.assets["TITLE_QUIT_BTN_ORIGIN"])
 
 title_bgm_playing = False
 
 # Event handlers
 def drawBG(filename, x, y):
-  print("\nDraw BG {} at position {}, {}".format(BG_PATH + filename, x, y))
+  print("\nDraw BG {} at position {}, {}".format(
+      a.BG_PATH + filename, x, y))
 
 def drawSprite(filename, x, y):
-  print("\nDraw sprite {} at position {}, {}".format(SPRITE_PATH + filename, x, y))
+  print("\nDraw sprite {} at position {}, {}".format(
+      a.SPRITE_PATH + filename, x, y))
 
 def displayText(speaker, body):
   print("\n{}: {}".format(speaker, body))
@@ -103,11 +78,9 @@ def playSFX():
   print("playSFX() called")
 
 # Game loop
-while RUNNING:
+while running:
   # Draw black screen
-  screen.fill(BLACK)
-
-  # Use number keys to quickly switch between states for testing
+  screen.fill(a.BLACK)
 
   ################################################################################
   #
@@ -117,7 +90,7 @@ while RUNNING:
   if current_state == State.TITLE:
     # Set BG music
     if not(title_bgm_playing):
-      mixer.music.load(BGM_PATH + assets["TITLE_BGM"])
+      mixer.music.load(a.BGM_PATH + a.assets["TITLE_BGM"])
       mixer.music.set_volume(volume_bgm)
       mixer.music.play(-1)
 
@@ -127,15 +100,15 @@ while RUNNING:
     screen.blit(TITLE_BACKGROUND, (0, 0))
 
     # Draw buttons
-    screen.blit(TITLE_BTN_START, assets["TITLE_START_BTN_ORIGIN"])
-    screen.blit(TITLE_BTN_LOAD, assets["TITLE_LOAD_BTN_ORIGIN"])
-    screen.blit(TITLE_BTN_SETTINGS, assets["TITLE_SETTINGS_BTN_ORIGIN"])
-    screen.blit(TITLE_BTN_QUIT, assets["TITLE_QUIT_BTN_ORIGIN"])
+    screen.blit(TITLE_BTN_START, a.assets["TITLE_START_BTN_ORIGIN"])
+    screen.blit(TITLE_BTN_LOAD, a.assets["TITLE_LOAD_BTN_ORIGIN"])
+    screen.blit(TITLE_BTN_SETTINGS, a.assets["TITLE_SETTINGS_BTN_ORIGIN"])
+    screen.blit(TITLE_BTN_QUIT, a.assets["TITLE_QUIT_BTN_ORIGIN"])
 
     for event in pygame.event.get():
-      # Stop RUNNING if QUIT event detected
+      # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
-        RUNNING = False
+        running = False
       
       if event.type == pygame.MOUSEBUTTONDOWN:
         mouse_x, mouse_y = event.pos
@@ -156,7 +129,7 @@ while RUNNING:
         if title_quit.collidepoint(mouse_x, mouse_y):
           print("Quit btn clicked")
 
-          RUNNING = False
+          running = False
 
   ################################################################################
   #
@@ -165,9 +138,9 @@ while RUNNING:
   ################################################################################
   elif current_state == State.LOAD:
     for event in pygame.event.get():
-      # Stop RUNNING if QUIT event detected
+      # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
-        RUNNING = False
+        running = False
 
   ################################################################################
   #
@@ -176,9 +149,9 @@ while RUNNING:
   ################################################################################
   elif current_state == State.SAVE:
     for event in pygame.event.get():
-      # Stop RUNNING if QUIT event detected
+      # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
-        RUNNING = False
+        running = False
 
   ################################################################################
   #
@@ -187,13 +160,13 @@ while RUNNING:
   ################################################################################
   elif current_state == State.GAME:
     for event in pygame.event.get():
-      # Stop RUNNING if QUIT event detected
+      # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
-        RUNNING = False
+        running = False
 
       if event.type == pygame.KEYDOWN:
         # Let player advance to next line in script if current index is TEXT
-        if event.key == pygame.K_SPACE and script[current_index][1] is TEXT:
+        if event.key == pygame.K_SPACE and script[current_index][1] is a.TEXT:
           if current_index + 1 < len(script):
             current_index += 1
 
@@ -208,28 +181,6 @@ while RUNNING:
 
           current_state = State.TITLE
 
-  ################################################################################
-  #
-  # SAVE SCREEN
-  #
-  ################################################################################
-  elif current_state == State.SETTINGS:
-    for event in pygame.event.get():
-      # Stop RUNNING if QUIT event detected
-      if event.type == pygame.QUIT:
-        RUNNING = False
-
-  ################################################################################
-  #
-  # CREDITS SCREEN
-  #
-  ################################################################################
-  else:
-    for event in pygame.event.get():
-      # Stop RUNNING if QUIT event detected
-      if event.type == pygame.QUIT:
-        RUNNING = False
-
     ################################################################################
     # Run through game script
     ################################################################################
@@ -241,21 +192,43 @@ while RUNNING:
       obj = script[current_index][-1]
 
       # Do command-specific actions
-      if cmd is SPRITE:
+      if cmd is a.SPRITE:
         drawSprite(obj["file"], obj["x"], obj["y"])
-      elif cmd is BG_IMG:
+      elif cmd is a.BG_IMG:
         drawBG(obj["file"], obj["x"], obj["y"])
-      elif cmd is TEXT:
+      elif cmd is a.TEXT:
         displayText(obj["speaker"], obj["body"])
-      elif cmd is BGM:
+      elif cmd is a.BGM:
         playBGM()
-      elif cmd is SFX:
+      elif cmd is a.SFX:
         playSFX()
 
       # Do not advance if current index is TEXT
-      if not(script[current_index][1] is TEXT):
+      if not(script[current_index][1] is a.TEXT):
         if current_index + 1 < len(script):
           current_index += 1
+
+  ################################################################################
+  #
+  # SAVE SCREEN
+  #
+  ################################################################################
+  elif current_state == State.SETTINGS:
+    for event in pygame.event.get():
+      # Stop running if QUIT event detected
+      if event.type == pygame.QUIT:
+        running = False
+
+  ################################################################################
+  #
+  # CREDITS SCREEN
+  #
+  ################################################################################
+  elif current_state == State.CREDITS:
+    for event in pygame.event.get():
+      # Stop running if QUIT event detected
+      if event.type == pygame.QUIT:
+        running = False
 
   # Update screen
   pygame.display.update()
