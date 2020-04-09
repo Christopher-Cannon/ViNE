@@ -52,8 +52,7 @@ BG_IMG = "BG_IMG"
 SPRITE = "SPRITE"
 BGM = "BGM"
 SFX = "SFX"
-BGM_VOL = "BGM_VOLUME"
-SFX_VOL = "SFX_VOLUME"
+CHAPTER = "CHAPTER"
 
 # Colours
 WHITE = (255, 255, 255)
@@ -65,16 +64,25 @@ volume_bgm = 0
 volume_sfx = 0.5
 
 # Title assets
-TITLE_BACKGROUND = pygame.image.load(BG_PATH + title_assets["TITLE_BG"])
-TITLE_BTN_START = pygame.image.load(SPRITE_PATH + title_assets["TITLE_START_BTN"]).convert()
-TITLE_BTN_LOAD = pygame.image.load(SPRITE_PATH + title_assets["TITLE_LOAD_BTN"]).convert()
-TITLE_BTN_SETTINGS = pygame.image.load(SPRITE_PATH + title_assets["TITLE_SETTINGS_BTN"]).convert()
-TITLE_BTN_QUIT = pygame.image.load(SPRITE_PATH + title_assets["TITLE_QUIT_BTN"]).convert()
+TITLE_BACKGROUND = pygame.image.load(
+    BG_PATH + title_assets["TITLE_BG"])
+TITLE_BTN_START = pygame.image.load(
+    SPRITE_PATH + title_assets["TITLE_START_BTN"]).convert()
+TITLE_BTN_LOAD = pygame.image.load(
+    SPRITE_PATH + title_assets["TITLE_LOAD_BTN"]).convert()
+TITLE_BTN_SETTINGS = pygame.image.load(
+    SPRITE_PATH + title_assets["TITLE_SETTINGS_BTN"]).convert()
+TITLE_BTN_QUIT = pygame.image.load(
+    SPRITE_PATH + title_assets["TITLE_QUIT_BTN"]).convert()
 
-title_start = TITLE_BTN_START.get_rect(center=(665, 210))
-title_load = TITLE_BTN_LOAD.get_rect(center=(665, 320))
-title_settings = TITLE_BTN_SETTINGS.get_rect(center=(665, 430))
-title_quit = TITLE_BTN_QUIT.get_rect(center=(665, 540))
+title_start = TITLE_BTN_START.get_rect(
+    topleft=title_assets["TITLE_START_BTN_ORIGIN"])
+title_load = TITLE_BTN_LOAD.get_rect(
+    topleft=title_assets["TITLE_LOAD_BTN_ORIGIN"])
+title_settings = TITLE_BTN_SETTINGS.get_rect(
+    topleft=title_assets["TITLE_SETTINGS_BTN_ORIGIN"])
+title_quit = TITLE_BTN_QUIT.get_rect(
+    topleft=title_assets["TITLE_QUIT_BTN_ORIGIN"])
 
 title_bgm_playing = False
 
@@ -93,12 +101,6 @@ def playBGM():
 
 def playSFX():
   print("playSFX() called")
-
-def volumeBGM():
-  print("volumeBGM() called")
-
-def volumeSFX():
-  print("volumeSFX() called")
 
 # Game loop
 while RUNNING:
@@ -123,10 +125,10 @@ while RUNNING:
     screen.blit(TITLE_BACKGROUND, (0, 0))
 
     # Draw buttons
-    screen.blit(TITLE_BTN_START, (540, 160))
-    screen.blit(TITLE_BTN_LOAD, (540, 270))
-    screen.blit(TITLE_BTN_SETTINGS, (540, 380))
-    screen.blit(TITLE_BTN_QUIT, (540, 490))
+    screen.blit(TITLE_BTN_START, title_assets["TITLE_START_BTN_ORIGIN"])
+    screen.blit(TITLE_BTN_LOAD, title_assets["TITLE_LOAD_BTN_ORIGIN"])
+    screen.blit(TITLE_BTN_SETTINGS, title_assets["TITLE_SETTINGS_BTN_ORIGIN"])
+    screen.blit(TITLE_BTN_QUIT, title_assets["TITLE_QUIT_BTN_ORIGIN"])
 
     for event in pygame.event.get():
       # Stop RUNNING if QUIT event detected
@@ -178,8 +180,13 @@ while RUNNING:
           for i in script:
             i[0] = 0
 
+          # Make sure to stop any music playing before returning to title
+
           current_state = State.TITLE
 
+    ################################################################################
+    # Run through game script
+    ################################################################################
     if script[current_index][0] == 0:
       # Set current instruction to complete to prevent repeat execution
       script[current_index][0] = 1
@@ -198,10 +205,6 @@ while RUNNING:
         playBGM()
       elif cmd is SFX:
         playSFX()
-      elif cmd is BGM_VOL:
-        volumeBGM()
-      elif cmd is SFX_VOL:
-        volumeSFX()
 
       # Do not advance if current index is TEXT
       if not(script[current_index][1] is TEXT):

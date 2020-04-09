@@ -12,7 +12,11 @@ def getTitleAssets():
     "TITLE_START_BTN":"btn-title-start.png",
     "TITLE_LOAD_BTN": "btn-title-load.png",
     "TITLE_SETTINGS_BTN": "btn-title-settings.png",
-    "TITLE_QUIT_BTN": "btn-title-quit.png"
+    "TITLE_QUIT_BTN": "btn-title-quit.png",
+    "TITLE_START_BTN_ORIGIN": (540, 160),
+    "TITLE_LOAD_BTN_ORIGIN": (540, 270),
+    "TITLE_SETTINGS_BTN_ORIGIN": (540, 380),
+    "TITLE_QUIT_BTN_ORIGIN": (540, 490)
   }
 
   return title_assets
