@@ -58,6 +58,7 @@ TITLE_QUIT_BTN_ORIGIN = c.assets["TITLE_QUIT_BTN_ORIGIN"]
 
 # Game
 TEXT_BOX = pygame.image.load(c.SPRITE_PATH + c.assets["TEXT_BOX"]).convert_alpha()
+TEXT_BOX_ORIGIN = c.assets["TEXT_BOX_ORIGIN"]
 
 TEXT_BODY_ORIGIN = c.assets["TEXT_BODY_ORIGIN"]
 TEXT_BODY_CHAR_LIMIT = c.assets["TEXT_BODY_CHAR_LIMIT"]
@@ -338,12 +339,12 @@ while running:
     # Loop through and blit current sprites
 
     # Draw text box
-    screen.blit(TEXT_BOX, c.assets["TEXT_BOX_ORIGIN"])
+    screen.blit(TEXT_BOX, TEXT_BOX_ORIGIN)
     # Draw buttons
-    screen.blit(GAME_SAVE_BTN, c.assets["GAME_SAVE_BTN_ORIGIN"])
-    screen.blit(GAME_LOAD_BTN, c.assets["GAME_LOAD_BTN_ORIGIN"])
-    screen.blit(GAME_LOG_BTN, c.assets["GAME_LOG_BTN_ORIGIN"])
-    screen.blit(GAME_QUIT_BTN, c.assets["GAME_QUIT_BTN_ORIGIN"])
+    screen.blit(GAME_SAVE_BTN, GAME_SAVE_BTN_ORIGIN)
+    screen.blit(GAME_LOAD_BTN, GAME_LOAD_BTN_ORIGIN)
+    screen.blit(GAME_LOG_BTN, GAME_LOG_BTN_ORIGIN)
+    screen.blit(GAME_QUIT_BTN, GAME_QUIT_BTN_ORIGIN)
     # Draw current text and speaker into the text box
     drawText(
         current_text["body"],
@@ -355,8 +356,8 @@ while running:
     if current_text["speaker"] != "":
       drawSpeaker(
         " " + current_text["speaker"] + " ", 
-        c.assets["SPEAKER_BOX_ORIGIN"][0],
-        c.assets["SPEAKER_BOX_ORIGIN"][1],
+        SPEAKER_BOX_ORIGIN[0],
+        SPEAKER_BOX_ORIGIN[1],
         current_text["speaker_colour"],
         c.BLACK
       )
