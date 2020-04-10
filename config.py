@@ -34,12 +34,12 @@ assets = {
   "SETTINGS_SFX_MINUS_BTN": "btn-settings-minus.png",
   "SETTINGS_TEXT_PLUS_BTN": "btn-settings-plus.png",
   "SETTINGS_TEXT_MINUS_BTN": "btn-settings-minus.png",
-  "SETTINGS_BGM_PLUS_BTN_ORIGIN": (),
-  "SETTINGS_BGM_MINUS_BTN_ORIGIN": (),
-  "SETTINGS_SFX_PLUS_BTN_ORIGIN": (),
-  "SETTINGS_SFX_MINUS_BTN_ORIGIN": (),
-  "SETTINGS_TEXT_PLUS_BTN_ORIGIN": (),
-  "SETTINGS_TEXT_MINUS_BTN_ORIGIN": (),
+  "SETTINGS_BGM_PLUS_BTN_ORIGIN": (400, 100),
+  "SETTINGS_BGM_MINUS_BTN_ORIGIN": (600, 100),
+  "SETTINGS_SFX_PLUS_BTN_ORIGIN": (400, 250),
+  "SETTINGS_SFX_MINUS_BTN_ORIGIN": (600, 250),
+  "SETTINGS_TEXT_PLUS_BTN_ORIGIN": (400, 400),
+  "SETTINGS_TEXT_MINUS_BTN_ORIGIN": (600, 400),
   # Save / Load screen
   "SAVE_LOAD_BG": "bg-title.png",
   "SAVE_LOAD_PANEL": "",
@@ -48,7 +48,6 @@ assets = {
   # Game screen
   "TEXT_BOX": "text-box.png",
   "TEXT_BOX_ORIGIN": (0, 550),
-  "SPEAKER_BOX": "speaker-box.png",
   "SPEAKER_BOX_ORIGIN": (0, 505),
   # Origin of text to display
   "TEXT_BODY_ORIGIN": (10, 570),

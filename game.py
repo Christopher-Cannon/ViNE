@@ -1,5 +1,5 @@
 import script as s
-import assets as a
+import config as c
 import pygame
 from pygame import mixer
 from enum import Enum
@@ -18,138 +18,117 @@ HEIGHT = 720
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-# Title assets
-TITLE_BACKGROUND = pygame.image.load(
-    a.BG_PATH + a.assets["TITLE_BG"]
-)
+################################################################################
+# Constants from config.py
+################################################################################
 
-TITLE_START_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["TITLE_START_BTN"]
-).convert_alpha()
+# General
+BACK_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["BACK_BTN"]).convert_alpha()
+BACK_BTN_ORIGIN = c.assets["BACK_BTN_ORIGIN"]
 
-TITLE_LOAD_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["TITLE_LOAD_BTN"]
-).convert_alpha()
+BODY_FONT_SMALL = pygame.font.Font(
+    c.FONT_PATH + c.assets["BODY_FONT"], 
+    c.assets["FONT_SIZE_SMALL"])
 
-TITLE_SETTINGS_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["TITLE_SETTINGS_BTN"]
-).convert_alpha()
+BODY_FONT_MEDIUM = pygame.font.Font(
+    c.FONT_PATH + c.assets["BODY_FONT"], 
+    c.assets["FONT_SIZE_MEDIUM"])
 
-TITLE_QUIT_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["TITLE_QUIT_BTN"]
-).convert_alpha()
+BODY_FONT_LARGE = pygame.font.Font(
+    c.FONT_PATH + c.assets["BODY_FONT"], 
+    c.assets["FONT_SIZE_LARGE"])
 
-BACK_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["BACK_BTN"]
-).convert_alpha()
+SPEAKER_FONT = pygame.font.Font(
+    c.FONT_PATH + c.assets["SPEAKER_FONT"], 
+    c.assets["FONT_SIZE_MEDIUM"])
 
-# Game assets
-TEXT_BOX = pygame.image.load(
-    a.SPRITE_PATH + a.assets["TEXT_BOX"]
-)
+# Title
+TITLE_BACKGROUND = pygame.image.load(c.BG_PATH + c.assets["TITLE_BG"])
+TITLE_START_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["TITLE_START_BTN"]).convert_alpha()
+TITLE_LOAD_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["TITLE_LOAD_BTN"]).convert_alpha()
+TITLE_SETTINGS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["TITLE_SETTINGS_BTN"]).convert_alpha()
+TITLE_QUIT_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["TITLE_QUIT_BTN"]).convert_alpha()
 
-GAME_SAVE_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["GAME_SAVE_BTN"]
-)
+TITLE_BGM = c.BGM_PATH + c.assets["TITLE_BGM"]
 
-GAME_LOAD_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["GAME_LOAD_BTN"]
-)
+TITLE_START_BTN_ORIGIN = c.assets["TITLE_START_BTN_ORIGIN"]
+TITLE_LOAD_BTN_ORIGIN = c.assets["TITLE_LOAD_BTN_ORIGIN"]
+TITLE_SETTINGS_BTN_ORIGIN = c.assets["TITLE_SETTINGS_BTN_ORIGIN"]
+TITLE_QUIT_BTN_ORIGIN = c.assets["TITLE_QUIT_BTN_ORIGIN"]
 
-GAME_LOG_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["GAME_LOG_BTN"]
-)
+# Game
+TEXT_BOX = pygame.image.load(c.SPRITE_PATH + c.assets["TEXT_BOX"]).convert_alpha()
 
-GAME_QUIT_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["GAME_QUIT_BTN"]
-)
+TEXT_BODY_ORIGIN = c.assets["TEXT_BODY_ORIGIN"]
+TEXT_BODY_CHAR_LIMIT = c.assets["TEXT_BODY_CHAR_LIMIT"]
+TEXT_BODY_LINE_SPACING = c.assets["TEXT_BODY_LINE_SPACING"]
 
-# Settings assets
-SETTINGS_BGM_PLUS_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["SETTINGS_BGM_PLUS_BTN"]
-)
+SPEAKER_BOX_ORIGIN = c.assets["SPEAKER_BOX_ORIGIN"]
 
-SETTINGS_BGM_MINUS_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["SETTINGS_BGM_MINUS_BTN"]
-)
+GAME_SAVE_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["GAME_SAVE_BTN"]).convert_alpha()
+GAME_LOAD_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["GAME_LOAD_BTN"]).convert_alpha()
+GAME_LOG_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["GAME_LOG_BTN"]).convert_alpha()
+GAME_QUIT_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["GAME_QUIT_BTN"]).convert_alpha()
 
-SETTINGS_SFX_PLUS_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["SETTINGS_SFX_PLUS_BTN"]
-)
+GAME_SAVE_BTN_ORIGIN = c.assets["GAME_SAVE_BTN_ORIGIN"]
+GAME_LOAD_BTN_ORIGIN = c.assets["GAME_LOAD_BTN_ORIGIN"]
+GAME_LOG_BTN_ORIGIN = c.assets["GAME_LOG_BTN_ORIGIN"]
+GAME_QUIT_BTN_ORIGIN = c.assets["GAME_QUIT_BTN_ORIGIN"]
 
-SETTINGS_SFX_MINUS_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["SETTINGS_SFX_MINUS_BTN"]
-)
+# Settings
+SETTINGS_BGM_PLUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_BGM_PLUS_BTN"]).convert_alpha()
+SETTINGS_BGM_MINUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_BGM_MINUS_BTN"]).convert_alpha()
+SETTINGS_SFX_PLUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_SFX_PLUS_BTN"]).convert_alpha()
+SETTINGS_SFX_MINUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_SFX_MINUS_BTN"]).convert_alpha()
+SETTINGS_TEXT_PLUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_TEXT_PLUS_BTN"]).convert_alpha()
+SETTINGS_TEXT_MINUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_TEXT_MINUS_BTN"]).convert_alpha()
 
-SETTINGS_TEXT_PLUS_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["SETTINGS_TEXT_PLUS_BTN"]
-)
+SETTINGS_BGM_PLUS_BTN_ORIGIN = c.assets["SETTINGS_BGM_PLUS_BTN_ORIGIN"]
+SETTINGS_BGM_MINUS_BTN_ORIGIN = c.assets["SETTINGS_BGM_MINUS_BTN_ORIGIN"]
+SETTINGS_SFX_PLUS_BTN_ORIGIN = c.assets["SETTINGS_SFX_PLUS_BTN_ORIGIN"]
+SETTINGS_SFX_MINUS_BTN_ORIGIN = c.assets["SETTINGS_SFX_MINUS_BTN_ORIGIN"]
+SETTINGS_TEXT_PLUS_BTN_ORIGIN = c.assets["SETTINGS_TEXT_PLUS_BTN_ORIGIN"]
+SETTINGS_TEXT_MINUS_BTN_ORIGIN = c.assets["SETTINGS_TEXT_MINUS_BTN_ORIGIN"]
 
-SETTINGS_TEXT_MINUS_BTN = pygame.image.load(
-    a.SPRITE_PATH + a.assets["SETTINGS_TEXT_MINUS_BTN"]
-)
+SETTINGS_BGM_TEXT = c.assets["SETTINGS_BGM_TEXT"]
+SETTINGS_SFX_TEXT = c.assets["SETTINGS_SFX_TEXT"]
+SETTINGS_TEXT_TEXT = c.assets["SETTINGS_TEXT_TEXT"]
 
-# Get rectangles
-TITLE_START_BTN_RECT = TITLE_START_BTN.get_rect(
-    topleft=a.assets["TITLE_START_BTN_ORIGIN"]
-)
-TITLE_LOAD_BTN_RECT = TITLE_LOAD_BTN.get_rect(
-    topleft=a.assets["TITLE_LOAD_BTN_ORIGIN"]
-)
-TITLE_SETTINGS_BTN_RECT = TITLE_SETTINGS_BTN.get_rect(
-    topleft=a.assets["TITLE_SETTINGS_BTN_ORIGIN"]
-)
-TITLE_QUIT_BTN_RECT = TITLE_QUIT_BTN.get_rect(
-    topleft=a.assets["TITLE_QUIT_BTN_ORIGIN"]
-)
+SETTINGS_BGM_TEXT_ORIGIN = c.assets["SETTINGS_BGM_TEXT_ORIGIN"]
+SETTINGS_SFX_TEXT_ORIGIN = c.assets["SETTINGS_SFX_TEXT_ORIGIN"]
+SETTINGS_TEXT_TEXT_ORIGIN = c.assets["SETTINGS_TEXT_TEXT_ORIGIN"]
 
-BACK_BTN_RECT = BACK_BTN.get_rect(
-    topleft=a.assets["BACK_BTN_ORIGIN"]
-)
+# General rectangles
+BACK_BTN_RECT = BACK_BTN.get_rect(topleft=c.assets["BACK_BTN_ORIGIN"])
 
-GAME_SAVE_BTN_RECT = GAME_SAVE_BTN.get_rect(
-    topleft=a.assets["GAME_SAVE_BTN_ORIGIN"]
-)
+# Title rectangles
+TITLE_START_BTN_RECT = TITLE_START_BTN.get_rect(topleft=TITLE_START_BTN_ORIGIN)
+TITLE_LOAD_BTN_RECT = TITLE_LOAD_BTN.get_rect(topleft=TITLE_LOAD_BTN_ORIGIN)
+TITLE_SETTINGS_BTN_RECT = TITLE_SETTINGS_BTN.get_rect(topleft=TITLE_SETTINGS_BTN_ORIGIN)
+TITLE_QUIT_BTN_RECT = TITLE_QUIT_BTN.get_rect(topleft=TITLE_QUIT_BTN_ORIGIN)
 
-GAME_LOAD_BTN_RECT = GAME_LOAD_BTN.get_rect(
-    topleft=a.assets["GAME_LOAD_BTN_ORIGIN"]
-)
+# Game rectangles
+GAME_SAVE_BTN_RECT = GAME_SAVE_BTN.get_rect(topleft=GAME_SAVE_BTN_ORIGIN)
+GAME_LOAD_BTN_RECT = GAME_LOAD_BTN.get_rect(topleft=GAME_LOAD_BTN_ORIGIN)
+GAME_LOG_BTN_RECT = GAME_LOG_BTN.get_rect(topleft=GAME_LOG_BTN_ORIGIN)
+GAME_QUIT_BTN_RECT = GAME_QUIT_BTN.get_rect(topleft=GAME_QUIT_BTN_ORIGIN)
 
-GAME_LOG_BTN_RECT = GAME_LOG_BTN.get_rect(
-    topleft=a.assets["GAME_LOG_BTN_ORIGIN"]
-)
-
-GAME_QUIT_BTN_RECT = GAME_QUIT_BTN.get_rect(
-    topleft=a.assets["GAME_QUIT_BTN_ORIGIN"]
-)
-
-# Settings assets
-
-# Save / Load assets
-
-running = True
-
-# Game settings - move to config file?
-SETTINGS_BGM_TEXT = a.assets["SETTINGS_BGM_TEXT"]
-SETTINGS_SFX_TEXT = a.assets["SETTINGS_SFX_TEXT"]
-SETTINGS_TEXT_TEXT = a.assets["SETTINGS_TEXT_TEXT"]
-
-volume_bgm = 0  # Default 0.5
-volume_sfx = 0.5
-
-btn_click = mixer.Sound(a.SFX_PATH + a.assets["BTN_CLICK_SFX"])
-btn_back = mixer.Sound(a.SFX_PATH + a.assets["BTN_BACK_SFX"])
-
-btn_click.set_volume(volume_sfx)
-btn_back.set_volume(volume_sfx)
-
-title_bgm_playing = False
-
-TITLE_BGM = a.BGM_PATH + a.assets["TITLE_BGM"]
-
+# Subject to change
 TEXT_SPEED_SLOW = 1
 TEXT_SPEED_NORMAL = 2
 TEXT_SPEED_FAST = 3
+
+
+# Game settings - move to config file?
+volume_bgm = 0  # Default 0.5
+volume_sfx = 0.5
+
+# Sounds and volume
+sound_btn_click = mixer.Sound(c.SFX_PATH + c.assets["BTN_CLICK_SFX"])
+sound_btn_back = mixer.Sound(c.SFX_PATH + c.assets["BTN_BACK_SFX"])
+
+sound_btn_click.set_volume(volume_sfx)
+sound_btn_back.set_volume(volume_sfx)
 
 # Application state
 class State:
@@ -164,52 +143,22 @@ class State:
 current_state = State.TITLE
 
 current_background = TITLE_BACKGROUND
-
 # Our current position in the script
 current_index = 0
-
 # Holds the current sprites to be displayed on the game screen
 current_sprites = {}
-
 # Current text and speaker to display
 current_text = {
   "speaker": "",
   "body": "",
-  "speaker_colour": a.WHITE,
-  "body_colour": a.WHITE
+  "speaker_colour": c.WHITE,
+  "body_colour": c.WHITE
 }
-
 # Holds the previous 100 TEXT lines
 scrollback_log = []
 
-# Fonts
-BODY_FONT_SMALL = pygame.font.Font(
-    a.FONT_PATH + a.assets["BODY_FONT"], 
-    a.assets["FONT_SIZE_SMALL"]
-)
-BODY_FONT_MEDIUM = pygame.font.Font(
-    a.FONT_PATH + a.assets["BODY_FONT"], 
-    a.assets["FONT_SIZE_MEDIUM"]
-)
-BODY_FONT_LARGE = pygame.font.Font(
-    a.FONT_PATH + a.assets["BODY_FONT"], 
-    a.assets["FONT_SIZE_LARGE"]
-)
-
-SPEAKER_FONT_SMALL = pygame.font.Font(
-    a.FONT_PATH + a.assets["SPEAKER_FONT"], 
-    a.assets["FONT_SIZE_SMALL"]
-)
-SPEAKER_FONT_MEDIUM = pygame.font.Font(
-    a.FONT_PATH + a.assets["SPEAKER_FONT"], 
-    a.assets["FONT_SIZE_MEDIUM"]
-)
-SPEAKER_FONT_LARGE = pygame.font.Font(
-    a.FONT_PATH + a.assets["SPEAKER_FONT"], 
-    a.assets["FONT_SIZE_LARGE"]
-)
-
-print(a.assets["SPEAKER_BOX_ORIGIN"][1])
+running = True
+title_bgm_playing = False
 
 def splitText(text):
   if len(text) > 0:
@@ -222,7 +171,7 @@ def splitText(text):
     for i in range(len(text_arr)):
       word = text_arr[i]
 
-      if len(new_string + word + " ") > a.assets["TEXT_BODY_CHAR_LIMIT"]:
+      if len(new_string + word + " ") > TEXT_BODY_CHAR_LIMIT:
         output.append(new_string.rstrip())
         new_string = ""
 
@@ -241,21 +190,21 @@ def drawText(text, x, y, fg_colour):
 
   for t in text:
     text_to_draw = BODY_FONT_SMALL.render("{}".format(t), True, fg_colour)
-    screen.blit(text_to_draw, (x, y + (counter*a.assets["TEXT_BODY_LINE_SPACING"])))
+    screen.blit(text_to_draw, (x, y + (counter * TEXT_BODY_LINE_SPACING)))
     counter += 1
 
 def drawSpeaker(name, x, y, fg_colour, bg_colour=None):
-  speaker_box = SPEAKER_FONT_MEDIUM.render("{}".format(name), True, fg_colour, bg_colour)
+  speaker_box = SPEAKER_FONT.render("{}".format(name), True, fg_colour, bg_colour)
   screen.blit(speaker_box, (x, y))
 
-# Might not need these?
+# To be changed or removed
 def drawBG(filename, x, y):
   print("\nDraw BG {} at position {}, {}".format(
-      a.BG_PATH + filename, x, y))
+      c.BG_PATH + filename, x, y))
 
 def drawSprite(filename, x, y):
   print("\nDraw sprite {} at position {}, {}".format(
-      a.SPRITE_PATH + filename, x, y))
+      c.SPRITE_PATH + filename, x, y))
 
 def displayText(speaker, body):
   print("\n{}: {}".format(speaker, body))
@@ -269,8 +218,7 @@ def playSFX():
 # Game loop
 while running:
   # Draw black screen
-  screen.fill(a.BLACK)
-
+  screen.fill(c.BLACK)
   # Set BG image
   screen.blit(current_background, (0, 0))
 
@@ -281,7 +229,6 @@ while running:
   ################################################################################
   if current_state == State.TITLE:
     current_background = TITLE_BACKGROUND
-
     # Set BG music - make sure it always plays on the title screen
     if not(title_bgm_playing):
       mixer.music.load(TITLE_BGM)
@@ -291,10 +238,10 @@ while running:
       title_bgm_playing = True
 
     # Draw buttons
-    screen.blit(TITLE_START_BTN, a.assets["TITLE_START_BTN_ORIGIN"])
-    screen.blit(TITLE_LOAD_BTN, a.assets["TITLE_LOAD_BTN_ORIGIN"])
-    screen.blit(TITLE_SETTINGS_BTN, a.assets["TITLE_SETTINGS_BTN_ORIGIN"])
-    screen.blit(TITLE_QUIT_BTN, a.assets["TITLE_QUIT_BTN_ORIGIN"])
+    screen.blit(TITLE_START_BTN, TITLE_START_BTN_ORIGIN)
+    screen.blit(TITLE_LOAD_BTN, TITLE_LOAD_BTN_ORIGIN)
+    screen.blit(TITLE_SETTINGS_BTN, TITLE_SETTINGS_BTN_ORIGIN)
+    screen.blit(TITLE_QUIT_BTN, TITLE_QUIT_BTN_ORIGIN)
 
     for event in pygame.event.get():
       # Stop running if QUIT event detected
@@ -323,27 +270,26 @@ while running:
         mouse_x, mouse_y = event.pos
 
         if TITLE_START_BTN_RECT.collidepoint(mouse_x, mouse_y):
-          btn_click.play()
-
+          sound_btn_click.play()
           # Reset to prevent any stored text flashing up briefly
           current_text["speaker"] = ""
           current_text["body"] = ""
-          current_text["speaker_colour"] = a.WHITE
-          current_text["body_colour"] = a.WHITE
+          current_text["speaker_colour"] = c.WHITE
+          current_text["body_colour"] = c.WHITE
 
           mixer.music.stop()
           title_bgm_playing = False
           current_state = State.GAME
 
         if TITLE_LOAD_BTN_RECT.collidepoint(mouse_x, mouse_y):
-          btn_click.play()
+          sound_btn_click.play()
 
           mixer.music.stop()
           title_bgm_playing = False
           current_state = State.LOAD
 
         if TITLE_SETTINGS_BTN_RECT.collidepoint(mouse_x, mouse_y):
-          btn_click.play()
+          sound_btn_click.play()
 
           mixer.music.stop()
           title_bgm_playing = False
@@ -392,29 +338,27 @@ while running:
     # Loop through and blit current sprites
 
     # Draw text box
-    screen.blit(TEXT_BOX, a.assets["TEXT_BOX_ORIGIN"])
-
+    screen.blit(TEXT_BOX, c.assets["TEXT_BOX_ORIGIN"])
     # Draw buttons
-    screen.blit(GAME_SAVE_BTN, a.assets["GAME_SAVE_BTN_ORIGIN"])
-    screen.blit(GAME_LOAD_BTN, a.assets["GAME_LOAD_BTN_ORIGIN"])
-    screen.blit(GAME_LOG_BTN, a.assets["GAME_LOG_BTN_ORIGIN"])
-    screen.blit(GAME_QUIT_BTN, a.assets["GAME_QUIT_BTN_ORIGIN"])
-
+    screen.blit(GAME_SAVE_BTN, c.assets["GAME_SAVE_BTN_ORIGIN"])
+    screen.blit(GAME_LOAD_BTN, c.assets["GAME_LOAD_BTN_ORIGIN"])
+    screen.blit(GAME_LOG_BTN, c.assets["GAME_LOG_BTN_ORIGIN"])
+    screen.blit(GAME_QUIT_BTN, c.assets["GAME_QUIT_BTN_ORIGIN"])
     # Draw current text and speaker into the text box
     drawText(
         current_text["body"],
-        a.assets["TEXT_BODY_ORIGIN"][0],
-        a.assets["TEXT_BODY_ORIGIN"][1],
+        c.assets["TEXT_BODY_ORIGIN"][0],
+        c.assets["TEXT_BODY_ORIGIN"][1],
         current_text["body_colour"]
     )
 
     if current_text["speaker"] != "":
       drawSpeaker(
         " " + current_text["speaker"] + " ", 
-        a.assets["SPEAKER_BOX_ORIGIN"][0],
-        a.assets["SPEAKER_BOX_ORIGIN"][1],
+        c.assets["SPEAKER_BOX_ORIGIN"][0],
+        c.assets["SPEAKER_BOX_ORIGIN"][1],
         current_text["speaker_colour"],
-        a.BLACK
+        c.BLACK
       )
 
     ################################################################################
@@ -423,20 +367,20 @@ while running:
     if script[current_index][0] == 0:
       # Set current instruction to complete to prevent repeat execution
       script[current_index][0] = 1
-
       # Get the current command and payload object
       cmd = script[current_index][1]
       obj = script[current_index][-1]
-
       # Carry out actions according to the script
-      if cmd is a.SPRITE:
+      if cmd is c.SPRITE:
         new_sprite = dict(file=obj["file"], x=obj["x"], y=obj["y"])
         current_sprites[obj["reference"]] = new_sprite
 
         print(current_sprites)
-      elif cmd is a.BG_IMG:
-        current_background = pygame.image.load(a.BG_PATH + obj["file"])
-      elif cmd is a.TEXT:
+
+      elif cmd is c.BG_IMG:
+        current_background = pygame.image.load(c.BG_PATH + obj["file"])
+
+      elif cmd is c.TEXT:
         # Update the current text
         current_text["speaker"] = obj["speaker"]
         # Split body text on to multiple lines
@@ -446,13 +390,14 @@ while running:
         current_text["body_colour"] = obj["body_colour"]
         current_text["body_colour"] = obj["body_colour"]
         
-      elif cmd is a.BGM:
+      elif cmd is c.BGM:
         playBGM()
-      elif cmd is a.SFX:
+
+      elif cmd is c.SFX:
         playSFX()
 
       # Do not advance if current index is TEXT
-      if not(script[current_index][1] is a.TEXT):
+      if not(script[current_index][1] is c.TEXT):
         if current_index + 1 < len(script):
           current_index += 1
 
@@ -466,7 +411,7 @@ while running:
 
       if event.type == pygame.KEYDOWN:
         # Let player advance to next line in script if current index is TEXT
-        if event.key == pygame.K_SPACE and script[current_index][1] is a.TEXT:
+        if event.key == pygame.K_SPACE and script[current_index][1] is c.TEXT:
           if current_index + 1 < len(script):
             current_index += 1
 
@@ -478,7 +423,6 @@ while running:
             i[0] = 0
 
           # Make sure to stop any music playing before returning to title
-
           current_state = State.TITLE
   ################################################################################
   #
@@ -486,19 +430,18 @@ while running:
   #
   ################################################################################
   elif current_state == State.SETTINGS:
-    bgm_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_BGM_TEXT), True, a.WHITE, a.BLACK)
-    screen.blit(bgm_text, a.assets["SETTINGS_BGM_TEXT_ORIGIN"])
+    bgm_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_BGM_TEXT), True, c.WHITE, c.BLACK)
+    screen.blit(bgm_text, SETTINGS_BGM_TEXT_ORIGIN)
 
-    sfx_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_SFX_TEXT), True, a.WHITE, a.BLACK)
-    screen.blit(sfx_text, a.assets["SETTINGS_SFX_TEXT_ORIGIN"])
+    sfx_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_SFX_TEXT), True, c.WHITE, c.BLACK)
+    screen.blit(sfx_text, SETTINGS_SFX_TEXT_ORIGIN)
 
-    text_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_TEXT_TEXT), True, a.WHITE, a.BLACK)
-    screen.blit(text_text, a.assets["SETTINGS_TEXT_TEXT_ORIGIN"])
+    text_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_TEXT_TEXT), True, c.WHITE, c.BLACK)
+    screen.blit(text_text, SETTINGS_TEXT_TEXT_ORIGIN)
 
-    screen.blit(BACK_BTN, a.assets["BACK_BTN_ORIGIN"])
+    screen.blit(BACK_BTN, BACK_BTN_ORIGIN)
 
     for event in pygame.event.get():
-      # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
         running = False
 
@@ -506,7 +449,7 @@ while running:
         mouse_x, mouse_y = event.pos
 
         if BACK_BTN_RECT.collidepoint(mouse_x, mouse_y):
-          btn_back.play()
+          sound_btn_back.play()
           current_state = State.TITLE
 
       if event.type == pygame.KEYDOWN:
@@ -520,7 +463,6 @@ while running:
   ################################################################################
   elif current_state == State.CREDITS:
     for event in pygame.event.get():
-      # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
         running = False
 
@@ -535,7 +477,6 @@ while running:
   ################################################################################
   elif current_state == State.SCROLLBACK:
     for event in pygame.event.get():
-      # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
         running = False
 
