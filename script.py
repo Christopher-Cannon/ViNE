@@ -14,7 +14,9 @@ def getScript():
     ["SFX", {"file": "filename.mp3"}],
     ["TEXT", {
       "speaker": "Bob", 
-      "body": "Text body goes here. This line is to test the limits of small text. It has gone", 
+      "body": """Text body goes here. This line is to test the limits of small text. It has gotten quite long. 
+Still testing the limits of sentence length. It keeps getting longer. I am running out of things 
+to say here, but I will add this at the end just in case.""",
       "size": "small", 
       "speaker_colour": (255, 255, 255),
       "body_colour": (255, 255, 255)}
@@ -25,6 +27,20 @@ def getScript():
     ["TEXT", {
       "speaker": "Jane", 
       "body": "Ah.", 
+      "size": "small", 
+      "speaker_colour": (255, 255, 255),
+      "body_colour": (255, 255, 255)}
+    ],
+    ["TEXT", {
+      "speaker": "", 
+      "body": "Oh no.", 
+      "size": "small", 
+      "speaker_colour": (255, 255, 255),
+      "body_colour": (255, 255, 255)}
+    ],
+    ["TEXT", {
+      "speaker": "Frederica", 
+      "body": "Hello.", 
       "size": "small", 
       "speaker_colour": (255, 255, 255),
       "body_colour": (255, 255, 255)}

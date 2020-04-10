@@ -139,25 +139,39 @@ SPEAKER_FONT_LARGE = pygame.font.Font(
 
 print(a.assets["SPEAKER_BOX_ORIGIN"][1])
 
+def splitText(text):
+  if len(text) > 0:
+    text = text.replace('\n', '')
+    text_arr = text.split(" ")
+
+    output = []
+    new_string = ""
+
+    for i in range(len(text_arr)):
+      word = text_arr[i]
+
+      if len(new_string + word + " ") > a.assets["TEXT_BODY_CHAR_LIMIT"]:
+        output.append(new_string.rstrip())
+        new_string = ""
+
+      new_string += word + " "
+
+      if i+1 == len(text_arr):
+        output.append(new_string.rstrip())
+  else:
+    output = ['']
+
+  print(output)
+  return output
+
 # Event handlers
 def drawText(text, x, y, fg_colour):
-  # text_to_draw = BODY_FONT_SMALL.render("{}".format(text), True, fg_colour)
-  # screen.blit(text_to_draw, (x, y))
+  counter = 0
 
-  # Count length of string
-  text_length = len(text)
-
-  if text_length > a.assets["TEXT_BODY_CHAR_LIMIT"]:
-    pass
-  # If line is over char limit
-    # Split string into array per char length limit
-
-    # Iterate through array and output over several lines
-  # Else output text as is
-
-  for i in range(a.assets["TEXT_BODY_LINE_LIMIT"]):
-    text_to_draw = BODY_FONT_SMALL.render("{}".format(text), True, fg_colour)
-    screen.blit(text_to_draw, (x, y + (i*a.assets["TEXT_BODY_LINE_SPACING"])))
+  for t in text:
+    text_to_draw = BODY_FONT_SMALL.render("{}".format(t), True, fg_colour)
+    screen.blit(text_to_draw, (x, y + (counter*a.assets["TEXT_BODY_LINE_SPACING"])))
+    counter += 1
 
 def drawSpeaker(name, x, y, fg_colour, bg_colour=None):
   speaker_box = SPEAKER_FONT_MEDIUM.render("{}".format(name), True, fg_colour, bg_colour)
@@ -316,13 +330,14 @@ while running:
         current_text["body_colour"]
     )
 
-    drawSpeaker(
-      " " + current_text["speaker"] + " ", 
-      a.assets["SPEAKER_BOX_ORIGIN"][0],
-      a.assets["SPEAKER_BOX_ORIGIN"][1],
-      current_text["speaker_colour"],
-      a.BLACK
-    )
+    if current_text["speaker"] != "":
+      drawSpeaker(
+        " " + current_text["speaker"] + " ", 
+        a.assets["SPEAKER_BOX_ORIGIN"][0],
+        a.assets["SPEAKER_BOX_ORIGIN"][1],
+        current_text["speaker_colour"],
+        a.BLACK
+      )
 
     ################################################################################
     # Run through game script
@@ -346,7 +361,7 @@ while running:
       elif cmd is a.TEXT:
         displayText(obj["speaker"], obj["body"])
         current_text["speaker"] = obj["speaker"]
-        current_text["body"] = obj["body"]
+        current_text["body"] = splitText(obj["body"])
         current_text["speaker_colour"] = obj["speaker_colour"]
         current_text["body_colour"] = obj["body_colour"]
         current_text["body_colour"] = obj["body_colour"]
