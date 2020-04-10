@@ -44,16 +44,53 @@ TEXT_BOX = pygame.image.load(
     a.SPRITE_PATH + a.assets["TEXT_BOX"]
 )
 
+BTN_GAME_SAVE = pygame.image.load(
+    a.SPRITE_PATH + a.assets["GAME_SAVE_BTN"]
+)
+
+BTN_GAME_LOAD = pygame.image.load(
+    a.SPRITE_PATH + a.assets["GAME_LOAD_BTN"]
+)
+
+BTN_GAME_LOG = pygame.image.load(
+    a.SPRITE_PATH + a.assets["GAME_LOG_BTN"]
+)
+
+BTN_GAME_QUIT = pygame.image.load(
+    a.SPRITE_PATH + a.assets["GAME_QUIT_BTN"]
+)
+
 TEXT_BOX_ORIGIN = a.assets["TEXT_BOX_ORIGIN"]
 
-title_start = TITLE_BTN_START.get_rect(
-    topleft=a.assets["TITLE_START_BTN_ORIGIN"])
-title_load = TITLE_BTN_LOAD.get_rect(
-    topleft=a.assets["TITLE_LOAD_BTN_ORIGIN"])
-title_settings = TITLE_BTN_SETTINGS.get_rect(
-    topleft=a.assets["TITLE_SETTINGS_BTN_ORIGIN"])
-title_quit = TITLE_BTN_QUIT.get_rect(
-    topleft=a.assets["TITLE_QUIT_BTN_ORIGIN"])
+# Get rectangles
+TITLE_BTN_START_RECT = TITLE_BTN_START.get_rect(
+    topleft=a.assets["TITLE_START_BTN_ORIGIN"]
+)
+TITLE_BTN_LOAD_RECT = TITLE_BTN_LOAD.get_rect(
+    topleft=a.assets["TITLE_LOAD_BTN_ORIGIN"]
+)
+TITLE_BTN_SETTINGS_RECT = TITLE_BTN_SETTINGS.get_rect(
+    topleft=a.assets["TITLE_SETTINGS_BTN_ORIGIN"]
+)
+TITLE_BTN_QUIT_RECT = TITLE_BTN_QUIT.get_rect(
+    topleft=a.assets["TITLE_QUIT_BTN_ORIGIN"]
+)
+
+BTN_GAME_SAVE_RECT = BTN_GAME_SAVE.get_rect(
+    topleft=a.assets["GAME_SAVE_BTN_ORIGIN"]
+)
+
+BTN_GAME_LOAD_RECT = BTN_GAME_LOAD.get_rect(
+    topleft=a.assets["GAME_LOAD_BTN_ORIGIN"]
+)
+
+BTN_GAME_LOG_RECT = BTN_GAME_LOG.get_rect(
+    topleft=a.assets["GAME_LOG_BTN_ORIGIN"]
+)
+
+BTN_GAME_QUIT_RECT = BTN_GAME_QUIT.get_rect(
+    topleft=a.assets["GAME_QUIT_BTN_ORIGIN"]
+)
 
 # Settings assets
 
@@ -161,7 +198,6 @@ def splitText(text):
   else:
     output = ['']
 
-  print(output)
   return output
 
 # Event handlers
@@ -177,6 +213,7 @@ def drawSpeaker(name, x, y, fg_colour, bg_colour=None):
   speaker_box = SPEAKER_FONT_MEDIUM.render("{}".format(name), True, fg_colour, bg_colour)
   screen.blit(speaker_box, (x, y))
 
+# Might not need these?
 def drawBG(filename, x, y):
   print("\nDraw BG {} at position {}, {}".format(
       a.BG_PATH + filename, x, y))
@@ -250,7 +287,7 @@ while running:
       if event.type == pygame.MOUSEBUTTONDOWN:
         mouse_x, mouse_y = event.pos
 
-        if title_start.collidepoint(mouse_x, mouse_y):
+        if TITLE_BTN_START_RECT.collidepoint(mouse_x, mouse_y):
           btn_click.play()
 
           # Reset to prevent any stored text flashing up briefly
@@ -263,21 +300,21 @@ while running:
           title_bgm_playing = False
           current_state = State.GAME
 
-        if title_load.collidepoint(mouse_x, mouse_y):
+        if TITLE_BTN_LOAD_RECT.collidepoint(mouse_x, mouse_y):
           btn_click.play()
 
           mixer.music.stop()
           title_bgm_playing = False
           current_state = State.LOAD
 
-        if title_settings.collidepoint(mouse_x, mouse_y):
+        if TITLE_BTN_SETTINGS_RECT.collidepoint(mouse_x, mouse_y):
           btn_click.play()
 
           mixer.music.stop()
           title_bgm_playing = False
           current_state = State.SETTINGS
 
-        if title_quit.collidepoint(mouse_x, mouse_y):
+        if TITLE_BTN_QUIT_RECT.collidepoint(mouse_x, mouse_y):
 
           running = False
 
@@ -322,6 +359,12 @@ while running:
     # Draw text box
     screen.blit(TEXT_BOX, TEXT_BOX_ORIGIN)
 
+    # Draw buttons
+    screen.blit(BTN_GAME_SAVE, a.assets["GAME_SAVE_BTN_ORIGIN"])
+    screen.blit(BTN_GAME_LOAD, a.assets["GAME_LOAD_BTN_ORIGIN"])
+    screen.blit(BTN_GAME_LOG, a.assets["GAME_LOG_BTN_ORIGIN"])
+    screen.blit(BTN_GAME_QUIT, a.assets["GAME_QUIT_BTN_ORIGIN"])
+
     # Draw current text and speaker into the text box
     drawText(
         current_text["body"],
@@ -361,6 +404,7 @@ while running:
       elif cmd is a.TEXT:
         displayText(obj["speaker"], obj["body"])
         current_text["speaker"] = obj["speaker"]
+        # Split body text on to multiple lines
         current_text["body"] = splitText(obj["body"])
         current_text["speaker_colour"] = obj["speaker_colour"]
         current_text["body_colour"] = obj["body_colour"]

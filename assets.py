@@ -7,6 +7,7 @@ assets = {
   "FONT_SIZE_SMALL": 20,
   "FONT_SIZE_MEDIUM": 35,
   "FONT_SIZE_LARGE": 50,
+  "BACK_BTN": "btn-back.png",
   # Title screen
   "TITLE_BG": "bg-title.png",
   "TITLE_BGM": "no-time.ogg",
@@ -20,7 +21,6 @@ assets = {
   "TITLE_QUIT_BTN_ORIGIN": (700, 610),
   # Settings screen
   "SETTINGS_BG": "bg-title.png",
-  "SETTINGS_RETURN_BTN": "",
   # Save / Load screen
   "SAVE_LOAD_BG": "bg-title.png",
   "SAVE_LOAD_PANEL": "",
@@ -36,10 +36,14 @@ assets = {
   # How many characters can be displayed on one line before breaking
   "TEXT_BODY_CHAR_LIMIT": 70,
   "TEXT_BODY_LINE_SPACING": 35,
-  "GAME_SAVE_BTN": "",
-  "GAME_LOAD_BTN": "",
-  "GAME_LOG_BTN": "",
-  "GAME_AUTO_BTN": ""
+  "GAME_SAVE_BTN": "btn-game-save.png",
+  "GAME_LOAD_BTN": "btn-game-load.png",
+  "GAME_LOG_BTN": "btn-game-log.png",
+  "GAME_QUIT_BTN": "btn-game-quit.png",
+  "GAME_SAVE_BTN_ORIGIN": (850, 560),
+  "GAME_LOAD_BTN_ORIGIN": (850, 600),
+  "GAME_LOG_BTN_ORIGIN": (850, 640),
+  "GAME_QUIT_BTN_ORIGIN": (850, 680)
 }
 
 # Paths to assets

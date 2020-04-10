@@ -14,9 +14,10 @@ def getScript():
     ["SFX", {"file": "filename.mp3"}],
     ["TEXT", {
       "speaker": "Bob", 
+      # Multi-line strings are good for long lines
       "body": """Text body goes here. This line is to test the limits of small text. It has gotten quite long. 
 Still testing the limits of sentence length. It keeps getting longer. I am running out of things 
-to say here, but I will add this at the end just in case.""",
+to say here, but I will add this at the end just in case. This is the limit.""",
       "size": "small", 
       "speaker_colour": (255, 255, 255),
       "body_colour": (255, 255, 255)}
