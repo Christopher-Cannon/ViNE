@@ -13,26 +13,10 @@ except:
   print("An error occurred when retrieving the script\nExiting...")
   pygame.QUIT
 
-# Our current position in the script
-current_index = 0
-
 WIDTH = 960
 HEIGHT = 720
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-
-running = True
-
-class State:
-  TITLE = 0
-  LOAD = 1
-  SAVE = 2
-  GAME = 3
-  SETTINGS = 4
-  CREDITS = 5
-  SCROLLBACK = 6
-
-current_state = State.TITLE
 
 # Title assets
 TITLE_BACKGROUND = pygame.image.load(
@@ -60,6 +44,8 @@ TEXT_BOX = pygame.image.load(
     a.SPRITE_PATH + a.assets["TEXT_BOX"]
 )
 
+TEXT_BOX_ORIGIN = a.assets["TEXT_BOX_ORIGIN"]
+
 title_start = TITLE_BTN_START.get_rect(
     topleft=a.assets["TITLE_START_BTN_ORIGIN"])
 title_load = TITLE_BTN_LOAD.get_rect(
@@ -72,6 +58,8 @@ title_quit = TITLE_BTN_QUIT.get_rect(
 # Settings assets
 
 # Save / Load assets
+
+running = True
 
 # Game settings - move to config file?
 volume_bgm = 0  # Default 0.5
@@ -87,39 +75,94 @@ title_bgm_playing = False
 
 TITLE_BGM = a.BGM_PATH + a.assets["TITLE_BGM"]
 
+TEXT_SPEED_SLOW = 1
+TEXT_SPEED_NORMAL = 2
+TEXT_SPEED_FAST = 3
+
+# Application state
+class State:
+  TITLE = 0
+  LOAD = 1
+  SAVE = 2
+  GAME = 3
+  SETTINGS = 4
+  CREDITS = 5
+  SCROLLBACK = 6
+
+current_state = State.TITLE
+
 current_background = TITLE_BACKGROUND
+
+# Our current position in the script
+current_index = 0
 
 # Holds the current sprites to be displayed on the game screen
 current_sprites = {}
 
+# Current text and speaker to display
+current_text = {
+  "speaker": "",
+  "body": "",
+  "speaker_colour": a.WHITE,
+  "body_colour": a.WHITE
+}
+
+# Holds the previous 100 TEXT lines
+scrollback_log = []
+
 # Fonts
-body_font_small = pygame.font.Font(
+BODY_FONT_SMALL = pygame.font.Font(
     a.FONT_PATH + a.assets["BODY_FONT"], 
     a.assets["FONT_SIZE_SMALL"]
 )
-body_font_medium = pygame.font.Font(
+BODY_FONT_MEDIUM = pygame.font.Font(
     a.FONT_PATH + a.assets["BODY_FONT"], 
     a.assets["FONT_SIZE_MEDIUM"]
 )
-body_font_large = pygame.font.Font(
+BODY_FONT_LARGE = pygame.font.Font(
     a.FONT_PATH + a.assets["BODY_FONT"], 
     a.assets["FONT_SIZE_LARGE"]
 )
 
-speaker_font_small = pygame.font.Font(
+SPEAKER_FONT_SMALL = pygame.font.Font(
     a.FONT_PATH + a.assets["SPEAKER_FONT"], 
     a.assets["FONT_SIZE_SMALL"]
 )
-speaker_font_medium = pygame.font.Font(
+SPEAKER_FONT_MEDIUM = pygame.font.Font(
     a.FONT_PATH + a.assets["SPEAKER_FONT"], 
     a.assets["FONT_SIZE_MEDIUM"]
 )
-speaker_font_large = pygame.font.Font(
+SPEAKER_FONT_LARGE = pygame.font.Font(
     a.FONT_PATH + a.assets["SPEAKER_FONT"], 
     a.assets["FONT_SIZE_LARGE"]
 )
+
+print(a.assets["SPEAKER_BOX_ORIGIN"][1])
 
 # Event handlers
+def drawText(text, x, y, fg_colour):
+  # text_to_draw = BODY_FONT_SMALL.render("{}".format(text), True, fg_colour)
+  # screen.blit(text_to_draw, (x, y))
+
+  # Count length of string
+  text_length = len(text)
+
+  if text_length > a.assets["TEXT_BODY_CHAR_LIMIT"]:
+    pass
+  # If line is over char limit
+    # Split string into array per char length limit
+
+    # Iterate through array and output over several lines
+  # Else output text as is
+
+  for i in range(a.assets["TEXT_BODY_LINE_LIMIT"]):
+    text_to_draw = BODY_FONT_SMALL.render("{}".format(text), True, fg_colour)
+    screen.blit(text_to_draw, (x, y + (i*a.assets["TEXT_BODY_LINE_SPACING"])))
+
+def drawSpeaker(name, x, y, fg_colour, bg_colour=None):
+  speaker_box = SPEAKER_FONT_MEDIUM.render("{}".format(name), True, fg_colour, bg_colour)
+  screen.blit(speaker_box, (x, y))
+
 def drawBG(filename, x, y):
   print("\nDraw BG {} at position {}, {}".format(
       a.BG_PATH + filename, x, y))
@@ -196,6 +239,12 @@ while running:
         if title_start.collidepoint(mouse_x, mouse_y):
           btn_click.play()
 
+          # Reset to prevent any stored text flashing up briefly
+          current_text["speaker"] = ""
+          current_text["body"] = ""
+          current_text["speaker_colour"] = a.WHITE
+          current_text["body_colour"] = a.WHITE
+
           mixer.music.stop()
           title_bgm_playing = False
           current_state = State.GAME
@@ -254,6 +303,27 @@ while running:
   #
   ################################################################################
   elif current_state == State.GAME:
+    # Loop through and blit current sprites
+
+    # Draw text box
+    screen.blit(TEXT_BOX, TEXT_BOX_ORIGIN)
+
+    # Draw current text and speaker into the text box
+    drawText(
+        current_text["body"],
+        a.assets["TEXT_BODY_ORIGIN"][0],
+        a.assets["TEXT_BODY_ORIGIN"][1],
+        current_text["body_colour"]
+    )
+
+    drawSpeaker(
+      " " + current_text["speaker"] + " ", 
+      a.assets["SPEAKER_BOX_ORIGIN"][0],
+      a.assets["SPEAKER_BOX_ORIGIN"][1],
+      current_text["speaker_colour"],
+      a.BLACK
+    )
+
     ################################################################################
     # Run through game script
     ################################################################################
@@ -261,18 +331,27 @@ while running:
       # Set current instruction to complete to prevent repeat execution
       script[current_index][0] = 1
 
+      # Get the current command and payload object
       cmd = script[current_index][1]
       obj = script[current_index][-1]
 
-      # Do command-specific actions
-      # May need sprite / BG array to hold current assets to display
-      # as they need to be constantly blit'd
+      # Carry out actions according to the script
       if cmd is a.SPRITE:
-        drawSprite(obj["file"], obj["x"], obj["y"])
+        new_sprite = dict(file=obj["file"], x=obj["x"], y=obj["y"])
+        current_sprites[obj["reference"]] = new_sprite
+
+        print(current_sprites)
       elif cmd is a.BG_IMG:
         current_background = pygame.image.load(a.BG_PATH + obj["file"])
       elif cmd is a.TEXT:
         displayText(obj["speaker"], obj["body"])
+        current_text["speaker"] = obj["speaker"]
+        current_text["body"] = obj["body"]
+        current_text["speaker_colour"] = obj["speaker_colour"]
+        current_text["body_colour"] = obj["body_colour"]
+        current_text["body_colour"] = obj["body_colour"]
+        current_text["body_colour"] = obj["body_colour"]
+        
       elif cmd is a.BGM:
         playBGM()
       elif cmd is a.SFX:

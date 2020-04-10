@@ -28,6 +28,14 @@ assets = {
   "LOAD_BTN": "",
   # Game screen
   "TEXT_BOX": "text-box.png",
+  "TEXT_BOX_ORIGIN": (0, 550),
+  "SPEAKER_BOX": "speaker-box.png",
+  "SPEAKER_BOX_ORIGIN": (0, 500),
+  # Origin of text to display
+  "TEXT_BODY_ORIGIN": (10, 570),
+  # How many characters can be displayed on one line before breaking
+  "TEXT_BODY_CHAR_LIMIT": 30
+  "TEXT_BODY_LINE_SPACING": 35,
   "GAME_SAVE_BTN": "",
   "GAME_LOAD_BTN": "",
   "GAME_LOG_BTN": "",
