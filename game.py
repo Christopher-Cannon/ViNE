@@ -60,6 +60,15 @@ TEXT_BOX = pygame.image.load(
     a.SPRITE_PATH + a.assets["TEXT_BOX"]
 )
 
+title_start = TITLE_BTN_START.get_rect(
+    topleft=a.assets["TITLE_START_BTN_ORIGIN"])
+title_load = TITLE_BTN_LOAD.get_rect(
+    topleft=a.assets["TITLE_LOAD_BTN_ORIGIN"])
+title_settings = TITLE_BTN_SETTINGS.get_rect(
+    topleft=a.assets["TITLE_SETTINGS_BTN_ORIGIN"])
+title_quit = TITLE_BTN_QUIT.get_rect(
+    topleft=a.assets["TITLE_QUIT_BTN_ORIGIN"])
+
 # Settings assets
 
 # Save / Load assets
@@ -74,31 +83,41 @@ btn_back = mixer.Sound(a.SFX_PATH + a.assets["BTN_BACK_SFX"])
 btn_click.set_volume(volume_sfx)
 btn_back.set_volume(volume_sfx)
 
-title_start = TITLE_BTN_START.get_rect(
-    topleft=a.assets["TITLE_START_BTN_ORIGIN"])
-title_load = TITLE_BTN_LOAD.get_rect(
-    topleft=a.assets["TITLE_LOAD_BTN_ORIGIN"])
-title_settings = TITLE_BTN_SETTINGS.get_rect(
-    topleft=a.assets["TITLE_SETTINGS_BTN_ORIGIN"])
-title_quit = TITLE_BTN_QUIT.get_rect(
-    topleft=a.assets["TITLE_QUIT_BTN_ORIGIN"])
-
 title_bgm_playing = False
 
 TITLE_BGM = a.BGM_PATH + a.assets["TITLE_BGM"]
 
 current_background = TITLE_BACKGROUND
 
+# Holds the current sprites to be displayed on the game screen
 current_sprites = {}
 
 # Fonts
-body_font_small = pygame.font.Font(a.assets["BODY_FONT"], a.assets["FONT_SIZE_SMALL"])
-body_font_medium = pygame.font.Font(a.assets["BODY_FONT"], a.assets["FONT_SIZE_MEDIUM"])
-body_font_large = pygame.font.Font(a.assets["BODY_FONT"], a.assets["FONT_SIZE_LARGE"])
+body_font_small = pygame.font.Font(
+    a.FONT_PATH + a.assets["BODY_FONT"], 
+    a.assets["FONT_SIZE_SMALL"]
+)
+body_font_medium = pygame.font.Font(
+    a.FONT_PATH + a.assets["BODY_FONT"], 
+    a.assets["FONT_SIZE_MEDIUM"]
+)
+body_font_large = pygame.font.Font(
+    a.FONT_PATH + a.assets["BODY_FONT"], 
+    a.assets["FONT_SIZE_LARGE"]
+)
 
-speaker_font_small = pygame.font.Font(a.assets["SPEAKER_FONT"], a.assets["FONT_SIZE_SMALL"])
-speaker_font_medium = pygame.font.Font(a.assets["SPEAKER_FONT"], a.assets["FONT_SIZE_MEDIUM"])
-speaker_font_large = pygame.font.Font(a.assets["SPEAKER_FONT"], a.assets["FONT_SIZE_LARGE"])
+speaker_font_small = pygame.font.Font(
+    a.FONT_PATH + a.assets["SPEAKER_FONT"], 
+    a.assets["FONT_SIZE_SMALL"]
+)
+speaker_font_medium = pygame.font.Font(
+    a.FONT_PATH + a.assets["SPEAKER_FONT"], 
+    a.assets["FONT_SIZE_MEDIUM"]
+)
+speaker_font_large = pygame.font.Font(
+    a.FONT_PATH + a.assets["SPEAKER_FONT"], 
+    a.assets["FONT_SIZE_LARGE"]
+)
 
 # Event handlers
 def drawBG(filename, x, y):
@@ -214,8 +233,9 @@ while running:
       if event.type == pygame.QUIT:
         running = False
 
-      if event.key == pygame.K_ESCAPE:
-        current_state = State.TITLE
+      if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_ESCAPE:
+          current_state = State.TITLE
 
   ################################################################################
   #
@@ -228,8 +248,9 @@ while running:
       if event.type == pygame.QUIT:
         running = False
 
-      if event.key == pygame.K_ESCAPE:
-        current_state = State.TITLE
+      if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_ESCAPE:
+          current_state = State.TITLE
 
   ################################################################################
   #
@@ -302,8 +323,9 @@ while running:
       if event.type == pygame.QUIT:
         running = False
 
-      if event.key == pygame.K_ESCAPE:
-        current_state = State.TITLE
+      if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_ESCAPE:
+          current_state = State.TITLE
 
   ################################################################################
   #
@@ -316,8 +338,9 @@ while running:
       if event.type == pygame.QUIT:
         running = False
 
-      if event.key == pygame.K_ESCAPE:
-        current_state = State.TITLE
+      if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_ESCAPE:
+          current_state = State.TITLE
 
   ################################################################################
   #
@@ -330,8 +353,9 @@ while running:
       if event.type == pygame.QUIT:
         running = False
 
-      if event.key == pygame.K_ESCAPE:
-        current_state = State.TITLE
+      if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_ESCAPE:
+          current_state = State.TITLE
 
   # Update screen
   pygame.display.update()
