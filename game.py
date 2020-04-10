@@ -23,20 +23,24 @@ TITLE_BACKGROUND = pygame.image.load(
     a.BG_PATH + a.assets["TITLE_BG"]
 )
 
-TITLE_BTN_START = pygame.image.load(
+TITLE_START_BTN = pygame.image.load(
     a.SPRITE_PATH + a.assets["TITLE_START_BTN"]
 ).convert_alpha()
 
-TITLE_BTN_LOAD = pygame.image.load(
+TITLE_LOAD_BTN = pygame.image.load(
     a.SPRITE_PATH + a.assets["TITLE_LOAD_BTN"]
 ).convert_alpha()
 
-TITLE_BTN_SETTINGS = pygame.image.load(
+TITLE_SETTINGS_BTN = pygame.image.load(
     a.SPRITE_PATH + a.assets["TITLE_SETTINGS_BTN"]
 ).convert_alpha()
 
-TITLE_BTN_QUIT = pygame.image.load(
+TITLE_QUIT_BTN = pygame.image.load(
     a.SPRITE_PATH + a.assets["TITLE_QUIT_BTN"]
+).convert_alpha()
+
+BACK_BTN = pygame.image.load(
+    a.SPRITE_PATH + a.assets["BACK_BTN"]
 ).convert_alpha()
 
 # Game assets
@@ -44,51 +48,78 @@ TEXT_BOX = pygame.image.load(
     a.SPRITE_PATH + a.assets["TEXT_BOX"]
 )
 
-BTN_GAME_SAVE = pygame.image.load(
+GAME_SAVE_BTN = pygame.image.load(
     a.SPRITE_PATH + a.assets["GAME_SAVE_BTN"]
 )
 
-BTN_GAME_LOAD = pygame.image.load(
+GAME_LOAD_BTN = pygame.image.load(
     a.SPRITE_PATH + a.assets["GAME_LOAD_BTN"]
 )
 
-BTN_GAME_LOG = pygame.image.load(
+GAME_LOG_BTN = pygame.image.load(
     a.SPRITE_PATH + a.assets["GAME_LOG_BTN"]
 )
 
-BTN_GAME_QUIT = pygame.image.load(
+GAME_QUIT_BTN = pygame.image.load(
     a.SPRITE_PATH + a.assets["GAME_QUIT_BTN"]
 )
 
-TEXT_BOX_ORIGIN = a.assets["TEXT_BOX_ORIGIN"]
+# Settings assets
+SETTINGS_BGM_PLUS_BTN = pygame.image.load(
+    a.SPRITE_PATH + a.assets["SETTINGS_BGM_PLUS_BTN"]
+)
+
+SETTINGS_BGM_MINUS_BTN = pygame.image.load(
+    a.SPRITE_PATH + a.assets["SETTINGS_BGM_MINUS_BTN"]
+)
+
+SETTINGS_SFX_PLUS_BTN = pygame.image.load(
+    a.SPRITE_PATH + a.assets["SETTINGS_SFX_PLUS_BTN"]
+)
+
+SETTINGS_SFX_MINUS_BTN = pygame.image.load(
+    a.SPRITE_PATH + a.assets["SETTINGS_SFX_MINUS_BTN"]
+)
+
+SETTINGS_TEXT_PLUS_BTN = pygame.image.load(
+    a.SPRITE_PATH + a.assets["SETTINGS_TEXT_PLUS_BTN"]
+)
+
+SETTINGS_TEXT_MINUS_BTN = pygame.image.load(
+    a.SPRITE_PATH + a.assets["SETTINGS_TEXT_MINUS_BTN"]
+)
 
 # Get rectangles
-TITLE_BTN_START_RECT = TITLE_BTN_START.get_rect(
+TITLE_START_BTN_RECT = TITLE_START_BTN.get_rect(
     topleft=a.assets["TITLE_START_BTN_ORIGIN"]
 )
-TITLE_BTN_LOAD_RECT = TITLE_BTN_LOAD.get_rect(
+TITLE_LOAD_BTN_RECT = TITLE_LOAD_BTN.get_rect(
     topleft=a.assets["TITLE_LOAD_BTN_ORIGIN"]
 )
-TITLE_BTN_SETTINGS_RECT = TITLE_BTN_SETTINGS.get_rect(
+TITLE_SETTINGS_BTN_RECT = TITLE_SETTINGS_BTN.get_rect(
     topleft=a.assets["TITLE_SETTINGS_BTN_ORIGIN"]
 )
-TITLE_BTN_QUIT_RECT = TITLE_BTN_QUIT.get_rect(
+TITLE_QUIT_BTN_RECT = TITLE_QUIT_BTN.get_rect(
     topleft=a.assets["TITLE_QUIT_BTN_ORIGIN"]
 )
 
-BTN_GAME_SAVE_RECT = BTN_GAME_SAVE.get_rect(
+BACK_BTN_RECT = BACK_BTN.get_rect(
+    topleft=a.assets["BACK_BTN_ORIGIN"]
+)
+
+GAME_SAVE_BTN_RECT = GAME_SAVE_BTN.get_rect(
     topleft=a.assets["GAME_SAVE_BTN_ORIGIN"]
 )
 
-BTN_GAME_LOAD_RECT = BTN_GAME_LOAD.get_rect(
+GAME_LOAD_BTN_RECT = GAME_LOAD_BTN.get_rect(
     topleft=a.assets["GAME_LOAD_BTN_ORIGIN"]
 )
 
-BTN_GAME_LOG_RECT = BTN_GAME_LOG.get_rect(
+GAME_LOG_BTN_RECT = GAME_LOG_BTN.get_rect(
     topleft=a.assets["GAME_LOG_BTN_ORIGIN"]
 )
 
-BTN_GAME_QUIT_RECT = BTN_GAME_QUIT.get_rect(
+GAME_QUIT_BTN_RECT = GAME_QUIT_BTN.get_rect(
     topleft=a.assets["GAME_QUIT_BTN_ORIGIN"]
 )
 
@@ -99,6 +130,10 @@ BTN_GAME_QUIT_RECT = BTN_GAME_QUIT.get_rect(
 running = True
 
 # Game settings - move to config file?
+SETTINGS_BGM_TEXT = a.assets["SETTINGS_BGM_TEXT"]
+SETTINGS_SFX_TEXT = a.assets["SETTINGS_SFX_TEXT"]
+SETTINGS_TEXT_TEXT = a.assets["SETTINGS_TEXT_TEXT"]
+
 volume_bgm = 0  # Default 0.5
 volume_sfx = 0.5
 
@@ -256,10 +291,10 @@ while running:
       title_bgm_playing = True
 
     # Draw buttons
-    screen.blit(TITLE_BTN_START, a.assets["TITLE_START_BTN_ORIGIN"])
-    screen.blit(TITLE_BTN_LOAD, a.assets["TITLE_LOAD_BTN_ORIGIN"])
-    screen.blit(TITLE_BTN_SETTINGS, a.assets["TITLE_SETTINGS_BTN_ORIGIN"])
-    screen.blit(TITLE_BTN_QUIT, a.assets["TITLE_QUIT_BTN_ORIGIN"])
+    screen.blit(TITLE_START_BTN, a.assets["TITLE_START_BTN_ORIGIN"])
+    screen.blit(TITLE_LOAD_BTN, a.assets["TITLE_LOAD_BTN_ORIGIN"])
+    screen.blit(TITLE_SETTINGS_BTN, a.assets["TITLE_SETTINGS_BTN_ORIGIN"])
+    screen.blit(TITLE_QUIT_BTN, a.assets["TITLE_QUIT_BTN_ORIGIN"])
 
     for event in pygame.event.get():
       # Stop running if QUIT event detected
@@ -287,7 +322,7 @@ while running:
       if event.type == pygame.MOUSEBUTTONDOWN:
         mouse_x, mouse_y = event.pos
 
-        if TITLE_BTN_START_RECT.collidepoint(mouse_x, mouse_y):
+        if TITLE_START_BTN_RECT.collidepoint(mouse_x, mouse_y):
           btn_click.play()
 
           # Reset to prevent any stored text flashing up briefly
@@ -300,21 +335,21 @@ while running:
           title_bgm_playing = False
           current_state = State.GAME
 
-        if TITLE_BTN_LOAD_RECT.collidepoint(mouse_x, mouse_y):
+        if TITLE_LOAD_BTN_RECT.collidepoint(mouse_x, mouse_y):
           btn_click.play()
 
           mixer.music.stop()
           title_bgm_playing = False
           current_state = State.LOAD
 
-        if TITLE_BTN_SETTINGS_RECT.collidepoint(mouse_x, mouse_y):
+        if TITLE_SETTINGS_BTN_RECT.collidepoint(mouse_x, mouse_y):
           btn_click.play()
 
           mixer.music.stop()
           title_bgm_playing = False
           current_state = State.SETTINGS
 
-        if TITLE_BTN_QUIT_RECT.collidepoint(mouse_x, mouse_y):
+        if TITLE_QUIT_BTN_RECT.collidepoint(mouse_x, mouse_y):
 
           running = False
 
@@ -357,13 +392,13 @@ while running:
     # Loop through and blit current sprites
 
     # Draw text box
-    screen.blit(TEXT_BOX, TEXT_BOX_ORIGIN)
+    screen.blit(TEXT_BOX, a.assets["TEXT_BOX_ORIGIN"])
 
     # Draw buttons
-    screen.blit(BTN_GAME_SAVE, a.assets["GAME_SAVE_BTN_ORIGIN"])
-    screen.blit(BTN_GAME_LOAD, a.assets["GAME_LOAD_BTN_ORIGIN"])
-    screen.blit(BTN_GAME_LOG, a.assets["GAME_LOG_BTN_ORIGIN"])
-    screen.blit(BTN_GAME_QUIT, a.assets["GAME_QUIT_BTN_ORIGIN"])
+    screen.blit(GAME_SAVE_BTN, a.assets["GAME_SAVE_BTN_ORIGIN"])
+    screen.blit(GAME_LOAD_BTN, a.assets["GAME_LOAD_BTN_ORIGIN"])
+    screen.blit(GAME_LOG_BTN, a.assets["GAME_LOG_BTN_ORIGIN"])
+    screen.blit(GAME_QUIT_BTN, a.assets["GAME_QUIT_BTN_ORIGIN"])
 
     # Draw current text and speaker into the text box
     drawText(
@@ -402,7 +437,7 @@ while running:
       elif cmd is a.BG_IMG:
         current_background = pygame.image.load(a.BG_PATH + obj["file"])
       elif cmd is a.TEXT:
-        displayText(obj["speaker"], obj["body"])
+        # Update the current text
         current_text["speaker"] = obj["speaker"]
         # Split body text on to multiple lines
         current_text["body"] = splitText(obj["body"])
@@ -447,14 +482,32 @@ while running:
           current_state = State.TITLE
   ################################################################################
   #
-  # SAVE SCREEN
+  # SETTINGS SCREEN
   #
   ################################################################################
   elif current_state == State.SETTINGS:
+    bgm_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_BGM_TEXT), True, a.WHITE, a.BLACK)
+    screen.blit(bgm_text, a.assets["SETTINGS_BGM_TEXT_ORIGIN"])
+
+    sfx_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_SFX_TEXT), True, a.WHITE, a.BLACK)
+    screen.blit(sfx_text, a.assets["SETTINGS_SFX_TEXT_ORIGIN"])
+
+    text_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_TEXT_TEXT), True, a.WHITE, a.BLACK)
+    screen.blit(text_text, a.assets["SETTINGS_TEXT_TEXT_ORIGIN"])
+
+    screen.blit(BACK_BTN, a.assets["BACK_BTN_ORIGIN"])
+
     for event in pygame.event.get():
       # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
         running = False
+
+      if event.type == pygame.MOUSEBUTTONDOWN:
+        mouse_x, mouse_y = event.pos
+
+        if BACK_BTN_RECT.collidepoint(mouse_x, mouse_y):
+          btn_back.play()
+          current_state = State.TITLE
 
       if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
