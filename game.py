@@ -194,7 +194,6 @@ while running:
         mouse_x, mouse_y = event.pos
 
         if title_start.collidepoint(mouse_x, mouse_y):
-          print("Start btn clicked")
           btn_click.play()
 
           mixer.music.stop()
@@ -202,7 +201,6 @@ while running:
           current_state = State.GAME
 
         if title_load.collidepoint(mouse_x, mouse_y):
-          print("Load btn clicked")
           btn_click.play()
 
           mixer.music.stop()
@@ -210,7 +208,6 @@ while running:
           current_state = State.LOAD
 
         if title_settings.collidepoint(mouse_x, mouse_y):
-          print("Settings btn clicked")
           btn_click.play()
 
           mixer.music.stop()
@@ -218,7 +215,6 @@ while running:
           current_state = State.SETTINGS
 
         if title_quit.collidepoint(mouse_x, mouse_y):
-          print("Quit btn clicked")
 
           running = False
 
@@ -258,9 +254,38 @@ while running:
   #
   ################################################################################
   elif current_state == State.GAME:
-    # Just a test
-    current_background = pygame.image.load(a.BG_PATH + "bg-sea.png")
+    ################################################################################
+    # Run through game script
+    ################################################################################
+    if script[current_index][0] == 0:
+      # Set current instruction to complete to prevent repeat execution
+      script[current_index][0] = 1
 
+      cmd = script[current_index][1]
+      obj = script[current_index][-1]
+
+      # Do command-specific actions
+      # May need sprite / BG array to hold current assets to display
+      # as they need to be constantly blit'd
+      if cmd is a.SPRITE:
+        drawSprite(obj["file"], obj["x"], obj["y"])
+      elif cmd is a.BG_IMG:
+        current_background = pygame.image.load(a.BG_PATH + obj["file"])
+      elif cmd is a.TEXT:
+        displayText(obj["speaker"], obj["body"])
+      elif cmd is a.BGM:
+        playBGM()
+      elif cmd is a.SFX:
+        playSFX()
+
+      # Do not advance if current index is TEXT
+      if not(script[current_index][1] is a.TEXT):
+        if current_index + 1 < len(script):
+          current_index += 1
+
+    ################################################################################
+    # Now handle player input
+    ################################################################################
     for event in pygame.event.get():
       # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
@@ -282,36 +307,6 @@ while running:
           # Make sure to stop any music playing before returning to title
 
           current_state = State.TITLE
-
-    ################################################################################
-    # Run through game script
-    ################################################################################
-    if script[current_index][0] == 0:
-      # Set current instruction to complete to prevent repeat execution
-      script[current_index][0] = 1
-
-      cmd = script[current_index][1]
-      obj = script[current_index][-1]
-
-      # Do command-specific actions
-      # May need sprite / BG array to hold current assets to display
-      # as they need to be constantly blit'd
-      if cmd is a.SPRITE:
-        drawSprite(obj["file"], obj["x"], obj["y"])
-      elif cmd is a.BG_IMG:
-        drawBG(obj["file"], obj["x"], obj["y"])
-      elif cmd is a.TEXT:
-        displayText(obj["speaker"], obj["body"])
-      elif cmd is a.BGM:
-        playBGM()
-      elif cmd is a.SFX:
-        playSFX()
-
-      # Do not advance if current index is TEXT
-      if not(script[current_index][1] is a.TEXT):
-        if current_index + 1 < len(script):
-          current_index += 1
-
   ################################################################################
   #
   # SAVE SCREEN
