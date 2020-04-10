@@ -2,8 +2,12 @@ def getScript():
   script = [
     # [completed, identifier, arguments] - completed is added before returning
     ["BG_IMG", {"file": "main_bg.png", "x": 0, "y": 0}],
-    ["SPRITE", {"file": "bob_bored.png", "x": 180, "y": 50}],
-    ["SPRITE", {"file": "jane_happy.png", "x": 480, "y": 70}],
+    ["SPRITE", 
+      {"reference": "bob", "file": "bob_bored.png", "x": 180, "y": 50}
+    ],
+    ["SPRITE", 
+      {"reference": "jane", "file": "jane_happy.png", "x": 480, "y": 70}
+    ],
     ["CHAPTER", {"number": 1, "title": "Sudden Complications"}],
     ["BGM", {"file": "filename.mp3"}],
     ["SFX", {"file": "filename.mp3"}],

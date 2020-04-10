@@ -1,10 +1,11 @@
 import script as s
-import assets as a  # Should really be called game config or something
+import assets as a
 import pygame
 from pygame import mixer
 from enum import Enum
 
 pygame.init()
+pygame.display.set_caption("ViNE")
 
 try:
   script = s.getScript()
@@ -29,24 +30,49 @@ class State:
   GAME = 3
   SETTINGS = 4
   CREDITS = 5
+  SCROLLBACK = 6
 
 current_state = State.TITLE
 
 # Title assets
 TITLE_BACKGROUND = pygame.image.load(
-    a.BG_PATH + a.assets["TITLE_BG"])
+    a.BG_PATH + a.assets["TITLE_BG"]
+)
+
 TITLE_BTN_START = pygame.image.load(
-    a.SPRITE_PATH + a.assets["TITLE_START_BTN"]).convert()
+    a.SPRITE_PATH + a.assets["TITLE_START_BTN"]
+).convert_alpha()
+
 TITLE_BTN_LOAD = pygame.image.load(
-    a.SPRITE_PATH + a.assets["TITLE_LOAD_BTN"]).convert()
+    a.SPRITE_PATH + a.assets["TITLE_LOAD_BTN"]
+).convert_alpha()
+
 TITLE_BTN_SETTINGS = pygame.image.load(
-    a.SPRITE_PATH + a.assets["TITLE_SETTINGS_BTN"]).convert()
+    a.SPRITE_PATH + a.assets["TITLE_SETTINGS_BTN"]
+).convert_alpha()
+
 TITLE_BTN_QUIT = pygame.image.load(
-    a.SPRITE_PATH + a.assets["TITLE_QUIT_BTN"]).convert()
+    a.SPRITE_PATH + a.assets["TITLE_QUIT_BTN"]
+).convert_alpha()
+
+# Game assets
+TEXT_BOX = pygame.image.load(
+    a.SPRITE_PATH + a.assets["TEXT_BOX"]
+)
+
+# Settings assets
+
+# Save / Load assets
 
 # Game settings - move to config file?
-volume_bgm = 0
+volume_bgm = 0  # Default 0.5
 volume_sfx = 0.5
+
+btn_click = mixer.Sound(a.SFX_PATH + a.assets["BTN_CLICK_SFX"])
+btn_back = mixer.Sound(a.SFX_PATH + a.assets["BTN_BACK_SFX"])
+
+btn_click.set_volume(volume_sfx)
+btn_back.set_volume(volume_sfx)
 
 title_start = TITLE_BTN_START.get_rect(
     topleft=a.assets["TITLE_START_BTN_ORIGIN"])
@@ -58,6 +84,21 @@ title_quit = TITLE_BTN_QUIT.get_rect(
     topleft=a.assets["TITLE_QUIT_BTN_ORIGIN"])
 
 title_bgm_playing = False
+
+TITLE_BGM = a.BGM_PATH + a.assets["TITLE_BGM"]
+
+current_background = TITLE_BACKGROUND
+
+current_sprites = {}
+
+# Fonts
+body_font_small = pygame.font.Font(a.assets["BODY_FONT"], a.assets["FONT_SIZE_SMALL"])
+body_font_medium = pygame.font.Font(a.assets["BODY_FONT"], a.assets["FONT_SIZE_MEDIUM"])
+body_font_large = pygame.font.Font(a.assets["BODY_FONT"], a.assets["FONT_SIZE_LARGE"])
+
+speaker_font_small = pygame.font.Font(a.assets["SPEAKER_FONT"], a.assets["FONT_SIZE_SMALL"])
+speaker_font_medium = pygame.font.Font(a.assets["SPEAKER_FONT"], a.assets["FONT_SIZE_MEDIUM"])
+speaker_font_large = pygame.font.Font(a.assets["SPEAKER_FONT"], a.assets["FONT_SIZE_LARGE"])
 
 # Event handlers
 def drawBG(filename, x, y):
@@ -82,22 +123,24 @@ while running:
   # Draw black screen
   screen.fill(a.BLACK)
 
+  # Set BG image
+  screen.blit(current_background, (0, 0))
+
   ################################################################################
   #
   # TITLE SCREEN
   #
   ################################################################################
   if current_state == State.TITLE:
-    # Set BG music
+    current_background = TITLE_BACKGROUND
+
+    # Set BG music - make sure it always plays on the title screen
     if not(title_bgm_playing):
-      mixer.music.load(a.BGM_PATH + a.assets["TITLE_BGM"])
+      mixer.music.load(TITLE_BGM)
       mixer.music.set_volume(volume_bgm)
       mixer.music.play(-1)
 
       title_bgm_playing = True
-
-    # Set BG image
-    screen.blit(TITLE_BACKGROUND, (0, 0))
 
     # Draw buttons
     screen.blit(TITLE_BTN_START, a.assets["TITLE_START_BTN_ORIGIN"])
@@ -110,11 +153,30 @@ while running:
       if event.type == pygame.QUIT:
         running = False
       
+      # Temporary state switcher events
+      if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_1:
+          mixer.music.stop()
+          title_bgm_playing = False
+          current_state = State.SAVE
+
+        if event.key == pygame.K_2:
+          mixer.music.stop()
+          title_bgm_playing = False
+          current_state = State.CREDITS
+
+        if event.key == pygame.K_3:
+          mixer.music.stop()
+          title_bgm_playing = False
+          current_state = State.SCROLLBACK
+
+      # Detect button clicks
       if event.type == pygame.MOUSEBUTTONDOWN:
         mouse_x, mouse_y = event.pos
 
         if title_start.collidepoint(mouse_x, mouse_y):
           print("Start btn clicked")
+          btn_click.play()
 
           mixer.music.stop()
           title_bgm_playing = False
@@ -122,9 +184,19 @@ while running:
 
         if title_load.collidepoint(mouse_x, mouse_y):
           print("Load btn clicked")
+          btn_click.play()
+
+          mixer.music.stop()
+          title_bgm_playing = False
+          current_state = State.LOAD
 
         if title_settings.collidepoint(mouse_x, mouse_y):
           print("Settings btn clicked")
+          btn_click.play()
+
+          mixer.music.stop()
+          title_bgm_playing = False
+          current_state = State.SETTINGS
 
         if title_quit.collidepoint(mouse_x, mouse_y):
           print("Quit btn clicked")
@@ -142,6 +214,9 @@ while running:
       if event.type == pygame.QUIT:
         running = False
 
+      if event.key == pygame.K_ESCAPE:
+        current_state = State.TITLE
+
   ################################################################################
   #
   # SAVE SCREEN
@@ -153,12 +228,18 @@ while running:
       if event.type == pygame.QUIT:
         running = False
 
+      if event.key == pygame.K_ESCAPE:
+        current_state = State.TITLE
+
   ################################################################################
   #
   # GAME SCREEN
   #
   ################################################################################
   elif current_state == State.GAME:
+    # Just a test
+    current_background = pygame.image.load(a.BG_PATH + "bg-sea.png")
+
     for event in pygame.event.get():
       # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
@@ -192,6 +273,8 @@ while running:
       obj = script[current_index][-1]
 
       # Do command-specific actions
+      # May need sprite / BG array to hold current assets to display
+      # as they need to be constantly blit'd
       if cmd is a.SPRITE:
         drawSprite(obj["file"], obj["x"], obj["y"])
       elif cmd is a.BG_IMG:
@@ -219,6 +302,9 @@ while running:
       if event.type == pygame.QUIT:
         running = False
 
+      if event.key == pygame.K_ESCAPE:
+        current_state = State.TITLE
+
   ################################################################################
   #
   # CREDITS SCREEN
@@ -229,6 +315,23 @@ while running:
       # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
         running = False
+
+      if event.key == pygame.K_ESCAPE:
+        current_state = State.TITLE
+
+  ################################################################################
+  #
+  # SCROLLBACK SCREEN
+  #
+  ################################################################################
+  elif current_state == State.SCROLLBACK:
+    for event in pygame.event.get():
+      # Stop running if QUIT event detected
+      if event.type == pygame.QUIT:
+        running = False
+
+      if event.key == pygame.K_ESCAPE:
+        current_state = State.TITLE
 
   # Update screen
   pygame.display.update()
