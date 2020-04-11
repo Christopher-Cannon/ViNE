@@ -331,6 +331,8 @@ while running:
   #
   ################################################################################
   elif current_state == State.SAVE:
+    # Three text files (save1, save2, save3)
+
     for event in pygame.event.get():
       # Stop running if QUIT event detected
       if event.type == pygame.QUIT:

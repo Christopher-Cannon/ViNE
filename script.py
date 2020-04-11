@@ -25,21 +25,24 @@ def getScript():
     ["TEXT", {
       "speaker": "",
       "body": "Wait a second, we're not ready yet.",
-      "size": "small",
       "speaker_colour": COL_WHITE,
       "body_colour": COL_WHITE}
     ],
     ["TEXT", {
       "speaker": "",
-      "body": "Just a bit more...",
-      "size": "small",
+      "body": "Just a little more...",
       "speaker_colour": COL_WHITE,
       "body_colour": COL_WHITE}
     ],
     ["TEXT", {
       "speaker": "",
-      "body": "Ok, done.",
-      "size": "small",
+      "body": "A little more...",
+      "speaker_colour": COL_WHITE,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "",
+      "body": "Ok, done. Time to play some music and brighten this place up a bit.",
       "speaker_colour": COL_WHITE,
       "body_colour": COL_WHITE}
     ],
@@ -47,63 +50,215 @@ def getScript():
     ["BGM", {"file": "kaleetan.ogg"}],
     # SPRITE reference MUST be unique
     ["SPRITE", 
-     {"reference": "bob", "file": SPR_BOB_HAPPY, "x": 50, "y": 120}
+      {"reference": "bob", "file": SPR_BOB_HAPPY, "x": 50, "y": 120}
     ],
-    ["SPRITE", 
-     {"reference": "jane", "file": SPR_JANE_BORED, "x": 660, "y": 220}
-    ],
-    ["CHAPTER", {"title": "Sudden Complications"}],
+    ["CHAPTER", {"title": "Introduction"}],
     ["TEXT", {
       "speaker": "Bob", 
       # Multi-line strings are good for long lines
-      "body": """Text body goes here. This line is to test the limits of small text. It has gotten quite long. 
-Still testing the limits of sentence length. It keeps getting longer. I am running out of things 
-to say here, but I will add this at the end just in case. This is the limit.""",
-      "size": "small", 
+      "body": """Hello and welcome to ViNE, A.K.A Visual Novel Engine. 
+It's a little basic right now but that should hopefully change in time.""",
       "speaker_colour": COL_WHITE,
       "body_colour": COL_WHITE}
     ],
     ["SPRITE",
-     {"reference": "jane", "file": SPR_JANE_SHOCKED, "x": 640, "y": 220}
+      {"reference": "jane", "file": SPR_JANE_SHOCKED, "x": 670, "y": 220}
     ],
-    ["SFX", {"file": "btn-click.ogg"}],
     ["TEXT", {
       "speaker": "Jane", 
       "body": "Ah.", 
-      "size": "small", 
       "speaker_colour": COL_RED,
       "body_colour": COL_WHITE}
     ],
-    ["SFX", {"file": "btn-back.ogg"}],
+    ["SPRITE",
+      {"reference": "jane", "file": SPR_JANE_HAPPY, "x": 640, "y": 220}
+    ],
+    ["TEXT", {
+      "speaker": "Jane", 
+      "body": "Hello.", 
+      "speaker_colour": COL_RED,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "Jane", 
+      "body": "ViNE is a simple engine that allows users to create simple visual novels.", 
+      "speaker_colour": COL_RED,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "Jane", 
+      "body": "It is powered by a script, sort of like a screenplay but a little more powerful.", 
+      "speaker_colour": COL_RED,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "Bob", 
+      "body": """Users can bring in their own assets, backgrounds, 
+sprites, sfx and music to be played and displayed when and where they wish.""", 
+      "speaker_colour": COL_WHITE,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "Bob", 
+      "body": """Most importantly, text events can be added with or without a speaker. 
+The speaker and body can be coloured differently too.""", 
+      "speaker_colour": COL_WHITE,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "Jane",
+      "body": "As you might have noticed, the script allows the user to play or stop music.",
+      "speaker_colour": COL_RED,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "Jane",
+      "body": "Or play sound effects.",
+      "speaker_colour": COL_RED,
+      "body_colour": COL_WHITE}
+    ],
+    ["SFX", {"file": "btn-click.ogg"}],
     ["TEXT", {
       "speaker": "", 
-      "body": "Oh no.", 
-      "size": "small", 
+      "body": "...huh?", 
       "speaker_colour": COL_WHITE,
-      "body_colour": (150, 150, 150)}
+      "body_colour": (180, 180, 180)}
     ],
     ["SPRITE",
-     {"reference": "frederica", "file": SPR_FREDERICA_SLEEPY, "x": 280, "y": 320}
+      {"reference": "frederica", "file": SPR_FREDERICA_SLEEPY, "x": 280, "y": 320}
     ],
     ["TEXT", {
       "speaker": "Frederica", 
-      "body": "Hello.", 
-      "size": "small", 
+      "body": "Oh, hello.", 
       "speaker_colour": COL_GREEN,
-      "body_colour": (200, 200, 200)}
+      "body_colour": (220, 220, 220)}
     ],
-    ["BG_IMG", {"file": "bg-trees.png"}],
+    ["SFX", {"file": "btn-back.ogg"}],
+    ["TEXT", {
+      "speaker": "Frederica",
+      "body": "...",
+      "speaker_colour": COL_GREEN,
+      "body_colour": (220, 220, 220)}
+    ],
+    ["TEXT", {
+      "speaker": "Frederica",
+      "body": "Stop that.",
+      "speaker_colour": COL_GREEN,
+      "body_colour": (220, 220, 220)}
+    ],
+    ["SPRITE",
+      {"reference": "frederica", "file": SPR_FREDERICA_CONTENT, "x": 280, "y": 320}
+    ],
+    ["SPRITE",
+      {"reference": "bob", "file": SPR_BOB_BORED, "x": 280, "y": 320}
+    ],
     ["TEXT", {
       "speaker": "Jane", 
-      "body": "That's not right.", 
-      "size": "small", 
+      "body": "Sprites can be added and removed easily through the script.", 
+      "speaker_colour": COL_RED,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "Jane", 
+      "body": "You just need to specify the filename and the coordinates (origin in top left).", 
+      "speaker_colour": COL_RED,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "Jane", 
+      "body": """So long as you provide a unique reference for each 
+sprite, the engine will keep track of them all automatically.""", 
+      "speaker_colour": COL_RED,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "Jane", 
+      "body": "And with that, it's time for me to go.", 
       "speaker_colour": COL_RED,
       "body_colour": COL_WHITE}
     ],
     ["SPRITE_REMOVE", {"reference": "jane"}],
-    ["BG_IMG", {"file": "bg-sea.png"}],
+    ["BG_IMG", {"file": "bg-trees.png"}],
+    ["CHAPTER", {"title": "The second part"}],
+    ["TEXT", {
+      "speaker": "Frederica",
+      "body": "The scenery changes fast around here doesn't it.",
+      "speaker_colour": COL_GREEN,
+      "body_colour": (220, 220, 220)}
+    ],
+    ["SPRITE",
+      {"reference": "bob", "file": SPR_BOB_HAPPY, "x": 280, "y": 320}
+    ],
+    ["SPRITE",
+      {"reference": "frederica", "file": SPR_FREDERICA_CONTENT, "x": 480, "y": 320}
+    ],
+    ["TEXT", {
+      "speaker": "Bob",
+      "body": """Another thing, you can't see it unless you look at the console, 
+but you can specify chapters for your story, the numbering auto-increments too!""",
+      "speaker_colour": COL_WHITE,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "Bob",
+      "body": """This feature should be expanded upon in the future, but for now 
+it's useful for keeping track of where you are in your save.""",
+      "speaker_colour": COL_WHITE,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "Frederica",
+      "body": """Saving/loading and a scrollback log are planned too, 
+alongside a richer text display to allow text scrolling with variable speed...""",
+      "speaker_colour": COL_GREEN,
+      "body_colour": (220, 220, 220)}
+    ],
+    ["TEXT", {
+      "speaker": "Frederica",
+      "body": """...and to let users define inline underlined, emboldened, 
+and coloured text.""",
+      "speaker_colour": COL_GREEN,
+      "body_colour": (220, 220, 220)}
+    ],
+    ["TEXT", {
+      "speaker": "Bob",
+      "body": """Lastly, fading in/out of backgrounds and music would be great too.""",
+      "speaker_colour": COL_WHITE,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "Bob",
+      "body": """But these features will be focused on once all 
+the other important stuff is finished.""",
+      "speaker_colour": COL_WHITE,
+      "body_colour": COL_WHITE}
+    ],
+    ["SPRITE",
+      {"reference": "bob", "file": SPR_BOB_HAPPY, "x": 320, "y": 320}
+    ],
+    ["SPRITE",
+      {"reference": "frederica", "file": SPR_FREDERICA_CONTENT, "x": 510, "y": 320}
+    ],
+    ["TEXT", {
+      "speaker": "Bob",
+      "body": """Until then, goodbye for now.""",
+      "speaker_colour": COL_WHITE,
+      "body_colour": COL_WHITE}
+    ],
+    ["TEXT", {
+      "speaker": "Frederica",
+      "body": """...it's impressive how long a short script like this can get...""",
+      "speaker_colour": COL_GREEN,
+      "body_colour": (220, 220, 220)}
+    ],
     ["BGM_STOP", {}],
-    ["CHAPTER", {"title": "Everything's Better Now"}]
+    ["BG_IMG", {"file": "bg-trees.png"}],
+    ["TEXT", {
+      "speaker": "",
+      "body": """Press the Escape key to return to the menu.""",
+      "speaker_colour": COL_WHITE,
+      "body_colour": COL_WHITE}
+    ]
   ]
 
   for i in script:
