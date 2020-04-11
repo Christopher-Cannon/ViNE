@@ -45,6 +45,8 @@ SPEAKER_FONT = pygame.font.Font(
     c.FONT_PATH + c.assets["SPEAKER_FONT"], 
     c.assets["FONT_SIZE_MEDIUM"])
 
+SCROLLBACK_LIMIT = a.assets["SCROLLBACK_LIMIT"]
+
 # Title
 TITLE_BACKGROUND = pygame.image.load(c.BG_PATH + c.assets["TITLE_BG"])
 TITLE_START_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["TITLE_START_BTN"]).convert_alpha()
@@ -123,8 +125,8 @@ TEXT_SPEED_NORMAL = 2
 TEXT_SPEED_FAST = 3
 
 # Game settings - Need to get these from user_settings.txt
-volume_bgm = 0.3  # Default 0.5
-volume_sfx = 0.5
+volume_bgm = 0  # Default 0.5
+volume_sfx = 0.2
 
 mixer.music.set_volume(volume_bgm)
 
@@ -395,8 +397,11 @@ while running:
       obj = script[current_index][-1]
       # Carry out actions according to the script
       if cmd is c.SPRITE:
-        new_sprite = dict(file=obj["file"], x=obj["x"], y=obj["y"])
-        current_sprites[obj["reference"]] = new_sprite
+        current_sprites[obj["reference"]] = dict(
+          file=obj["file"], 
+          x=obj["x"],
+          y=obj["y"]
+        )
 
         print(current_sprites)
 
@@ -417,13 +422,21 @@ while running:
 
       elif cmd is c.TEXT:
         # Update the current text
-        current_text["speaker"] = obj["speaker"]
-        # Split body text on to multiple lines
-        current_text["body"] = splitText(obj["body"])
-        current_text["speaker_colour"] = obj["speaker_colour"]
-        current_text["body_colour"] = obj["body_colour"]
-        current_text["body_colour"] = obj["body_colour"]
-        current_text["body_colour"] = obj["body_colour"]
+        if speaker == "":
+          speaker = "???"
+        else:
+          speaker = obj["speaker"]
+
+        current_text = dict(
+          speaker=speaker,
+          body=splitText(obj["body"]), 
+          speaker_colour=obj["speaker_colour"],
+          body_colour=obj["body_colour"]
+        )
+        scrollback_log.insert(0, current_text)
+
+        if len(scrollback_log) > SCROLLBACK_LIMIT:
+          scrollback_log.pop(-1)
         
       elif cmd is c.BGM:
         mixer.music.load(c.BGM_PATH + obj["file"])
