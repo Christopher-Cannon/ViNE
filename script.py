@@ -125,7 +125,7 @@ The speaker and body can be coloured differently too.""",
       "body_colour": (180, 180, 180)}
     ],
     ["SPRITE",
-      {"reference": "frederica", "file": SPR_FREDERICA_SLEEPY, "x": 280, "y": 320}
+      {"reference": "frederica", "file": SPR_FREDERICA_SLEEPY, "x": 300, "y": 320}
     ],
     ["TEXT", {
       "speaker": "Frederica", 
@@ -147,14 +147,16 @@ The speaker and body can be coloured differently too.""",
       "body_colour": (220, 220, 220)}
     ],
     ["SPRITE",
-      {"reference": "frederica", "file": SPR_FREDERICA_CONTENT, "x": 280, "y": 320}
+      {"reference": "frederica", "file": SPR_FREDERICA_CONTENT, "x": 300, "y": 320}
     ],
     ["SPRITE",
-      {"reference": "bob", "file": SPR_BOB_BORED, "x": 280, "y": 320}
+      {"reference": "bob", "file": SPR_BOB_BORED, "x": 50, "y": 120}
     ],
     ["TEXT", {
       "speaker": "Jane", 
-      "body": "Sprites can be added and removed easily through the script.", 
+      "body": """Sprites can be added and removed easily through 
+the script, great for quickly changing character expressions or 
+moving them around.""", 
       "speaker_colour": COL_RED,
       "body_colour": COL_WHITE}
     ],
@@ -187,10 +189,10 @@ sprite, the engine will keep track of them all automatically.""",
       "body_colour": (220, 220, 220)}
     ],
     ["SPRITE",
-      {"reference": "bob", "file": SPR_BOB_HAPPY, "x": 280, "y": 320}
+      {"reference": "bob", "file": SPR_BOB_HAPPY, "x": 100, "y": 120}
     ],
     ["SPRITE",
-      {"reference": "frederica", "file": SPR_FREDERICA_CONTENT, "x": 480, "y": 320}
+      {"reference": "frederica", "file": SPR_FREDERICA_CONTENT, "x": 550, "y": 320}
     ],
     ["TEXT", {
       "speaker": "Bob",
@@ -234,10 +236,10 @@ the other important stuff is finished.""",
       "body_colour": COL_WHITE}
     ],
     ["SPRITE",
-      {"reference": "bob", "file": SPR_BOB_HAPPY, "x": 320, "y": 320}
+      {"reference": "bob", "file": SPR_BOB_HAPPY, "x": 200, "y": 120}
     ],
     ["SPRITE",
-      {"reference": "frederica", "file": SPR_FREDERICA_CONTENT, "x": 510, "y": 320}
+      {"reference": "frederica", "file": SPR_FREDERICA_CONTENT, "x": 500, "y": 320}
     ],
     ["TEXT", {
       "speaker": "Bob",
@@ -252,7 +254,9 @@ the other important stuff is finished.""",
       "body_colour": (220, 220, 220)}
     ],
     ["BGM_STOP", {}],
-    ["BG_IMG", {"file": "bg-trees.png"}],
+    ["BG_IMG", {"file": "bg-black.png"}],
+    ["SPRITE_REMOVE", {"reference": "bob"}],
+    ["SPRITE_REMOVE", {"reference": "frederica"}],
     ["TEXT", {
       "speaker": "",
       "body": """Press the Escape key to return to the menu.""",

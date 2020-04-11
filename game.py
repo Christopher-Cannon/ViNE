@@ -316,6 +316,8 @@ while running:
   #
   ################################################################################
   elif current_state == State.LOAD:
+    # Check for existence of save1-3 and load details accordingly
+
     for event in pygame.event.get():
       # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
