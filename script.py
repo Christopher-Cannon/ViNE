@@ -169,7 +169,8 @@ moving them around.""",
     ["TEXT", {
       "speaker": "Jane", 
       "body": """So long as you provide a unique reference for each 
-sprite, the engine will keep track of them all automatically.""", 
+sprite, the engine will keep track of them all automatically. You 
+can see the current sprites in the console.""", 
       "speaker_colour": COL_RED,
       "body_colour": COL_WHITE}
     ],

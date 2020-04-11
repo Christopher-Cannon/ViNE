@@ -18,6 +18,9 @@ HEIGHT = 720
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
+ICON = pygame.image.load(c.SPRITE_PATH + 'icon-vine.png')
+pygame.display.set_icon(ICON)
+
 ################################################################################
 # Constants from config.py
 ################################################################################
