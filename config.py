@@ -73,16 +73,16 @@ SPRITE_PATH = 'sprites/'
 
 # Various commands that can be included in scripts
 # These can be changes so long as they are followed in the script
-TEXT = "TEXT"
+CHAPTER = "CHAPTER"
 BG_IMG = "BG_IMG"
 SPRITE = "SPRITE"
+SPRITE_REMOVE = "SPRITE_REMOVE"
 BGM = "BGM"
+BGM_STOP = "BGM_STOP"
 SFX = "SFX"
-CHAPTER = "CHAPTER"
+TEXT = "TEXT"
 
 # Colours
 WHITE = (255, 255, 255)
 GREY = (100, 100, 100)
 BLACK = (0, 0, 0)
-
-

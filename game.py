@@ -119,10 +119,11 @@ TEXT_SPEED_SLOW = 1
 TEXT_SPEED_NORMAL = 2
 TEXT_SPEED_FAST = 3
 
-
-# Game settings - move to config file?
-volume_bgm = 0  # Default 0.5
+# Game settings - Need to get these from user_settings.txt
+volume_bgm = 0.3  # Default 0.5
 volume_sfx = 0.5
+
+mixer.music.set_volume(volume_bgm)
 
 # Sounds and volume
 sound_btn_click = mixer.Sound(c.SFX_PATH + c.assets["BTN_CLICK_SFX"])
@@ -148,6 +149,11 @@ current_background = TITLE_BACKGROUND
 current_index = 0
 # Holds the current sprites to be displayed on the game screen
 current_sprites = {}
+# Holds the current chapter - number + 1 if CHAPTER cmd encountered in the script
+current_chapter = {
+  "number": 0,
+  "title": ""
+}
 # Current text and speaker to display
 current_text = {
   "speaker": "",
@@ -160,6 +166,21 @@ scrollback_log = []
 
 running = True
 title_bgm_playing = False
+
+# Functions
+def getUserSettings():
+  # Try to read user_settings.txt
+    # Create if doesn't exist, populate with defaults, return defaults
+  
+  # Get BGM / SFX Volume and Text Speed
+
+  # Return dictionary containing values
+
+  return 0
+
+def saveUserSettings():
+  # Write file with currently assigned values
+  return 0
 
 def splitText(text):
   if len(text) > 0:
@@ -185,7 +206,6 @@ def splitText(text):
 
   return output
 
-# Event handlers
 def drawText(text, x, y, fg_colour):
   counter = 0
 
@@ -207,15 +227,6 @@ def drawSprite(filename, x, y):
   print("\nDraw sprite {} at position {}, {}".format(
       c.SPRITE_PATH + filename, x, y))
 
-def displayText(speaker, body):
-  print("\n{}: {}".format(speaker, body))
-
-def playBGM():
-  print("playBGM() called")
-
-def playSFX():
-  print("playSFX() called")
-
 # Game loop
 while running:
   # Draw black screen
@@ -233,7 +244,6 @@ while running:
     # Set BG music - make sure it always plays on the title screen
     if not(title_bgm_playing):
       mixer.music.load(TITLE_BGM)
-      mixer.music.set_volume(volume_bgm)
       mixer.music.play(-1)
 
       title_bgm_playing = True
@@ -337,6 +347,10 @@ while running:
   ################################################################################
   elif current_state == State.GAME:
     # Loop through and blit current sprites
+    if len(current_sprites) > 0:
+      for spr in current_sprites.values():
+        sprite_to_draw = pygame.image.load(c.SPRITE_PATH + spr["file"]).convert_alpha()
+        screen.blit(sprite_to_draw, (spr["x"], spr["y"]))
 
     # Draw text box
     screen.blit(TEXT_BOX, TEXT_BOX_ORIGIN)
@@ -346,12 +360,13 @@ while running:
     screen.blit(GAME_LOG_BTN, GAME_LOG_BTN_ORIGIN)
     screen.blit(GAME_QUIT_BTN, GAME_QUIT_BTN_ORIGIN)
     # Draw current text and speaker into the text box
-    drawText(
-        current_text["body"],
-        c.assets["TEXT_BODY_ORIGIN"][0],
-        c.assets["TEXT_BODY_ORIGIN"][1],
-        current_text["body_colour"]
-    )
+    if current_text["body"] != "":
+      drawText(
+          current_text["body"],
+          c.assets["TEXT_BODY_ORIGIN"][0],
+          c.assets["TEXT_BODY_ORIGIN"][1],
+          current_text["body_colour"]
+      )
 
     if current_text["speaker"] != "":
       drawSpeaker(
@@ -378,8 +393,20 @@ while running:
 
         print(current_sprites)
 
+      elif cmd is c.SPRITE_REMOVE:
+        current_sprites.pop(obj["reference"])
+
       elif cmd is c.BG_IMG:
         current_background = pygame.image.load(c.BG_PATH + obj["file"])
+
+      elif cmd is c.CHAPTER:
+        current_chapter["number"] = current_chapter["number"] + 1
+        current_chapter["title"] = obj["title"]
+
+        print("\nCHAPTER {}: {}\n".format(
+          current_chapter["number"],
+          current_chapter["title"]
+        ))
 
       elif cmd is c.TEXT:
         # Update the current text
@@ -392,10 +419,15 @@ while running:
         current_text["body_colour"] = obj["body_colour"]
         
       elif cmd is c.BGM:
-        playBGM()
+        mixer.music.load(c.BGM_PATH + obj["file"])
+        mixer.music.play(-1)
+        
+      elif cmd is c.BGM_STOP:
+        mixer.music.stop()
 
       elif cmd is c.SFX:
-        playSFX()
+        sound = mixer.Sound(c.SFX_PATH + obj["file"])
+        sound.play()
 
       # Do not advance if current index is TEXT
       if not(script[current_index][1] is c.TEXT):
@@ -431,6 +463,7 @@ while running:
   #
   ################################################################################
   elif current_state == State.SETTINGS:
+    # Output text for each setting
     bgm_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_BGM_TEXT), True, c.WHITE, c.BLACK)
     screen.blit(bgm_text, SETTINGS_BGM_TEXT_ORIGIN)
 
@@ -440,6 +473,7 @@ while running:
     text_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_TEXT_TEXT), True, c.WHITE, c.BLACK)
     screen.blit(text_text, SETTINGS_TEXT_TEXT_ORIGIN)
 
+    # Draw back button
     screen.blit(BACK_BTN, BACK_BTN_ORIGIN)
 
     for event in pygame.event.get():
