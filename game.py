@@ -106,6 +106,10 @@ SETTINGS_BGM_TEXT_ORIGIN = c.assets["SETTINGS_BGM_TEXT_ORIGIN"]
 SETTINGS_SFX_TEXT_ORIGIN = c.assets["SETTINGS_SFX_TEXT_ORIGIN"]
 SETTINGS_TEXT_TEXT_ORIGIN = c.assets["SETTINGS_TEXT_TEXT_ORIGIN"]
 
+# Scrollback
+SCROLLBACK_BOX = pygame.image.load(c.SPRITE_PATH + c.assets["SCROLLBACK_BOX"])
+SCROLLBACK_LINE_SPACING = c.assets["SCROLLBACK_LINE_SPACING"]
+
 # General rectangles
 BACK_BTN_RECT = BACK_BTN.get_rect(topleft=c.assets["BACK_BTN_ORIGIN"])
 
@@ -431,19 +435,8 @@ while running:
           speaker_colour=obj["speaker_colour"],
           body_colour=obj["body_colour"]
         )
-        speaker = obj["speaker"]
-
-        if speaker == "":
-          speaker = "_____"
-
         # Update scrollback log
-        new_log = dict(
-          speaker=speaker,
-          body=splitText(obj["body"]), 
-          speaker_colour=obj["speaker_colour"],
-          body_colour=obj["body_colour"]
-        )
-        scrollback_log.insert(0, new_log)
+        scrollback_log.insert(0, current_text)
 
         if len(scrollback_log) > SCROLLBACK_LIMIT:
           scrollback_log.pop(-1)
@@ -487,6 +480,23 @@ while running:
 
           # Make sure to stop any music playing before returning to title
           current_state = State.TITLE
+      if event.type == pygame.MOUSEBUTTONDOWN:
+        mouse_x, mouse_y = event.pos
+
+        if GAME_SAVE_BTN_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_click.play()
+
+        if GAME_LOAD_BTN_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_click.play()
+
+        if GAME_LOG_BTN_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_click.play()
+          current_state = State.SCROLLBACK
+
+        if GAME_QUIT_BTN_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_back.play()
+          current_state = State.TITLE
+
   ################################################################################
   #
   # SETTINGS SCREEN
@@ -541,19 +551,20 @@ while running:
   #
   ################################################################################
   elif current_state == State.SCROLLBACK:
-    current_background = BLANK_BG
-
+    # Output translucent box over current background image
+    screen.blit(SCROLLBACK_BOX, (0, 0))
+    # Current position to draw text
     cur_pos = 20
-    line_space = 40
+    # Need a counter that always starts at 0
     counter = 0
 
     for i in range(len(scrollback_log)):
       pos = i + scrollback_pos
 
-      if cur_pos + line_space > HEIGHT:
+      if cur_pos + SCROLLBACK_LINE_SPACING > HEIGHT:
         break
 
-      # Now output the speaker
+      # Output the speaker
       try:
         scrollback_speaker = BODY_FONT_SMALL.render(
           "{}".format(scrollback_log[pos]["speaker"]), 
@@ -562,13 +573,13 @@ while running:
         )
         screen.blit(
           scrollback_speaker, 
-          (20, cur_pos)
+          (50, cur_pos)
         )
-        cur_pos += line_space
+        cur_pos += SCROLLBACK_LINE_SPACING
       except:
         pass
 
-      # Output the body first
+      # Output each line of the body text on separate line
       try:
         for j in range(len(scrollback_log[pos]["body"])):
           scrollback_body = BODY_FONT_SMALL.render(
@@ -578,9 +589,9 @@ while running:
           )
           screen.blit(
             scrollback_body, 
-            (40, cur_pos)
+            (80, cur_pos)
           )
-          cur_pos += line_space
+          cur_pos += SCROLLBACK_LINE_SPACING
       except:
         pass
 
@@ -591,17 +602,26 @@ while running:
         running = False
 
       if event.type == pygame.KEYDOWN:
-        print("log length: {}, pos: {}".format(len(scrollback_log), scrollback_pos))
-
         if event.key == pygame.K_ESCAPE:
-          current_state = State.TITLE
+          sound_btn_back.play()
+          current_state = State.GAME
 
+        # Scroll log with arrow keys
         if event.key == pygame.K_UP:
           if not(scrollback_pos >= len(scrollback_log)-1):
             scrollback_pos += 1
         if event.key == pygame.K_DOWN:
           if not(scrollback_pos <= 0):
             scrollback_pos -= 1
+
+      if event.type == pygame.MOUSEBUTTONDOWN:
+        # Scroll log with mousewheel
+        if event.button == 4:
+          if not(scrollback_pos <= 0):
+            scrollback_pos -= 1
+        if event.button == 5:
+          if not(scrollback_pos >= len(scrollback_log)-1):
+            scrollback_pos += 1
 
   # Update screen
   pygame.display.update()

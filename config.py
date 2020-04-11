@@ -63,7 +63,9 @@ assets = {
   "GAME_SAVE_BTN_ORIGIN": (850, 560),
   "GAME_LOAD_BTN_ORIGIN": (850, 600),
   "GAME_LOG_BTN_ORIGIN": (850, 640),
-  "GAME_QUIT_BTN_ORIGIN": (850, 680)
+  "GAME_QUIT_BTN_ORIGIN": (850, 680),
+  "SCROLLBACK_BOX": "scrollback-box.png",
+  "SCROLLBACK_LINE_SPACING": 40
 }
 
 # Paths to assets
