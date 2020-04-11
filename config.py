@@ -10,6 +10,7 @@ assets = {
   "BACK_BTN": "btn-back.png",
   "BACK_BTN_ORIGIN": (700, 610),
   "SCROLLBACK_LIMIT": 10,
+  "BLANK_BG": "bg-black.png",
   # Title screen
   "TITLE_BG": "bg-title.png",
   "TITLE_BGM": "no-time.ogg",

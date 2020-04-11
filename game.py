@@ -45,7 +45,9 @@ SPEAKER_FONT = pygame.font.Font(
     c.FONT_PATH + c.assets["SPEAKER_FONT"], 
     c.assets["FONT_SIZE_MEDIUM"])
 
-SCROLLBACK_LIMIT = a.assets["SCROLLBACK_LIMIT"]
+SCROLLBACK_LIMIT = c.assets["SCROLLBACK_LIMIT"]
+
+BLANK_BG = pygame.image.load(c.BG_PATH + c.assets["BLANK_BG"])
 
 # Title
 TITLE_BACKGROUND = pygame.image.load(c.BG_PATH + c.assets["TITLE_BG"])
@@ -168,6 +170,7 @@ current_text = {
 }
 # Holds the previous 100 TEXT lines
 scrollback_log = []
+scrollback_pos = 0
 
 running = True
 title_bgm_playing = False
@@ -422,18 +425,25 @@ while running:
 
       elif cmd is c.TEXT:
         # Update the current text
-        if speaker == "":
-          speaker = "???"
-        else:
-          speaker = obj["speaker"]
-
         current_text = dict(
+          speaker=obj["speaker"],
+          body=splitText(obj["body"]), 
+          speaker_colour=obj["speaker_colour"],
+          body_colour=obj["body_colour"]
+        )
+        speaker = obj["speaker"]
+
+        if speaker == "":
+          speaker = "_____"
+
+        # Update scrollback log
+        new_log = dict(
           speaker=speaker,
           body=splitText(obj["body"]), 
           speaker_colour=obj["speaker_colour"],
           body_colour=obj["body_colour"]
         )
-        scrollback_log.insert(0, current_text)
+        scrollback_log.insert(0, new_log)
 
         if len(scrollback_log) > SCROLLBACK_LIMIT:
           scrollback_log.pop(-1)
@@ -531,13 +541,67 @@ while running:
   #
   ################################################################################
   elif current_state == State.SCROLLBACK:
+    current_background = BLANK_BG
+
+    cur_pos = 20
+    line_space = 40
+    counter = 0
+
+    for i in range(len(scrollback_log)):
+      pos = i + scrollback_pos
+
+      if cur_pos + line_space > HEIGHT:
+        break
+
+      # Now output the speaker
+      try:
+        scrollback_speaker = BODY_FONT_SMALL.render(
+          "{}".format(scrollback_log[pos]["speaker"]), 
+          True, 
+          scrollback_log[pos]["speaker_colour"]
+        )
+        screen.blit(
+          scrollback_speaker, 
+          (20, cur_pos)
+        )
+        cur_pos += line_space
+      except:
+        pass
+
+      # Output the body first
+      try:
+        for j in range(len(scrollback_log[pos]["body"])):
+          scrollback_body = BODY_FONT_SMALL.render(
+            "{}".format(scrollback_log[pos]["body"][j]), 
+            True, 
+            scrollback_log[pos]["body_colour"]
+          )
+          screen.blit(
+            scrollback_body, 
+            (40, cur_pos)
+          )
+          cur_pos += line_space
+      except:
+        pass
+
+      counter += 1
+
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         running = False
 
       if event.type == pygame.KEYDOWN:
+        print("log length: {}, pos: {}".format(len(scrollback_log), scrollback_pos))
+
         if event.key == pygame.K_ESCAPE:
           current_state = State.TITLE
+
+        if event.key == pygame.K_UP:
+          if not(scrollback_pos >= len(scrollback_log)-1):
+            scrollback_pos += 1
+        if event.key == pygame.K_DOWN:
+          if not(scrollback_pos <= 0):
+            scrollback_pos -= 1
 
   # Update screen
   pygame.display.update()
