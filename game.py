@@ -1,6 +1,7 @@
 import script as s
 import config as c
 import pygame
+import math
 import re
 from pygame import mixer
 from enum import Enum
@@ -97,23 +98,19 @@ SETTINGS_BGM_PLUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_BGM
 SETTINGS_BGM_MINUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_BGM_MINUS_BTN"]).convert_alpha()
 SETTINGS_SFX_PLUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_SFX_PLUS_BTN"]).convert_alpha()
 SETTINGS_SFX_MINUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_SFX_MINUS_BTN"]).convert_alpha()
-SETTINGS_TEXT_PLUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_TEXT_PLUS_BTN"]).convert_alpha()
-SETTINGS_TEXT_MINUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_TEXT_MINUS_BTN"]).convert_alpha()
 
 SETTINGS_BGM_PLUS_BTN_ORIGIN = c.assets["SETTINGS_BGM_PLUS_BTN_ORIGIN"]
 SETTINGS_BGM_MINUS_BTN_ORIGIN = c.assets["SETTINGS_BGM_MINUS_BTN_ORIGIN"]
 SETTINGS_SFX_PLUS_BTN_ORIGIN = c.assets["SETTINGS_SFX_PLUS_BTN_ORIGIN"]
 SETTINGS_SFX_MINUS_BTN_ORIGIN = c.assets["SETTINGS_SFX_MINUS_BTN_ORIGIN"]
-SETTINGS_TEXT_PLUS_BTN_ORIGIN = c.assets["SETTINGS_TEXT_PLUS_BTN_ORIGIN"]
-SETTINGS_TEXT_MINUS_BTN_ORIGIN = c.assets["SETTINGS_TEXT_MINUS_BTN_ORIGIN"]
 
+SETTINGS_HEADING_TEXT = c.assets["SETTINGS_HEADING_TEXT"]
 SETTINGS_BGM_TEXT = c.assets["SETTINGS_BGM_TEXT"]
 SETTINGS_SFX_TEXT = c.assets["SETTINGS_SFX_TEXT"]
-SETTINGS_TEXT_TEXT = c.assets["SETTINGS_TEXT_TEXT"]
 
+SETTINGS_HEADING_ORIGIN = c.assets["SETTINGS_HEADING_ORIGIN"]
 SETTINGS_BGM_TEXT_ORIGIN = c.assets["SETTINGS_BGM_TEXT_ORIGIN"]
 SETTINGS_SFX_TEXT_ORIGIN = c.assets["SETTINGS_SFX_TEXT_ORIGIN"]
-SETTINGS_TEXT_TEXT_ORIGIN = c.assets["SETTINGS_TEXT_TEXT_ORIGIN"]
 
 # Scrollback
 SCROLLBACK_BOX = pygame.image.load(c.SPRITE_PATH + c.assets["SCROLLBACK_BOX"])
@@ -133,6 +130,16 @@ GAME_SAVE_BTN_RECT = GAME_SAVE_BTN.get_rect(topleft=GAME_SAVE_BTN_ORIGIN)
 GAME_LOAD_BTN_RECT = GAME_LOAD_BTN.get_rect(topleft=GAME_LOAD_BTN_ORIGIN)
 GAME_LOG_BTN_RECT = GAME_LOG_BTN.get_rect(topleft=GAME_LOG_BTN_ORIGIN)
 GAME_QUIT_BTN_RECT = GAME_QUIT_BTN.get_rect(topleft=GAME_QUIT_BTN_ORIGIN)
+
+# Setting rectangles
+SETTINGS_BGM_PLUS_BTN_RECT = SETTINGS_BGM_PLUS_BTN.get_rect(
+    topleft=SETTINGS_BGM_PLUS_BTN_ORIGIN)
+SETTINGS_BGM_MINUS_BTN_RECT = SETTINGS_BGM_MINUS_BTN.get_rect(
+    topleft=SETTINGS_BGM_MINUS_BTN_ORIGIN)
+SETTINGS_SFX_PLUS_BTN_RECT = SETTINGS_SFX_PLUS_BTN.get_rect(
+    topleft=SETTINGS_SFX_PLUS_BTN_ORIGIN)
+SETTINGS_SFX_MINUS_BTN_RECT = SETTINGS_SFX_MINUS_BTN.get_rect(
+    topleft=SETTINGS_SFX_MINUS_BTN_ORIGIN)
 
 # Subject to change
 TEXT_SPEED_SLOW = 1
@@ -203,6 +210,16 @@ def saveUserSettings():
   # Write file with currently assigned values
   return 0
 
+def renderBodyText(text, font_size, origin, aa, fg, bg=None):
+  if font_size == "large":
+    output = BODY_FONT_LARGE.render("{}".format(text), aa, fg, bg)
+  elif font_size == "medium":
+    output = BODY_FONT_MEDIUM.render("{}".format(text), aa, fg, bg)
+  else:
+    output = BODY_FONT_SMALL.render("{}".format(text), aa, fg, bg)
+
+  screen.blit(output, origin)
+
 # Set inline dialogue formatting
 def inlineTextFormat(word):
   if re.search(TEXT_BOLD_PATTERN_START, word):
@@ -244,7 +261,7 @@ def getColour(word):
   
   return 0
 
-# Output text box dialogue
+# Output text box dialogue (all at once)
 def drawDialogue(text, x, y, fg_colour):
   counter = 0
   cur_x = x
@@ -342,7 +359,9 @@ while running:
           current_state = State.SCROLLBACK
 
       # Detect button clicks
-      if event.type == pygame.MOUSEBUTTONDOWN:
+      if (event.type == pygame.MOUSEBUTTONDOWN and 
+        event.button == 1
+        ):
         mouse_x, mouse_y = event.pos
 
         if TITLE_START_BTN_RECT.collidepoint(mouse_x, mouse_y):
@@ -362,19 +381,14 @@ while running:
         if TITLE_LOAD_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
 
-          mixer.music.stop()
-          title_bgm_playing = False
           current_state = State.LOAD
 
         if TITLE_SETTINGS_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
 
-          mixer.music.stop()
-          title_bgm_playing = False
           current_state = State.SETTINGS
 
         if TITLE_QUIT_BTN_RECT.collidepoint(mouse_x, mouse_y):
-
           running = False
 
   ###################################################################
@@ -540,7 +554,9 @@ while running:
 
           # Make sure to stop any music playing before returning to title
           current_state = State.TITLE
-      if event.type == pygame.MOUSEBUTTONDOWN:
+      if (event.type == pygame.MOUSEBUTTONDOWN and 
+        event.button == 1
+        ):
         mouse_x, mouse_y = event.pos
 
         if GAME_SAVE_BTN_RECT.collidepoint(mouse_x, mouse_y):
@@ -563,30 +579,30 @@ while running:
   #
   ###################################################################
   elif current_state == State.SETTINGS:
+    # Output the heading
+    renderBodyText(SETTINGS_HEADING_TEXT, "large", 
+      SETTINGS_HEADING_ORIGIN, True, c.WHITE, c.BLACK
+    )
     # Output text for each setting
-    bgm_text = BODY_FONT_MEDIUM.render(
-      "{}".format(SETTINGS_BGM_TEXT), 
-      True, 
-      c.WHITE, 
-      c.BLACK
+    renderBodyText(SETTINGS_BGM_TEXT, "medium", 
+      SETTINGS_BGM_TEXT_ORIGIN, True, c.WHITE, c.BLACK
     )
-    screen.blit(bgm_text, SETTINGS_BGM_TEXT_ORIGIN)
+    renderBodyText(SETTINGS_SFX_TEXT, "medium", 
+      SETTINGS_SFX_TEXT_ORIGIN, True, c.WHITE, c.BLACK
+    )
+    # Output plus / minus buttons
+    screen.blit(SETTINGS_BGM_PLUS_BTN, SETTINGS_BGM_PLUS_BTN_ORIGIN)
+    screen.blit(SETTINGS_BGM_MINUS_BTN, SETTINGS_BGM_MINUS_BTN_ORIGIN)
 
-    sfx_text = BODY_FONT_MEDIUM.render(
-      "{}".format(SETTINGS_SFX_TEXT), 
-      True, 
-      c.WHITE, 
-      c.BLACK
-    )
-    screen.blit(sfx_text, SETTINGS_SFX_TEXT_ORIGIN)
+    screen.blit(SETTINGS_SFX_PLUS_BTN, SETTINGS_SFX_PLUS_BTN_ORIGIN)
+    screen.blit(SETTINGS_SFX_MINUS_BTN, SETTINGS_SFX_MINUS_BTN_ORIGIN)
 
-    text_text = BODY_FONT_MEDIUM.render(
-      "{}".format(SETTINGS_TEXT_TEXT), 
-      True, 
-      c.WHITE, 
-      c.BLACK
+    renderBodyText(math.floor((volume_bgm + 0.01) * 10), "medium",
+      (500, 200), True, c.WHITE, c.BLACK
     )
-    screen.blit(text_text, SETTINGS_TEXT_TEXT_ORIGIN)
+    renderBodyText(math.floor((volume_sfx + 0.01) * 10), "medium",
+      (500, 300), True, c.WHITE, c.BLACK
+    )
 
     # Draw back button
     screen.blit(BACK_BTN, BACK_BTN_ORIGIN)
@@ -595,12 +611,52 @@ while running:
       if event.type == pygame.QUIT:
         running = False
 
-      if event.type == pygame.MOUSEBUTTONDOWN:
+      if (event.type == pygame.MOUSEBUTTONDOWN and 
+        event.button == 1
+        ):
         mouse_x, mouse_y = event.pos
 
         if BACK_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_back.play()
           current_state = State.TITLE
+
+        # Raise / Lower BGM / SFX volume
+        if SETTINGS_BGM_PLUS_BTN_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_click.play()
+          
+          if volume_bgm < 0.9:
+            volume_bgm += 0.1
+          else:
+            volume_bgm = 1
+
+        if SETTINGS_BGM_MINUS_BTN_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_click.play()
+
+          if volume_bgm >= 0.1:
+            volume_bgm -= 0.1
+          else:
+            volume_bgm = 0
+
+        if SETTINGS_SFX_PLUS_BTN_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_click.play()
+
+          if volume_sfx < 0.9:
+            volume_sfx += 0.1
+          else:
+            volume_sfx = 1
+
+        if SETTINGS_SFX_MINUS_BTN_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_click.play()
+
+          if volume_sfx >= 0.1:
+            volume_sfx -= 0.1
+          else:
+            volume_sfx = 0
+
+        mixer.music.set_volume(volume_bgm)
+
+        sound_btn_click.set_volume(volume_sfx)
+        sound_btn_back.set_volume(volume_sfx)
 
       if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
@@ -626,6 +682,15 @@ while running:
   #
   ###################################################################
   elif current_state == State.SCROLLBACK:
+    # Loop through and blit current sprites
+    if len(current_sprites) > 0:
+      for spr in current_sprites.values():
+        sprite_to_draw = pygame.image.load(
+            c.SPRITE_PATH + spr["file"]
+        ).convert_alpha()
+
+        screen.blit(sprite_to_draw, (spr["x"], spr["y"]))
+
     # Output translucent box over current background image
     screen.blit(SCROLLBACK_BOX, (0, 0))
     # Current position to draw text
