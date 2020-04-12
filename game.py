@@ -203,7 +203,53 @@ def saveUserSettings():
   # Write file with currently assigned values
   return 0
 
-def drawText(text, x, y, fg_colour):
+# Set inline dialogue formatting
+def inlineTextFormat(word):
+  if re.search(TEXT_BOLD_PATTERN_START, word):
+    BODY_FONT_SMALL.set_bold(1)
+    return 1
+
+  if re.search(TEXT_BOLD_PATTERN_END, word):
+    BODY_FONT_SMALL.set_bold(0)
+    return 1
+
+  # Italic
+  if re.search(TEXT_ITALIC_PATTERN_START, word):
+    BODY_FONT_SMALL.set_italic(1)
+    return 1
+
+  if re.search(TEXT_ITALIC_PATTERN_END, word):
+    BODY_FONT_SMALL.set_italic(0)
+    return 1
+
+  # Underline
+  if re.search(TEXT_UNDERLINE_PATTERN_START, word):
+    BODY_FONT_SMALL.set_underline(1)
+    return 1
+
+  if re.search(TEXT_UNDERLINE_PATTERN_END, word):
+    BODY_FONT_SMALL.set_underline(0)
+    return 1
+
+  return 0
+
+# Get colour for inline dialogue formatting
+def getColour(word):
+  if re.search(TEXT_COLOUR_PATTERN, word):
+    match = re.search(TEXT_COLOUR_PATTERN, word).string
+    match = match.replace('(', '')
+    match = match.replace(')', '')
+
+    return tuple(map(int, match.split(',')))
+  
+  return 0
+
+# Output text to the screen
+def displayText(text, x, y):
+  screen.blit(text, (x, y))
+
+# Output text box dialogue
+def displayDialogue(text, x, y, fg_colour):
   counter = 0
   cur_x = x
   colour = fg_colour
@@ -212,39 +258,12 @@ def drawText(text, x, y, fg_colour):
 
   for word in split_text:
     # Bold
-    if re.search(TEXT_BOLD_PATTERN_START, word):
-      BODY_FONT_SMALL.set_bold(1)
-      continue
-
-    if re.search(TEXT_BOLD_PATTERN_END, word):
-      BODY_FONT_SMALL.set_bold(0)
-      continue
-
-    # Italic
-    if re.search(TEXT_ITALIC_PATTERN_START, word):
-      BODY_FONT_SMALL.set_italic(1)
-      continue
-
-    if re.search(TEXT_ITALIC_PATTERN_END, word):
-      BODY_FONT_SMALL.set_italic(0)
-      continue
-
-    # Underline
-    if re.search(TEXT_UNDERLINE_PATTERN_START, word):
-      BODY_FONT_SMALL.set_underline(1)
-      continue
-
-    if re.search(TEXT_UNDERLINE_PATTERN_END, word):
-      BODY_FONT_SMALL.set_underline(0)
+    if inlineTextFormat(word):
       continue
 
     # Colour
-    if re.search(TEXT_COLOUR_PATTERN, word):
-      match = re.search(TEXT_COLOUR_PATTERN, word).string
-      match = match.replace('(', '')
-      match = match.replace(')', '')
-
-      colour = tuple(map(int, match.split(',')))
+    if getColour(word):
+      colour = getColour(word)
       continue
 
     # Render word to surface for drawing
@@ -260,10 +279,8 @@ def drawText(text, x, y, fg_colour):
       cur_x = x
       counter += 1
 
-    screen.blit(
-      word_to_draw, 
-      (cur_x, y + (counter * TEXT_BODY_LINE_SPACING))
-    )
+    displayText(word_to_draw, cur_x, y + (counter * TEXT_BODY_LINE_SPACING))
+
     # Where to place the next word
     cur_x += word_width
 
@@ -419,7 +436,7 @@ while running:
     screen.blit(GAME_QUIT_BTN, GAME_QUIT_BTN_ORIGIN)
     # Draw current text and speaker into the text box
     if current_text["body"] != "":
-      drawText(
+      displayDialogue(
           current_text["body"],
           c.assets["TEXT_BODY_ORIGIN"][0],
           c.assets["TEXT_BODY_ORIGIN"][1],

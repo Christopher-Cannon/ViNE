@@ -19,12 +19,17 @@ def getScript():
   COL_RED = (250, 40, 55)
   COL_GREEN = (40, 250, 55)
 
+  # Colours for inline formatting
+  def colour(colour):
+    colour_string = "({},{},{})".format(colour[0], colour[1], colour[2])
+    return colour_string
+
   script = [
     # [completed, command, payload] - completed is added before returning
     ["BG_IMG", {"file": "bg-black.png"}],
     ["TEXT", {
       "speaker": "",
-      "body": "[b] Wait [i] a [u] (255,20,20) second, [/b] we're [/u] not [/i] ready yet.",
+      "body": "[b] Wait [i] a [u] {} second, [/b] we're [/u] not [/i] {} ready yet.".format(colour(COL_GREEN), colour(COL_WHITE)),
       "speaker_colour": COL_WHITE,
       "body_colour": COL_WHITE}
     ],
