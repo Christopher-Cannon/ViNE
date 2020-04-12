@@ -244,12 +244,8 @@ def getColour(word):
   
   return 0
 
-# Output text to the screen
-def displayText(text, x, y):
-  screen.blit(text, (x, y))
-
 # Output text box dialogue
-def displayDialogue(text, x, y, fg_colour):
+def drawDialogue(text, x, y, fg_colour):
   counter = 0
   cur_x = x
   colour = fg_colour
@@ -274,12 +270,15 @@ def displayDialogue(text, x, y, fg_colour):
     )
     word_width = word_to_draw.get_width()
 
-    if cur_x + (word_width) > TEXT_BODY_BOUNDS:
+    if cur_x + word_width > TEXT_BODY_BOUNDS:
       # Reset x back to start, increment counter
       cur_x = x
       counter += 1
 
-    displayText(word_to_draw, cur_x, y + (counter * TEXT_BODY_LINE_SPACING))
+    screen.blit(
+      word_to_draw, 
+      (cur_x, y + (counter * TEXT_BODY_LINE_SPACING))
+    )
 
     # Where to place the next word
     cur_x += word_width
@@ -436,7 +435,7 @@ while running:
     screen.blit(GAME_QUIT_BTN, GAME_QUIT_BTN_ORIGIN)
     # Draw current text and speaker into the text box
     if current_text["body"] != "":
-      displayDialogue(
+      drawDialogue(
           current_text["body"],
           c.assets["TEXT_BODY_ORIGIN"][0],
           c.assets["TEXT_BODY_ORIGIN"][1],
@@ -499,6 +498,8 @@ while running:
 
         if len(scrollback_log) > SCROLLBACK_LIMIT:
           scrollback_log.pop(-1)
+
+        print(scrollback_log)
         
       elif cmd is c.BGM:
         mixer.music.load(c.BGM_PATH + obj["file"])
@@ -628,12 +629,15 @@ while running:
     # Output translucent box over current background image
     screen.blit(SCROLLBACK_BOX, (0, 0))
     # Current position to draw text
-    cur_pos = 20
+    start_x = 80
+    cur_y = 20
 
+    # Iterate through the entire scrollback log
     for i in range(len(scrollback_log)):
       pos = i + scrollback_pos
+      cur_x = start_x
       # Stop drawing text if we're going to go off the bottom of the screen
-      if cur_pos + SCROLLBACK_LINE_SPACING > HEIGHT:
+      if cur_y + SCROLLBACK_LINE_SPACING > HEIGHT:
         break
 
       # Output the speaker
@@ -643,27 +647,44 @@ while running:
           True, 
           scrollback_log[pos]["speaker_colour"]
         )
-        screen.blit(
-          scrollback_speaker, 
-          (50, cur_pos)
-        )
-        cur_pos += SCROLLBACK_LINE_SPACING
+        screen.blit(scrollback_speaker, (50, cur_y))
+        cur_y += SCROLLBACK_LINE_SPACING
+
       except:
         pass
 
       # Output each line of the body text on separate lines
       try:
-        for j in range(len(scrollback_log[pos]["body"])):
-          scrollback_body = BODY_FONT_SMALL.render(
-            "{}".format(scrollback_log[pos]["body"][j]), 
+        current_line = scrollback_log[pos]["body"].split()
+        colour = scrollback_log[pos]["body_colour"]
+
+        for j in range(len(current_line)):
+          # Bold
+          if inlineTextFormat(current_line[j]):
+            continue
+
+          # Colour
+          if getColour(current_line[j]):
+            colour = getColour(current_line[j])
+            continue
+
+          word_to_draw = BODY_FONT_SMALL.render(
+            "{} ".format(current_line[j]), 
             True, 
-            scrollback_log[pos]["body_colour"]
+            colour
           )
-          screen.blit(
-            scrollback_body, 
-            (80, cur_pos)
-          )
-          cur_pos += SCROLLBACK_LINE_SPACING
+          word_width = word_to_draw.get_width()
+
+          # Reset x and move a line down if line will be too long
+          if cur_x + word_width > TEXT_BODY_BOUNDS:
+            cur_x = start_x
+            cur_y += SCROLLBACK_LINE_SPACING
+
+          screen.blit(word_to_draw, (cur_x, cur_y))
+
+          cur_x += word_width
+        cur_y += SCROLLBACK_LINE_SPACING
+
       except:
         pass
 
