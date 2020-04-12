@@ -24,7 +24,7 @@ def getScript():
     ["BG_IMG", {"file": "bg-black.png"}],
     ["TEXT", {
       "speaker": "",
-      "body": "Wait a second, we're not ready yet.",
+      "body": "[b] Wait [i] a (255,20,20) second, [/b] we're not [/i] ready yet.",
       "speaker_colour": COL_WHITE,
       "body_colour": COL_WHITE}
     ],
@@ -56,7 +56,7 @@ def getScript():
     ["TEXT", {
       "speaker": "Bob", 
       # Multi-line strings are good for long lines
-      "body": """Hello and welcome to ViNE, A.K.A Visual Novel Engine. 
+      "body": """Hello and "welcome to ViNE", A.K.A Visual Novel Engine. 
 It's a little basic right now but that should hopefully change in time.""",
       "speaker_colour": COL_WHITE,
       "body_colour": COL_WHITE}

@@ -1,6 +1,7 @@
 import script as s
 import config as c
 import pygame
+import re
 from pygame import mixer
 from enum import Enum
 
@@ -50,6 +51,12 @@ FONT_SIZE_SMALL_SPACE = c.assets["FONT_SIZE_SMALL_SPACE"]
 SCROLLBACK_LIMIT = c.assets["SCROLLBACK_LIMIT"]
 
 BLANK_BG = pygame.image.load(c.BG_PATH + c.assets["BLANK_BG"])
+
+TEXT_BOLD_PATTERN_START = "\[b\]"
+TEXT_BOLD_PATTERN_END = "\[\/b\]"
+TEXT_ITALIC_PATTERN_START = "\[i\]"
+TEXT_ITALIC_PATTERN_END = "\[\/i\]"
+TEXT_COLOUR_PATTERN = "\((\W|\d)+\)"
 
 # Title
 TITLE_BACKGROUND = pygame.image.load(c.BG_PATH + c.assets["TITLE_BG"])
@@ -199,12 +206,42 @@ def saveUserSettings():
 def drawText(text, x, y, fg_colour):
   counter = 0
   cur_x = x
+  colour = fg_colour
 
   split_text = text.split()
 
   for word in split_text:
+    # Text parsing goes here
+    # Bold? - BODY_FONT_SMALL.set_bold(1|0)
+    if re.search(TEXT_BOLD_PATTERN_START, word):
+      BODY_FONT_SMALL.set_bold(1)
+      continue
+
+    if re.search(TEXT_BOLD_PATTERN_END, word):
+      BODY_FONT_SMALL.set_bold(0)
+      continue
+
+    # Italic? - BODY_FONT_SMALL.set_italic(1|0)
+    if re.search(TEXT_ITALIC_PATTERN_START, word):
+      BODY_FONT_SMALL.set_italic(1)
+      continue
+
+    if re.search(TEXT_ITALIC_PATTERN_END, word):
+      BODY_FONT_SMALL.set_italic(0)
+      continue
+
+    # Colour? - Override colour variable
+    if re.search(TEXT_COLOUR_PATTERN, word):
+      match = re.search(TEXT_COLOUR_PATTERN, word).string
+      match = match.replace('(', '')
+      match = match.replace(')', '')
+
+      colour = tuple(map(int, match.split(',')))
+
+      continue
+
     # Render word to surface for drawing
-    word_to_draw = BODY_FONT_SMALL.render("{}".format(word), True, fg_colour)
+    word_to_draw = BODY_FONT_SMALL.render("{}".format(word), True, colour)
 
     word_width = word_to_draw.get_width()
 
@@ -293,6 +330,8 @@ while running:
 
           mixer.music.stop()
           title_bgm_playing = False
+
+          current_sprites = {}
           current_state = State.GAME
 
         if TITLE_LOAD_BTN_RECT.collidepoint(mouse_x, mouse_y):
