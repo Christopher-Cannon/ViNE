@@ -7,7 +7,6 @@ assets = {
   "FONT_SIZE_SMALL": 20,
   "FONT_SIZE_MEDIUM": 35,
   "FONT_SIZE_LARGE": 50,
-  "FONT_SIZE_SMALL_SPACE": 10,
   "BACK_BTN": "btn-back.png",
   "BACK_BTN_ORIGIN": (700, 610),
   "SCROLLBACK_LIMIT": 10,

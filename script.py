@@ -24,7 +24,7 @@ def getScript():
     ["BG_IMG", {"file": "bg-black.png"}],
     ["TEXT", {
       "speaker": "",
-      "body": "[b] Wait [i] a (255,20,20) second, [/b] we're not [/i] ready yet.",
+      "body": "[b] Wait [i] a [u] (255,20,20) second, [/b] we're [/u] not [/i] ready yet.",
       "speaker_colour": COL_WHITE,
       "body_colour": COL_WHITE}
     ],
