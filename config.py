@@ -7,6 +7,7 @@ assets = {
   "FONT_SIZE_SMALL": 20,
   "FONT_SIZE_MEDIUM": 35,
   "FONT_SIZE_LARGE": 50,
+  "FONT_SIZE_SMALL_SPACE": 10,
   "BACK_BTN": "btn-back.png",
   "BACK_BTN_ORIGIN": (700, 610),
   "SCROLLBACK_LIMIT": 10,
@@ -53,9 +54,9 @@ assets = {
   "SPEAKER_BOX_ORIGIN": (0, 505),
   # Origin of text to display
   "TEXT_BODY_ORIGIN": (10, 570),
-  # How many characters can be displayed on one line before breaking
-  "TEXT_BODY_CHAR_LIMIT": 70,
   "TEXT_BODY_LINE_SPACING": 35,
+  # How far text can go before wrapping to a new line
+  "TEXT_BODY_BOUNDS": 840,
   "GAME_SAVE_BTN": "btn-game-save.png",
   "GAME_LOAD_BTN": "btn-game-load.png",
   "GAME_LOG_BTN": "btn-game-log.png",

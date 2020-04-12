@@ -260,7 +260,7 @@ the other important stuff is finished.""",
     ["SPRITE_REMOVE", {"reference": "frederica"}],
     ["TEXT", {
       "speaker": "",
-      "body": """Press the Escape key to return to the menu.""",
+      "body": """Press the Escape key or the QUIT button to return to the menu.""",
       "speaker_colour": COL_WHITE,
       "body_colour": COL_WHITE}
     ]

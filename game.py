@@ -45,6 +45,8 @@ SPEAKER_FONT = pygame.font.Font(
     c.FONT_PATH + c.assets["SPEAKER_FONT"], 
     c.assets["FONT_SIZE_MEDIUM"])
 
+FONT_SIZE_SMALL_SPACE = c.assets["FONT_SIZE_SMALL_SPACE"]
+
 SCROLLBACK_LIMIT = c.assets["SCROLLBACK_LIMIT"]
 
 BLANK_BG = pygame.image.load(c.BG_PATH + c.assets["BLANK_BG"])
@@ -68,7 +70,7 @@ TEXT_BOX = pygame.image.load(c.SPRITE_PATH + c.assets["TEXT_BOX"]).convert_alpha
 TEXT_BOX_ORIGIN = c.assets["TEXT_BOX_ORIGIN"]
 
 TEXT_BODY_ORIGIN = c.assets["TEXT_BODY_ORIGIN"]
-TEXT_BODY_CHAR_LIMIT = c.assets["TEXT_BODY_CHAR_LIMIT"]
+TEXT_BODY_BOUNDS = c.assets["TEXT_BODY_BOUNDS"]
 TEXT_BODY_LINE_SPACING = c.assets["TEXT_BODY_LINE_SPACING"]
 
 SPEAKER_BOX_ORIGIN = c.assets["SPEAKER_BOX_ORIGIN"]
@@ -194,37 +196,26 @@ def saveUserSettings():
   # Write file with currently assigned values
   return 0
 
-def splitText(text):
-  if len(text) > 0:
-    text = text.replace('\n', '')
-    text_arr = text.split(" ")
-
-    output = []
-    new_string = ""
-
-    for i in range(len(text_arr)):
-      word = text_arr[i]
-
-      if len(new_string + word + " ") > TEXT_BODY_CHAR_LIMIT:
-        output.append(new_string.rstrip())
-        new_string = ""
-
-      new_string += word + " "
-
-      if i+1 == len(text_arr):
-        output.append(new_string.rstrip())
-  else:
-    output = ['']
-
-  return output
-
 def drawText(text, x, y, fg_colour):
   counter = 0
+  cur_x = x
 
-  for t in text:
-    text_to_draw = BODY_FONT_SMALL.render("{}".format(t), True, fg_colour)
-    screen.blit(text_to_draw, (x, y + (counter * TEXT_BODY_LINE_SPACING)))
-    counter += 1
+  split_text = text.split()
+
+  for word in split_text:
+    # Render word to surface for drawing
+    word_to_draw = BODY_FONT_SMALL.render("{}".format(word), True, fg_colour)
+
+    word_width = word_to_draw.get_width()
+
+    if cur_x + (word_width + FONT_SIZE_SMALL_SPACE) > TEXT_BODY_BOUNDS:
+      # Reset x back to start, increment counter
+      cur_x = x
+      counter += 1
+
+    screen.blit(word_to_draw, (cur_x, y + (counter * TEXT_BODY_LINE_SPACING)))
+    # Where to place the next word
+    cur_x += word_width + FONT_SIZE_SMALL_SPACE
 
 def drawSpeaker(name, x, y, fg_colour, bg_colour=None):
   speaker_box = SPEAKER_FONT.render("{}".format(name), True, fg_colour, bg_colour)
@@ -431,7 +422,7 @@ while running:
         # Update the current text
         current_text = dict(
           speaker=obj["speaker"],
-          body=splitText(obj["body"]), 
+          body=obj["body"], 
           speaker_colour=obj["speaker_colour"],
           body_colour=obj["body_colour"]
         )
@@ -555,12 +546,10 @@ while running:
     screen.blit(SCROLLBACK_BOX, (0, 0))
     # Current position to draw text
     cur_pos = 20
-    # Need a counter that always starts at 0
-    counter = 0
 
     for i in range(len(scrollback_log)):
       pos = i + scrollback_pos
-
+      # Stop drawing text if we're going to go off the bottom of the screen
       if cur_pos + SCROLLBACK_LINE_SPACING > HEIGHT:
         break
 
@@ -579,7 +568,7 @@ while running:
       except:
         pass
 
-      # Output each line of the body text on separate line
+      # Output each line of the body text on separate lines
       try:
         for j in range(len(scrollback_log[pos]["body"])):
           scrollback_body = BODY_FONT_SMALL.render(
@@ -594,8 +583,6 @@ while running:
           cur_pos += SCROLLBACK_LINE_SPACING
       except:
         pass
-
-      counter += 1
 
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
