@@ -22,9 +22,9 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 ICON = pygame.image.load(c.SPRITE_PATH + 'icon-vine.png')
 pygame.display.set_icon(ICON)
 
-################################################################################
+###################################################################
 # Constants from config.py
-################################################################################
+###################################################################
 
 # General
 BACK_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["BACK_BTN"]).convert_alpha()
@@ -248,8 +248,11 @@ def drawText(text, x, y, fg_colour):
       continue
 
     # Render word to surface for drawing
-    word_to_draw = BODY_FONT_SMALL.render("{} ".format(word), True, colour)
-
+    word_to_draw = BODY_FONT_SMALL.render(
+      "{} ".format(word), 
+      True, 
+      colour
+    )
     word_width = word_to_draw.get_width()
 
     if cur_x + (word_width) > TEXT_BODY_BOUNDS:
@@ -257,12 +260,20 @@ def drawText(text, x, y, fg_colour):
       cur_x = x
       counter += 1
 
-    screen.blit(word_to_draw, (cur_x, y + (counter * TEXT_BODY_LINE_SPACING)))
+    screen.blit(
+      word_to_draw, 
+      (cur_x, y + (counter * TEXT_BODY_LINE_SPACING))
+    )
     # Where to place the next word
     cur_x += word_width
 
 def drawSpeaker(name, x, y, fg_colour, bg_colour=None):
-  speaker_box = SPEAKER_FONT.render("{}".format(name), True, fg_colour, bg_colour)
+  speaker_box = SPEAKER_FONT.render(
+    "{}".format(name), 
+    True, 
+    fg_colour, 
+    bg_colour
+  )
   screen.blit(speaker_box, (x, y))
 
 # Game loop
@@ -272,11 +283,11 @@ while running:
   # Set BG image
   screen.blit(current_background, (0, 0))
 
-  ################################################################################
+  ###################################################################
   #
   # TITLE SCREEN
   #
-  ################################################################################
+  ###################################################################
   if current_state == State.TITLE:
     current_background = TITLE_BACKGROUND
     # Set BG music - make sure it always plays on the title screen
@@ -350,11 +361,11 @@ while running:
 
           running = False
 
-  ################################################################################
+  ###################################################################
   #
   # LOAD SCREEN
   #
-  ################################################################################
+  ###################################################################
   elif current_state == State.LOAD:
     # Check for existence of save1-3 and load details accordingly
 
@@ -367,11 +378,11 @@ while running:
         if event.key == pygame.K_ESCAPE:
           current_state = State.TITLE
 
-  ################################################################################
+  ###################################################################
   #
   # SAVE SCREEN
   #
-  ################################################################################
+  ###################################################################
   elif current_state == State.SAVE:
     # Three text files (save1, save2, save3)
 
@@ -384,16 +395,19 @@ while running:
         if event.key == pygame.K_ESCAPE:
           current_state = State.TITLE
 
-  ################################################################################
+  ###################################################################
   #
   # GAME SCREEN
   #
-  ################################################################################
+  ###################################################################
   elif current_state == State.GAME:
     # Loop through and blit current sprites
     if len(current_sprites) > 0:
       for spr in current_sprites.values():
-        sprite_to_draw = pygame.image.load(c.SPRITE_PATH + spr["file"]).convert_alpha()
+        sprite_to_draw = pygame.image.load(
+          c.SPRITE_PATH + spr["file"]
+        ).convert_alpha()
+        
         screen.blit(sprite_to_draw, (spr["x"], spr["y"]))
 
     # Draw text box
@@ -421,9 +435,9 @@ while running:
         c.BLACK
       )
 
-    ################################################################################
+    ###################################################################
     # Run through game script
-    ################################################################################
+    ###################################################################
     if script[current_index][0] == 0:
       # Set current instruction to complete to prevent repeat execution
       script[current_index][0] = 1
@@ -485,9 +499,9 @@ while running:
         if current_index + 1 < len(script):
           current_index += 1
 
-    ################################################################################
+    ###################################################################
     # Now handle player input
-    ################################################################################
+    ###################################################################
     for event in pygame.event.get():
       # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
@@ -525,20 +539,35 @@ while running:
           sound_btn_back.play()
           current_state = State.TITLE
 
-  ################################################################################
+  ###################################################################
   #
   # SETTINGS SCREEN
   #
-  ################################################################################
+  ###################################################################
   elif current_state == State.SETTINGS:
     # Output text for each setting
-    bgm_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_BGM_TEXT), True, c.WHITE, c.BLACK)
+    bgm_text = BODY_FONT_MEDIUM.render(
+      "{}".format(SETTINGS_BGM_TEXT), 
+      True, 
+      c.WHITE, 
+      c.BLACK
+    )
     screen.blit(bgm_text, SETTINGS_BGM_TEXT_ORIGIN)
 
-    sfx_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_SFX_TEXT), True, c.WHITE, c.BLACK)
+    sfx_text = BODY_FONT_MEDIUM.render(
+      "{}".format(SETTINGS_SFX_TEXT), 
+      True, 
+      c.WHITE, 
+      c.BLACK
+    )
     screen.blit(sfx_text, SETTINGS_SFX_TEXT_ORIGIN)
 
-    text_text = BODY_FONT_MEDIUM.render("{}".format(SETTINGS_TEXT_TEXT), True, c.WHITE, c.BLACK)
+    text_text = BODY_FONT_MEDIUM.render(
+      "{}".format(SETTINGS_TEXT_TEXT), 
+      True, 
+      c.WHITE, 
+      c.BLACK
+    )
     screen.blit(text_text, SETTINGS_TEXT_TEXT_ORIGIN)
 
     # Draw back button
@@ -559,11 +588,11 @@ while running:
         if event.key == pygame.K_ESCAPE:
           current_state = State.TITLE
 
-  ################################################################################
+  ###################################################################
   #
   # CREDITS SCREEN
   #
-  ################################################################################
+  ###################################################################
   elif current_state == State.CREDITS:
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
@@ -573,11 +602,11 @@ while running:
         if event.key == pygame.K_ESCAPE:
           current_state = State.TITLE
 
-  ################################################################################
+  ###################################################################
   #
   # SCROLLBACK SCREEN
   #
-  ################################################################################
+  ###################################################################
   elif current_state == State.SCROLLBACK:
     # Output translucent box over current background image
     screen.blit(SCROLLBACK_BOX, (0, 0))
