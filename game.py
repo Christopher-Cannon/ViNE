@@ -48,8 +48,8 @@ SPEAKER_FONT = pygame.font.Font(
     c.assets["FONT_SIZE_MEDIUM"])
 
 SCROLLBACK_LIMIT = c.assets["SCROLLBACK_LIMIT"]
-
 BLANK_BG = pygame.image.load(c.BG_PATH + c.assets["BLANK_BG"])
+HEADING_ORIGIN = c.assets["HEADING_ORIGIN"]
 
 TEXT_BOLD_PATTERN_START = "\[b\]"
 TEXT_BOLD_PATTERN_END = "\[\/b\]"
@@ -94,6 +94,8 @@ GAME_LOG_BTN_ORIGIN = c.assets["GAME_LOG_BTN_ORIGIN"]
 GAME_QUIT_BTN_ORIGIN = c.assets["GAME_QUIT_BTN_ORIGIN"]
 
 # Settings
+SETTINGS_BG = pygame.image.load(c.BG_PATH + c.assets["SETTINGS_BG"])
+
 SETTINGS_BGM_PLUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_BGM_PLUS_BTN"]).convert_alpha()
 SETTINGS_BGM_MINUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_BGM_MINUS_BTN"]).convert_alpha()
 SETTINGS_SFX_PLUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_SFX_PLUS_BTN"]).convert_alpha()
@@ -108,9 +110,35 @@ SETTINGS_HEADING_TEXT = c.assets["SETTINGS_HEADING_TEXT"]
 SETTINGS_BGM_TEXT = c.assets["SETTINGS_BGM_TEXT"]
 SETTINGS_SFX_TEXT = c.assets["SETTINGS_SFX_TEXT"]
 
-SETTINGS_HEADING_ORIGIN = c.assets["SETTINGS_HEADING_ORIGIN"]
 SETTINGS_BGM_TEXT_ORIGIN = c.assets["SETTINGS_BGM_TEXT_ORIGIN"]
 SETTINGS_SFX_TEXT_ORIGIN = c.assets["SETTINGS_SFX_TEXT_ORIGIN"]
+
+# Save / Load
+SAVE_LOAD_BG = pygame.image.load(c.BG_PATH + c.assets["SAVE_LOAD_BG"])
+
+SAVE_HEADING_TEXT = c.assets["SAVE_HEADING_TEXT"]
+LOAD_HEADING_TEXT = c.assets["LOAD_HEADING_TEXT"]
+
+SAVE_LOAD_PANEL = pygame.image.load(c.SPRITE_PATH + c.assets["SAVE_LOAD_PANEL"]).convert_alpha()
+
+SAVE_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SAVE_BTN"]).convert_alpha()
+LOAD_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["LOAD_BTN"]).convert_alpha()
+DELETE_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["DELETE_BTN"]).convert_alpha()
+
+SAVE_LOAD_PANEL_ONE_ORIGIN = c.assets["SAVE_LOAD_PANEL_ONE_ORIGIN"]
+SAVE_BTN_ONE_ORIGIN = c.assets["SAVE_BTN_ONE_ORIGIN"]
+LOAD_BTN_ONE_ORIGIN = c.assets["LOAD_BTN_ONE_ORIGIN"]
+DELETE_BTN_ONE_ORIGIN = c.assets["DELETE_BTN_ONE_ORIGIN"]
+
+SAVE_LOAD_PANEL_TWO_ORIGIN = c.assets["SAVE_LOAD_PANEL_TWO_ORIGIN"]
+SAVE_BTN_TWO_ORIGIN = c.assets["SAVE_BTN_TWO_ORIGIN"]
+LOAD_BTN_TWO_ORIGIN = c.assets["LOAD_BTN_TWO_ORIGIN"]
+DELETE_BTN_TWO_ORIGIN = c.assets["DELETE_BTN_TWO_ORIGIN"]
+
+SAVE_LOAD_PANEL_THREE_ORIGIN = c.assets["SAVE_LOAD_PANEL_THREE_ORIGIN"]
+SAVE_BTN_THREE_ORIGIN = c.assets["SAVE_BTN_THREE_ORIGIN"]
+LOAD_BTN_THREE_ORIGIN = c.assets["LOAD_BTN_THREE_ORIGIN"]
+DELETE_BTN_THREE_ORIGIN = c.assets["DELETE_BTN_THREE_ORIGIN"]
 
 # Scrollback
 SCROLLBACK_BOX = pygame.image.load(c.SPRITE_PATH + c.assets["SCROLLBACK_BOX"])
@@ -140,6 +168,26 @@ SETTINGS_SFX_PLUS_BTN_RECT = SETTINGS_SFX_PLUS_BTN.get_rect(
     topleft=SETTINGS_SFX_PLUS_BTN_ORIGIN)
 SETTINGS_SFX_MINUS_BTN_RECT = SETTINGS_SFX_MINUS_BTN.get_rect(
     topleft=SETTINGS_SFX_MINUS_BTN_ORIGIN)
+
+# Save / Load rectangles
+SAVE_BTN_ONE_RECT = SAVE_BTN.get_rect(
+    topleft=SAVE_BTN_ONE_ORIGIN)
+SAVE_BTN_TWO_RECT = SAVE_BTN.get_rect(
+    topleft=SAVE_BTN_TWO_ORIGIN)
+SAVE_BTN_THREE_RECT = SAVE_BTN.get_rect(
+    topleft=SAVE_BTN_THREE_ORIGIN)
+LOAD_BTN_ONE_RECT = LOAD_BTN.get_rect(
+    topleft=LOAD_BTN_ONE_ORIGIN)
+LOAD_BTN_TWO_RECT = LOAD_BTN.get_rect(
+    topleft=LOAD_BTN_TWO_ORIGIN)
+LOAD_BTN_THREE_RECT = LOAD_BTN.get_rect(
+    topleft=LOAD_BTN_THREE_ORIGIN)
+DELETE_BTN_ONE_RECT = DELETE_BTN.get_rect(
+    topleft=DELETE_BTN_ONE_ORIGIN)
+DELETE_BTN_TWO_RECT = DELETE_BTN.get_rect(
+    topleft=DELETE_BTN_TWO_ORIGIN)
+DELETE_BTN_THREE_RECT = DELETE_BTN.get_rect(
+    topleft=DELETE_BTN_THREE_ORIGIN)
 
 # Subject to change
 TEXT_SPEED_SLOW = 1
@@ -397,6 +445,25 @@ while running:
   #
   ###################################################################
   elif current_state == State.LOAD:
+    current_background = SAVE_LOAD_BG
+
+    # Output the heading
+    renderBodyText(LOAD_HEADING_TEXT, "large",
+      HEADING_ORIGIN, True, c.WHITE, c.BLACK
+    )
+
+    screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_ONE_ORIGIN)
+    screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_TWO_ORIGIN)
+    screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_THREE_ORIGIN)
+
+    screen.blit(LOAD_BTN, LOAD_BTN_ONE_ORIGIN)
+    screen.blit(LOAD_BTN, LOAD_BTN_TWO_ORIGIN)
+    screen.blit(LOAD_BTN, LOAD_BTN_THREE_ORIGIN)
+
+    screen.blit(DELETE_BTN, DELETE_BTN_ONE_ORIGIN)
+    screen.blit(DELETE_BTN, DELETE_BTN_TWO_ORIGIN)
+    screen.blit(DELETE_BTN, DELETE_BTN_THREE_ORIGIN)
+
     # Check for existence of save1-3 and load details accordingly
 
     for event in pygame.event.get():
@@ -408,12 +475,35 @@ while running:
         if event.key == pygame.K_ESCAPE:
           current_state = State.TITLE
 
+      if (event.type == pygame.MOUSEBUTTONDOWN and
+        event.button == 1
+        ):
+        mouse_x, mouse_y = event.pos
+
   ###################################################################
   #
   # SAVE SCREEN
   #
   ###################################################################
   elif current_state == State.SAVE:
+    current_background = SAVE_LOAD_BG
+
+    # Output the heading
+    renderBodyText(SAVE_HEADING_TEXT, "large",
+      HEADING_ORIGIN, True, c.WHITE, c.BLACK
+    )
+
+    screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_ONE_ORIGIN)
+    screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_TWO_ORIGIN)
+    screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_THREE_ORIGIN)
+
+    screen.blit(SAVE_BTN, SAVE_BTN_ONE_ORIGIN)
+    screen.blit(SAVE_BTN, SAVE_BTN_TWO_ORIGIN)
+    screen.blit(SAVE_BTN, SAVE_BTN_THREE_ORIGIN)
+
+    screen.blit(DELETE_BTN, DELETE_BTN_ONE_ORIGIN)
+    screen.blit(DELETE_BTN, DELETE_BTN_TWO_ORIGIN)
+    screen.blit(DELETE_BTN, DELETE_BTN_THREE_ORIGIN)
     # Three text files (save1, save2, save3)
 
     for event in pygame.event.get():
@@ -424,6 +514,11 @@ while running:
       if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
           current_state = State.TITLE
+
+      if (event.type == pygame.MOUSEBUTTONDOWN and
+        event.button == 1
+        ):
+        mouse_x, mouse_y = event.pos
 
   ###################################################################
   #
@@ -510,10 +605,9 @@ while running:
         # Update scrollback log
         scrollback_log.insert(0, current_text)
 
+        # Prune scrollback log if stored text exceeds limit
         if len(scrollback_log) > SCROLLBACK_LIMIT:
           scrollback_log.pop(-1)
-
-        print(scrollback_log)
         
       elif cmd is c.BGM:
         mixer.music.load(c.BGM_PATH + obj["file"])
@@ -581,7 +675,7 @@ while running:
   elif current_state == State.SETTINGS:
     # Output the heading
     renderBodyText(SETTINGS_HEADING_TEXT, "large", 
-      SETTINGS_HEADING_ORIGIN, True, c.WHITE, c.BLACK
+      HEADING_ORIGIN, True, c.WHITE, c.BLACK
     )
     # Output text for each setting
     renderBodyText(SETTINGS_BGM_TEXT, "medium", 
