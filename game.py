@@ -2,6 +2,7 @@ import script as s
 import config as c
 import pygame
 import math
+from datetime import datetime
 import os.path
 from os import path
 import re
@@ -545,42 +546,59 @@ while running:
         # Detect which button was clicked
         if SAVE_BTN_ONE_RECT.collidepoint(mouse_x, mouse_y):
           # Should have a dialogue prompt here
+          now = datetime.now()
+          dt = now.strftime("%Y %b %d - %H:%M:%S")
+
           saveToFile(
             SAVE_FILE_ONE,
             [
+              dt,
               current_sprites,
               current_text,
               scrollback_log,
               current_chapter,
               current_bgm,
-              current_bg_file
+              current_bg_file,
+              current_index
             ]
           )
+          # Need to store time of save and current index
+
           # Now display chapter number + title and time saved
         
         if SAVE_BTN_TWO_RECT.collidepoint(mouse_x, mouse_y):
+          now = datetime.now()
+          dt = now.strftime("%Y %b %d - %H:%M:%S")
+
           saveToFile(
             SAVE_FILE_TWO,
             [
+              dt,
               current_sprites,
               current_text,
               scrollback_log,
               current_chapter,
               current_bgm,
-              current_bg_file
+              current_bg_file,
+              current_index
             ]
           )
 
         if SAVE_BTN_THREE_RECT.collidepoint(mouse_x, mouse_y):
+          now = datetime.now()
+          dt = now.strftime("%Y %b %d - %H:%M:%S")
+
           saveToFile(
             SAVE_FILE_THREE,
             [
+              dt,
               current_sprites,
               current_text,
               scrollback_log,
               current_chapter,
               current_bgm,
-              current_bg_file
+              current_bg_file,
+              current_index
             ]
           )
 
