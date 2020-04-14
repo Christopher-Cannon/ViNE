@@ -516,6 +516,8 @@ while running:
   ###################################################################
   elif current_state == State.SAVE:
     current_background = SAVE_LOAD_BG
+    ready_to_save = False
+    save_file = ""
 
     # Output the heading
     renderBodyText(SAVE_HEADING_TEXT, "large",
@@ -546,61 +548,36 @@ while running:
         # Detect which button was clicked
         if SAVE_BTN_ONE_RECT.collidepoint(mouse_x, mouse_y):
           # Should have a dialogue prompt here
-          now = datetime.now()
-          dt = now.strftime("%Y %b %d - %H:%M:%S")
-
-          saveToFile(
-            SAVE_FILE_ONE,
-            [
-              dt,
-              current_sprites,
-              current_text,
-              scrollback_log,
-              current_chapter,
-              current_bgm,
-              current_bg_file,
-              current_index
-            ]
-          )
-          # Need to store time of save and current index
-
-          # Now display chapter number + title and time saved
+          save_file = SAVE_FILE_ONE
+          ready_to_save = True
         
         if SAVE_BTN_TWO_RECT.collidepoint(mouse_x, mouse_y):
-          now = datetime.now()
-          dt = now.strftime("%Y %b %d - %H:%M:%S")
-
-          saveToFile(
-            SAVE_FILE_TWO,
-            [
-              dt,
-              current_sprites,
-              current_text,
-              scrollback_log,
-              current_chapter,
-              current_bgm,
-              current_bg_file,
-              current_index
-            ]
-          )
+          save_file = SAVE_FILE_TWO
+          ready_to_save = True
 
         if SAVE_BTN_THREE_RECT.collidepoint(mouse_x, mouse_y):
-          now = datetime.now()
-          dt = now.strftime("%Y %b %d - %H:%M:%S")
+          save_file = SAVE_FILE_THREE
+          ready_to_save = True
 
-          saveToFile(
-            SAVE_FILE_THREE,
-            [
-              dt,
-              current_sprites,
-              current_text,
-              scrollback_log,
-              current_chapter,
-              current_bgm,
-              current_bg_file,
-              current_index
-            ]
-          )
+    if ready_to_save:
+      now = datetime.now()
+      dt = now.strftime("%Y %b %d - %H:%M:%S")
+
+      saveToFile(
+        save_file,
+        [
+            dt,
+            current_sprites,
+            current_text,
+            scrollback_log,
+            current_chapter,
+            current_bgm,
+            current_bg_file,
+            current_index
+        ]
+      )
+      ready_to_save = False
+      # Now update display of save chapter number + title and time saved
 
   ###################################################################
   #
