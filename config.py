@@ -12,6 +12,8 @@ assets = {
   "SCROLLBACK_LIMIT": 25,
   "BLANK_BG": "bg-black.png",
   "HEADING_ORIGIN": (50, 50),
+  "DEFAULT_BGM_VOLUME": 6,
+  "DEFAULT_SFX_VOLUME": 8,
   # Title screen
   "TITLE_BG": "bg-title.png",
   "TITLE_BGM": "no-time.ogg",

@@ -2,12 +2,16 @@ import script as s
 import config as c
 import pygame
 import math
+import os.path
+from os import path
 import re
 from pygame import mixer
 from enum import Enum
 
 pygame.init()
 pygame.display.set_caption("ViNE")
+
+clock = pygame.time.Clock()
 
 try:
   script = s.getScript()
@@ -17,6 +21,8 @@ except:
 
 WIDTH = 960
 HEIGHT = 720
+
+USER_SETTINGS = "user_settings.txt"
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -50,6 +56,9 @@ SPEAKER_FONT = pygame.font.Font(
 SCROLLBACK_LIMIT = c.assets["SCROLLBACK_LIMIT"]
 BLANK_BG = pygame.image.load(c.BG_PATH + c.assets["BLANK_BG"])
 HEADING_ORIGIN = c.assets["HEADING_ORIGIN"]
+
+DEFAULT_BGM_VOLUME = c.assets["DEFAULT_BGM_VOLUME"]
+DEFAULT_SFX_VOLUME = c.assets["DEFAULT_SFX_VOLUME"]
 
 TEXT_BOLD_PATTERN_START = "\[b\]"
 TEXT_BOLD_PATTERN_END = "\[\/b\]"
@@ -176,12 +185,14 @@ SAVE_BTN_TWO_RECT = SAVE_BTN.get_rect(
     topleft=SAVE_BTN_TWO_ORIGIN)
 SAVE_BTN_THREE_RECT = SAVE_BTN.get_rect(
     topleft=SAVE_BTN_THREE_ORIGIN)
+
 LOAD_BTN_ONE_RECT = LOAD_BTN.get_rect(
     topleft=LOAD_BTN_ONE_ORIGIN)
 LOAD_BTN_TWO_RECT = LOAD_BTN.get_rect(
     topleft=LOAD_BTN_TWO_ORIGIN)
 LOAD_BTN_THREE_RECT = LOAD_BTN.get_rect(
     topleft=LOAD_BTN_THREE_ORIGIN)
+
 DELETE_BTN_ONE_RECT = DELETE_BTN.get_rect(
     topleft=DELETE_BTN_ONE_ORIGIN)
 DELETE_BTN_TWO_RECT = DELETE_BTN.get_rect(
@@ -189,74 +200,31 @@ DELETE_BTN_TWO_RECT = DELETE_BTN.get_rect(
 DELETE_BTN_THREE_RECT = DELETE_BTN.get_rect(
     topleft=DELETE_BTN_THREE_ORIGIN)
 
-# Subject to change
-TEXT_SPEED_SLOW = 1
-TEXT_SPEED_NORMAL = 2
-TEXT_SPEED_FAST = 3
-
-# Game settings - Need to get these from user_settings.txt
-volume_bgm = 0  # Default 0.5
-volume_sfx = 0.2
-
-mixer.music.set_volume(volume_bgm)
-
-# Sounds and volume
-sound_btn_click = mixer.Sound(c.SFX_PATH + c.assets["BTN_CLICK_SFX"])
-sound_btn_back = mixer.Sound(c.SFX_PATH + c.assets["BTN_BACK_SFX"])
-
-sound_btn_click.set_volume(volume_sfx)
-sound_btn_back.set_volume(volume_sfx)
-
-# Application state
-class State:
-  TITLE = 0
-  LOAD = 1
-  SAVE = 2
-  GAME = 3
-  SETTINGS = 4
-  CREDITS = 5
-  SCROLLBACK = 6
-
-current_state = State.TITLE
-
-current_background = TITLE_BACKGROUND
-# Our current position in the script
-current_index = 0
-# Holds the current sprites to be displayed on the game screen
-current_sprites = {}
-# Holds the current chapter - number + 1 if CHAPTER cmd encountered in the script
-current_chapter = {
-  "number": 0,
-  "title": ""
-}
-# Current text and speaker to display
-current_text = {
-  "speaker": "",
-  "body": "",
-  "speaker_colour": c.WHITE,
-  "body_colour": c.WHITE
-}
-# Holds the previous 100 TEXT lines
-scrollback_log = []
-scrollback_pos = 0
-
-running = True
-title_bgm_playing = False
-
 # Functions
+# Returns an array containing two integers
 def getUserSettings():
-  # Try to read user_settings.txt
-    # Create if doesn't exist, populate with defaults, return defaults
-  
-  # Get BGM / SFX Volume and Text Speed
+  if path.exists(USER_SETTINGS):
+    settings = []
 
-  # Return dictionary containing values
+    with open(USER_SETTINGS, "rt") as in_file:
+      for cnt, line in enumerate(in_file):
+        settings.append(int(line.strip()))
 
-  return 0
+    return settings
+  else:
+    saveUserSettings(DEFAULT_BGM_VOLUME, DEFAULT_SFX_VOLUME)
+    return [DEFAULT_BGM_VOLUME, DEFAULT_SFX_VOLUME]
 
-def saveUserSettings():
-  # Write file with currently assigned values
-  return 0
+# Accepts two integers
+def saveUserSettings(bgm, sfx):  
+  with open(USER_SETTINGS, "wt") as out_file:
+    out_file.write("{}\n{}".format(bgm, sfx))
+
+# Set BGM / SFX volume - accepts two integers
+def setVolume(bgm, sfx):
+  mixer.music.set_volume(bgm / 10)
+  sound_btn_click.set_volume(sfx / 10)
+  sound_btn_back.set_volume(sfx / 10)
 
 def renderBodyText(text, font_size, origin, aa, fg, bg=None):
   if font_size == "large":
@@ -357,6 +325,63 @@ def drawSpeaker(name, x, y, fg_colour, bg_colour=None):
   )
   screen.blit(speaker_box, (x, y))
 
+def commonSaveLoadGUI():
+  screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_ONE_ORIGIN)
+  screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_TWO_ORIGIN)
+  screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_THREE_ORIGIN)
+
+  screen.blit(DELETE_BTN, DELETE_BTN_ONE_ORIGIN)
+  screen.blit(DELETE_BTN, DELETE_BTN_TWO_ORIGIN)
+  screen.blit(DELETE_BTN, DELETE_BTN_THREE_ORIGIN)
+
+# Game settings - get these from user_settings.txt
+volume = getUserSettings()
+
+volume_bgm = volume[0]
+volume_sfx = volume[1]
+
+# Sounds and volume
+sound_btn_click = mixer.Sound(c.SFX_PATH + c.assets["BTN_CLICK_SFX"])
+sound_btn_back = mixer.Sound(c.SFX_PATH + c.assets["BTN_BACK_SFX"])
+
+setVolume(volume_bgm, volume_sfx)
+
+# Application state
+class State:
+  TITLE = 0
+  LOAD = 1
+  SAVE = 2
+  GAME = 3
+  SETTINGS = 4
+  CREDITS = 5
+  SCROLLBACK = 6
+
+current_state = State.TITLE
+
+current_background = TITLE_BACKGROUND
+# Our current position in the script
+current_index = 0
+# Holds the current sprites to be displayed on the game screen
+current_sprites = {}
+# Holds the current chapter - number + 1 if CHAPTER cmd encountered in the script
+current_chapter = {
+  "number": 0,
+  "title": ""
+}
+# Current text and speaker to display
+current_text = {
+  "speaker": "",
+  "body": "",
+  "speaker_colour": c.WHITE,
+  "body_colour": c.WHITE
+}
+# Holds the previous 100 TEXT lines
+scrollback_log = []
+scrollback_pos = 0
+
+running = True
+title_bgm_playing = False
+
 # Game loop
 while running:
   # Draw black screen
@@ -451,20 +476,11 @@ while running:
     renderBodyText(LOAD_HEADING_TEXT, "large",
       HEADING_ORIGIN, True, c.WHITE, c.BLACK
     )
-
-    screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_ONE_ORIGIN)
-    screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_TWO_ORIGIN)
-    screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_THREE_ORIGIN)
+    commonSaveLoadGUI()
 
     screen.blit(LOAD_BTN, LOAD_BTN_ONE_ORIGIN)
     screen.blit(LOAD_BTN, LOAD_BTN_TWO_ORIGIN)
     screen.blit(LOAD_BTN, LOAD_BTN_THREE_ORIGIN)
-
-    screen.blit(DELETE_BTN, DELETE_BTN_ONE_ORIGIN)
-    screen.blit(DELETE_BTN, DELETE_BTN_TWO_ORIGIN)
-    screen.blit(DELETE_BTN, DELETE_BTN_THREE_ORIGIN)
-
-    # Check for existence of save1-3 and load details accordingly
 
     for event in pygame.event.get():
       # Stop running if QUIT event detected
@@ -479,6 +495,15 @@ while running:
         event.button == 1
         ):
         mouse_x, mouse_y = event.pos
+
+        # Detect which button was clicked
+
+        # Attempt to open specified save file
+          # On error, display error message
+        
+        # Read file, parse each line back into state variables
+
+        # Go to GAME state
 
   ###################################################################
   #
@@ -492,19 +517,11 @@ while running:
     renderBodyText(SAVE_HEADING_TEXT, "large",
       HEADING_ORIGIN, True, c.WHITE, c.BLACK
     )
-
-    screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_ONE_ORIGIN)
-    screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_TWO_ORIGIN)
-    screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_THREE_ORIGIN)
+    commonSaveLoadGUI()
 
     screen.blit(SAVE_BTN, SAVE_BTN_ONE_ORIGIN)
     screen.blit(SAVE_BTN, SAVE_BTN_TWO_ORIGIN)
     screen.blit(SAVE_BTN, SAVE_BTN_THREE_ORIGIN)
-
-    screen.blit(DELETE_BTN, DELETE_BTN_ONE_ORIGIN)
-    screen.blit(DELETE_BTN, DELETE_BTN_TWO_ORIGIN)
-    screen.blit(DELETE_BTN, DELETE_BTN_THREE_ORIGIN)
-    # Three text files (save1, save2, save3)
 
     for event in pygame.event.get():
       # Stop running if QUIT event detected
@@ -519,6 +536,16 @@ while running:
         event.button == 1
         ):
         mouse_x, mouse_y = event.pos
+
+        # Detect which button was clicked
+
+        # Open / Create save_(1|2|3).txt
+
+        # Empty contents
+
+        # Write state variables on their own line
+
+        # Let player return to GAME state when finished
 
   ###################################################################
   #
@@ -691,12 +718,8 @@ while running:
     screen.blit(SETTINGS_SFX_PLUS_BTN, SETTINGS_SFX_PLUS_BTN_ORIGIN)
     screen.blit(SETTINGS_SFX_MINUS_BTN, SETTINGS_SFX_MINUS_BTN_ORIGIN)
 
-    renderBodyText(math.floor((volume_bgm + 0.01) * 10), "medium",
-      (500, 200), True, c.WHITE, c.BLACK
-    )
-    renderBodyText(math.floor((volume_sfx + 0.01) * 10), "medium",
-      (500, 300), True, c.WHITE, c.BLACK
-    )
+    renderBodyText(volume_bgm, "medium", (500, 200), True, c.WHITE, c.BLACK)
+    renderBodyText(volume_sfx, "medium", (500, 300), True, c.WHITE, c.BLACK)
 
     # Draw back button
     screen.blit(BACK_BTN, BACK_BTN_ORIGIN)
@@ -718,39 +741,46 @@ while running:
         if SETTINGS_BGM_PLUS_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
           
-          if volume_bgm < 0.9:
-            volume_bgm += 0.1
+          if volume_bgm < 9:
+            volume_bgm += 1
           else:
-            volume_bgm = 1
+            volume_bgm = 10
+
+          setVolume(volume_bgm, volume_sfx)
+          saveUserSettings(volume_bgm, volume_sfx)
 
         if SETTINGS_BGM_MINUS_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
 
-          if volume_bgm >= 0.1:
-            volume_bgm -= 0.1
+          if volume_bgm >= 1:
+            volume_bgm -= 1
           else:
             volume_bgm = 0
+
+          setVolume(volume_bgm, volume_sfx)
+          saveUserSettings(volume_bgm, volume_sfx)
 
         if SETTINGS_SFX_PLUS_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
 
-          if volume_sfx < 0.9:
-            volume_sfx += 0.1
+          if volume_sfx < 9:
+            volume_sfx += 1
           else:
-            volume_sfx = 1
+            volume_sfx = 10
+
+          setVolume(volume_bgm, volume_sfx)
+          saveUserSettings(volume_bgm, volume_sfx)
 
         if SETTINGS_SFX_MINUS_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
 
-          if volume_sfx >= 0.1:
-            volume_sfx -= 0.1
+          if volume_sfx >= 1:
+            volume_sfx -= 1
           else:
             volume_sfx = 0
 
-        mixer.music.set_volume(volume_bgm)
-
-        sound_btn_click.set_volume(volume_sfx)
-        sound_btn_back.set_volume(volume_sfx)
+          setVolume(volume_bgm, volume_sfx)
+          saveUserSettings(volume_bgm, volume_sfx)
 
       if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
@@ -875,3 +905,4 @@ while running:
 
   # Update screen
   pygame.display.update()
+  clock.tick(60)
