@@ -24,6 +24,10 @@ HEIGHT = 720
 
 USER_SETTINGS = "user_settings.txt"
 
+SAVE_FILE_ONE = "save1.txt"
+SAVE_FILE_TWO = "save2.txt"
+SAVE_FILE_THREE = "save3.txt"
+
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 ICON = pygame.image.load(c.SPRITE_PATH + 'icon-vine.png')
@@ -54,7 +58,7 @@ SPEAKER_FONT = pygame.font.Font(
     c.assets["FONT_SIZE_MEDIUM"])
 
 SCROLLBACK_LIMIT = c.assets["SCROLLBACK_LIMIT"]
-BLANK_BG = pygame.image.load(c.BG_PATH + c.assets["BLANK_BG"])
+BLANK_BG_FILE = c.assets["BLANK_BG"]
 HEADING_ORIGIN = c.assets["HEADING_ORIGIN"]
 
 DEFAULT_BGM_VOLUME = c.assets["DEFAULT_BGM_VOLUME"]
@@ -203,6 +207,7 @@ DELETE_BTN_THREE_RECT = DELETE_BTN.get_rect(
 # Functions
 # Returns an array containing two integers
 def getUserSettings():
+  # If settings file exists, get values
   if path.exists(USER_SETTINGS):
     settings = []
 
@@ -211,11 +216,12 @@ def getUserSettings():
         settings.append(int(line.strip()))
 
     return settings
+  # File doesn't exist, so make it and return defaults
   else:
     saveUserSettings(DEFAULT_BGM_VOLUME, DEFAULT_SFX_VOLUME)
     return [DEFAULT_BGM_VOLUME, DEFAULT_SFX_VOLUME]
 
-# Accepts two integers
+# Write volume settings to settings file - accepts two integers
 def saveUserSettings(bgm, sfx):  
   with open(USER_SETTINGS, "wt") as out_file:
     out_file.write("{}\n{}".format(bgm, sfx))
@@ -225,6 +231,16 @@ def setVolume(bgm, sfx):
   mixer.music.set_volume(bgm / 10)
   sound_btn_click.set_volume(sfx / 10)
   sound_btn_back.set_volume(sfx / 10)
+
+# Write to a save file
+def saveToFile(file, payload):
+  with open(file, "wt") as out_file:
+    write_string = ""
+
+    for elem in payload:
+      write_string += "{}\n".format(elem)
+
+    out_file.write("{}".format(write_string))
 
 def renderBodyText(text, font_size, origin, aa, fg, bg=None):
   if font_size == "large":
@@ -359,6 +375,10 @@ class State:
 current_state = State.TITLE
 
 current_background = TITLE_BACKGROUND
+# Holds only the filename of the current background
+current_bg_file = c.BG_PATH + BLANK_BG_FILE
+# Current in-game BGM
+current_bgm = ""
 # Our current position in the script
 current_index = 0
 # Holds the current sprites to be displayed on the game screen
@@ -413,23 +433,6 @@ while running:
       # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
         running = False
-      
-      # Temporary state switcher events
-      if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_1:
-          mixer.music.stop()
-          title_bgm_playing = False
-          current_state = State.SAVE
-
-        if event.key == pygame.K_2:
-          mixer.music.stop()
-          title_bgm_playing = False
-          current_state = State.CREDITS
-
-        if event.key == pygame.K_3:
-          mixer.music.stop()
-          title_bgm_playing = False
-          current_state = State.SCROLLBACK
 
       # Detect button clicks
       if (event.type == pygame.MOUSEBUTTONDOWN and 
@@ -530,7 +533,9 @@ while running:
 
       if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
-          current_state = State.TITLE
+          current_background = pygame.image.load(c.BG_PATH + current_bg_file)
+
+          current_state = State.GAME
 
       if (event.type == pygame.MOUSEBUTTONDOWN and
         event.button == 1
@@ -538,14 +543,46 @@ while running:
         mouse_x, mouse_y = event.pos
 
         # Detect which button was clicked
+        if SAVE_BTN_ONE_RECT.collidepoint(mouse_x, mouse_y):
+          # Should have a dialogue prompt here
+          saveToFile(
+            SAVE_FILE_ONE,
+            [
+              current_sprites,
+              current_text,
+              scrollback_log,
+              current_chapter,
+              current_bgm,
+              current_bg_file
+            ]
+          )
+          # Now display chapter number + title and time saved
+        
+        if SAVE_BTN_TWO_RECT.collidepoint(mouse_x, mouse_y):
+          saveToFile(
+            SAVE_FILE_TWO,
+            [
+              current_sprites,
+              current_text,
+              scrollback_log,
+              current_chapter,
+              current_bgm,
+              current_bg_file
+            ]
+          )
 
-        # Open / Create save_(1|2|3).txt
-
-        # Empty contents
-
-        # Write state variables on their own line
-
-        # Let player return to GAME state when finished
+        if SAVE_BTN_THREE_RECT.collidepoint(mouse_x, mouse_y):
+          saveToFile(
+            SAVE_FILE_THREE,
+            [
+              current_sprites,
+              current_text,
+              scrollback_log,
+              current_chapter,
+              current_bgm,
+              current_bg_file
+            ]
+          )
 
   ###################################################################
   #
@@ -611,6 +648,7 @@ while running:
 
       elif cmd is c.BG_IMG:
         current_background = pygame.image.load(c.BG_PATH + obj["file"])
+        current_bg_file = obj["file"]
 
       elif cmd is c.CHAPTER:
         current_chapter["number"] = current_chapter["number"] + 1
@@ -639,9 +677,11 @@ while running:
       elif cmd is c.BGM:
         mixer.music.load(c.BGM_PATH + obj["file"])
         mixer.music.play(-1)
+        current_bgm = obj["file"]
         
       elif cmd is c.BGM_STOP:
         mixer.music.stop()
+        current_bgm = ""
 
       elif cmd is c.SFX:
         sound = mixer.Sound(c.SFX_PATH + obj["file"])
@@ -682,9 +722,11 @@ while running:
 
         if GAME_SAVE_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
+          current_state = State.SAVE
 
         if GAME_LOAD_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
+          current_state = State.LOAD
 
         if GAME_LOG_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
