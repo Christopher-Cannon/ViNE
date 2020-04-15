@@ -74,6 +74,16 @@ TEXT_UNDERLINE_PATTERN_START = "\[u\]"
 TEXT_UNDERLINE_PATTERN_END = "\[\/u\]"
 TEXT_COLOUR_PATTERN = "\((\W|\d)+\)"
 
+DIALOGUE_BOX = pygame.image.load(c.SPRITE_PATH + c.assets["DIALOGUE_BOX"]).convert_alpha()
+DIALOGUE_BOX_BTN_YES = pygame.image.load(c.SPRITE_PATH + c.assets["DIALOGUE_BOX_BTN_YES"]).convert_alpha()
+DIALOGUE_BOX_BTN_NO = pygame.image.load(c.SPRITE_PATH + c.assets["DIALOGUE_BOX_BTN_NO"]).convert_alpha()
+
+DIALOGUE_BOX_TEXT = c.assets["DIALOGUE_BOX_TEXT"]
+
+DIALOGUE_BOX_ORIGIN = c.assets["DIALOGUE_BOX_ORIGIN"]
+DIALOGUE_BOX_BTN_YES_ORIGIN = c.assets["DIALOGUE_BOX_BTN_YES_ORIGIN"]
+DIALOGUE_BOX_BTN_NO_ORIGIN = c.assets["DIALOGUE_BOX_BTN_NO_ORIGIN"]
+
 # Title
 TITLE_BACKGROUND = pygame.image.load(c.BG_PATH + c.assets["TITLE_BG"])
 TITLE_START_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["TITLE_START_BTN"]).convert_alpha()
@@ -161,6 +171,11 @@ SCROLLBACK_LINE_SPACING = c.assets["SCROLLBACK_LINE_SPACING"]
 
 # General rectangles
 BACK_BTN_RECT = BACK_BTN.get_rect(topleft=c.assets["BACK_BTN_ORIGIN"])
+
+DIALOGUE_BOX_BTN_YES_RECT = DIALOGUE_BOX_BTN_YES.get_rect(
+    topleft=c.assets["DIALOGUE_BOX_BTN_YES_ORIGIN"])
+DIALOGUE_BOX_BTN_NO_RECT = DIALOGUE_BOX_BTN_NO.get_rect(
+    topleft=c.assets["DIALOGUE_BOX_BTN_NO_ORIGIN"])
 
 # Title rectangles
 TITLE_START_BTN_RECT = TITLE_START_BTN.get_rect(topleft=TITLE_START_BTN_ORIGIN)
@@ -413,6 +428,22 @@ def outputSaveFileDetails():
     # Set y pos for next save panel
     save_details_y += save_details_y_increment
 
+def displayDialogueBox():
+  screen.blit(DIALOGUE_BOX, DIALOGUE_BOX_ORIGIN)
+
+  text_to_draw = BODY_FONT_SMALL.render(
+    DIALOGUE_BOX_TEXT, True, c.WHITE
+  )
+  text_width = text_to_draw.get_width()
+
+  # Ensure text is centered and at the top of the dialogue box
+  text_x = (math.floor(DIALOGUE_BOX.get_width() - text_width) / 2) + DIALOGUE_BOX_ORIGIN[0]
+  text_y = (math.floor(HEIGHT - DIALOGUE_BOX.get_height()) / 2) + 10
+
+  screen.blit(text_to_draw, (text_x, text_y))
+  screen.blit(DIALOGUE_BOX_BTN_YES, DIALOGUE_BOX_BTN_YES_ORIGIN)
+  screen.blit(DIALOGUE_BOX_BTN_NO, DIALOGUE_BOX_BTN_NO_ORIGIN)
+
 # Game settings - get these from user_settings.txt
 volume = getUserSettings()
 
@@ -465,6 +496,10 @@ scrollback_pos = 0
 state_before_load = State.TITLE
 # Get save file chapters and datetime if they exist
 save_details = getSaveFileDetails()
+ready_to_save = False
+ready_to_load = False
+save_file = ""
+dialogue_ok = False
 
 running = True
 title_bgm_playing = False
@@ -482,7 +517,8 @@ while running:
   #
   ###################################################################
   if current_state == State.TITLE:
-    current_background = TITLE_BACKGROUND
+    if current_background != TITLE_BACKGROUND:
+      current_background = TITLE_BACKGROUND
     # Set BG music - make sure it always plays on the title screen
     if not(title_bgm_playing):
       mixer.music.load(TITLE_BGM)
@@ -509,6 +545,8 @@ while running:
 
         if TITLE_START_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
+
+          current_bg_file = BLANK_BG_FILE
           # Reset to prevent any stored text flashing up briefly
           current_text["speaker"] = ""
           current_text["body"] = ""
@@ -519,17 +557,26 @@ while running:
           title_bgm_playing = False
 
           current_sprites = {}
+          current_index = 0
+          current_chapter = {
+            "number": 0,
+            "title": ""
+          }
+
+          scrollback_log = []
+          scrollback_pos = 0
+
           current_state = State.GAME
 
         if TITLE_LOAD_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
-
+          current_background = SAVE_LOAD_BG
           state_before_load = State.TITLE
           current_state = State.LOAD
 
         if TITLE_SETTINGS_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
-
+          current_background = SETTINGS_BG
           current_state = State.SETTINGS
 
         if TITLE_QUIT_BTN_RECT.collidepoint(mouse_x, mouse_y):
@@ -541,10 +588,6 @@ while running:
   #
   ###################################################################
   elif current_state == State.LOAD:
-    current_background = SAVE_LOAD_BG
-    ready_to_load = False
-    load_file = ""
-
     # Output the heading
     renderBodyText(LOAD_HEADING_TEXT, "large",
       HEADING_ORIGIN, True, c.WHITE, c.BLACK
@@ -556,6 +599,8 @@ while running:
     screen.blit(LOAD_BTN, LOAD_BTN_THREE_ORIGIN)
 
     outputSaveFileDetails()
+
+    screen.blit(BACK_BTN, BACK_BTN_ORIGIN)
 
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
@@ -574,28 +619,33 @@ while running:
         event.button == 1
         ):
         mouse_x, mouse_y = event.pos
-
+        if BACK_BTN_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_back.play()
+          if state_before_load == State.TITLE:
+            current_state = State.TITLE
+          else:
+            # Restore correct in-game background when leaving screen
+            current_background = pygame.image.load(c.BG_PATH + current_bg_file)
+            current_state = State.GAME
         # Detect which button was clicked
         if LOAD_BTN_ONE_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
-          # Should have a dialogue prompt here
-          load_file = SAVE_FILE_ONE
+          save_file = SAVE_FILE_ONE
           ready_to_load = True
 
         if LOAD_BTN_TWO_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
-          load_file = SAVE_FILE_TWO
+          save_file = SAVE_FILE_TWO
           ready_to_load = True
 
         if LOAD_BTN_THREE_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
-          load_file = SAVE_FILE_THREE
+          save_file = SAVE_FILE_THREE
           ready_to_load = True
 
     if ready_to_load:
-      if getSaveFileData(load_file):
-        save_data = getSaveFileData(load_file)
-
+      if getSaveFileData(save_file):
+        save_data = getSaveFileData(save_file)
         # Now load save data into state and return to game screen
         current_chapter = save_data[1]
         current_sprites = save_data[2]
@@ -604,12 +654,25 @@ while running:
         current_bgm = save_data[5]
         current_bg_file = save_data[6]
         current_index = save_data[7]
+        # Reset script command completion
+        for i in script:
+          i[0] = 0
+        # Complete commands up till the current index
+        cnt = 1
+        for i in script:
+          i[0] = 1
+          cnt += 1
+
+          if cnt >= current_index:
+            break
 
         current_background = pygame.image.load(c.BG_PATH + current_bg_file)
-
-        mixer.music.load(c.BGM_PATH + current_bgm)
-        mixer.music.play(-1)
-
+        # Start playing music if a file is given
+        if current_bgm != "":
+          mixer.music.load(c.BGM_PATH + current_bgm)
+          mixer.music.play(-1)
+        # Back to game
+        ready_to_load = False
         current_state = State.GAME
 
   ###################################################################
@@ -618,10 +681,6 @@ while running:
   #
   ###################################################################
   elif current_state == State.SAVE:
-    current_background = SAVE_LOAD_BG
-    ready_to_save = False
-    save_file = ""
-
     # Output the heading
     renderBodyText(SAVE_HEADING_TEXT, "large",
       HEADING_ORIGIN, True, c.WHITE, c.BLACK
@@ -634,38 +693,14 @@ while running:
 
     outputSaveFileDetails()
 
-    for event in pygame.event.get():
-      if event.type == pygame.QUIT:
-        running = False
-
-      if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_ESCAPE:
-          current_background = pygame.image.load(c.BG_PATH + current_bg_file)
-          current_state = State.GAME
-
-      if (event.type == pygame.MOUSEBUTTONDOWN and
-        event.button == 1
-        ):
-        mouse_x, mouse_y = event.pos
-
-        # Detect which button was clicked
-        if SAVE_BTN_ONE_RECT.collidepoint(mouse_x, mouse_y):
-          sound_btn_click.play()
-          # Should have a dialogue prompt here
-          save_file = SAVE_FILE_ONE
-          ready_to_save = True
-        
-        if SAVE_BTN_TWO_RECT.collidepoint(mouse_x, mouse_y):
-          sound_btn_click.play()
-          save_file = SAVE_FILE_TWO
-          ready_to_save = True
-
-        if SAVE_BTN_THREE_RECT.collidepoint(mouse_x, mouse_y):
-          sound_btn_click.play()
-          save_file = SAVE_FILE_THREE
-          ready_to_save = True
-
+    screen.blit(BACK_BTN, BACK_BTN_ORIGIN)
+    # Show dialogue box
     if ready_to_save:
+      # Output dialogue box graphics to screen
+      displayDialogueBox()
+
+    # Only save if player gives the go-ahead
+    if ready_to_save and dialogue_ok:
       now = datetime.now()
       dt = now.strftime("%Y %b %d - %H:%M:%S")
 
@@ -684,9 +719,58 @@ while running:
       )
       # Update stored save file details
       save_details = getSaveFileDetails()
-
       ready_to_save = False
-      # Now update display of save chapter number + title and time saved
+
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        running = False
+
+      if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_ESCAPE:
+          if ready_to_save and not(dialogue_ok):
+            # Cancel dialogue box if it's open
+            ready_to_save = False
+          else:
+            # Otherwise return to game
+            current_background = pygame.image.load(c.BG_PATH + current_bg_file)
+            current_state = State.GAME
+
+      # Check for left clicks on save buttons and we aren't in save process
+      if (event.type == pygame.MOUSEBUTTONDOWN and
+        event.button == 1
+        ):
+        mouse_x, mouse_y = event.pos
+        # Save process not started
+        if not(ready_to_save) and not(dialogue_ok):
+          if BACK_BTN_RECT.collidepoint(mouse_x, mouse_y):
+            sound_btn_back.play()
+            current_state = State.GAME
+
+          # Detect which button was clicked
+          if SAVE_BTN_ONE_RECT.collidepoint(mouse_x, mouse_y):
+            sound_btn_click.play()
+            save_file = SAVE_FILE_ONE
+            ready_to_save = True
+          
+          if SAVE_BTN_TWO_RECT.collidepoint(mouse_x, mouse_y):
+            sound_btn_click.play()
+            save_file = SAVE_FILE_TWO
+            ready_to_save = True
+
+          if SAVE_BTN_THREE_RECT.collidepoint(mouse_x, mouse_y):
+            sound_btn_click.play()
+            save_file = SAVE_FILE_THREE
+            ready_to_save = True
+        # Save process has started and waiting for player decision
+        elif ready_to_save and not(dialogue_ok):
+          # Events checking for clicks on Yes or No
+          if DIALOGUE_BOX_BTN_YES_RECT.collidepoint(mouse_x, mouse_y):
+            sound_btn_click.play()
+            dialogue_ok = True
+
+          if DIALOGUE_BOX_BTN_NO_RECT.collidepoint(mouse_x, mouse_y):
+            sound_btn_back.play()
+            ready_to_save = False
 
   ###################################################################
   #
@@ -694,6 +778,9 @@ while running:
   #
   ###################################################################
   elif current_state == State.GAME:
+    # Have an instruction to not draw sprites / text box.
+    # Useful for chapter transitions
+
     # Loop through and blit current sprites
     if len(current_sprites) > 0:
       for spr in current_sprites.values():
@@ -745,8 +832,6 @@ while running:
           y=obj["y"]
         )
 
-        print(current_sprites)
-
       elif cmd is c.SPRITE_REMOVE:
         current_sprites.pop(obj["reference"])
 
@@ -757,11 +842,6 @@ while running:
       elif cmd is c.CHAPTER:
         current_chapter["number"] = current_chapter["number"] + 1
         current_chapter["title"] = obj["title"]
-
-        print("\nCHAPTER {}: {}\n".format(
-          current_chapter["number"],
-          current_chapter["title"]
-        ))
 
       elif cmd is c.TEXT:
         # Update the current text
@@ -826,10 +906,12 @@ while running:
 
         if GAME_SAVE_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
+          current_background = SAVE_LOAD_BG
           current_state = State.SAVE
 
         if GAME_LOAD_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
+          current_background = SAVE_LOAD_BG
           state_before_load = State.GAME
           current_state = State.LOAD
 
@@ -839,6 +921,12 @@ while running:
 
         if GAME_QUIT_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_back.play()
+
+          current_index = 0
+
+          for i in script:
+            i[0] = 0
+
           current_state = State.TITLE
 
   ###################################################################
@@ -867,7 +955,6 @@ while running:
 
     renderBodyText(volume_bgm, "medium", (500, 200), True, c.WHITE, c.BLACK)
     renderBodyText(volume_sfx, "medium", (500, 300), True, c.WHITE, c.BLACK)
-
     # Draw back button
     screen.blit(BACK_BTN, BACK_BTN_ORIGIN)
 

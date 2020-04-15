@@ -14,6 +14,14 @@ assets = {
   "HEADING_ORIGIN": (50, 50),
   "DEFAULT_BGM_VOLUME": 6,
   "DEFAULT_SFX_VOLUME": 8,
+  "DIALOGUE_BOX": "dialogue-box.png",
+  "DIALOGUE_BOX_BTN_YES": "btn-yes.png",
+  "DIALOGUE_BOX_BTN_NO": "btn-no.png",
+  # Keep this short
+  "DIALOGUE_BOX_TEXT": "Are you sure?",
+  "DIALOGUE_BOX_ORIGIN": (280, 280),
+  "DIALOGUE_BOX_BTN_YES_ORIGIN": (313, 330),
+  "DIALOGUE_BOX_BTN_NO_ORIGIN": (496, 330),
   # Title screen
   "TITLE_BG": "bg-title.png",
   "TITLE_BGM": "no-time.ogg",
