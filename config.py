@@ -82,7 +82,14 @@ assets = {
   "GAME_LOG_BTN_ORIGIN": (850, 640),
   "GAME_QUIT_BTN_ORIGIN": (850, 680),
   "SCROLLBACK_BOX": "scrollback-box.png",
-  "SCROLLBACK_LINE_SPACING": 40
+  "SCROLLBACK_LINE_SPACING": 40,
+  # Credits gallery - requires at least 1 bg image
+  "CREDITS_GALLERY": [
+    "credits-1.png",
+    "credits-2.png",
+    "credits-3.png"
+  ],
+  "CREDITS_BGM": ""
 }
 
 # Paths to assets
@@ -97,6 +104,7 @@ SPRITE_PATH = 'sprites/'
 TEXT_BOX_HIDE = "TEXT_BOX_HIDE"
 TEXT_BOX_SHOW = "TEXT_BOX_SHOW"
 CHAPTER = "CHAPTER"
+CREDITS = "CREDITS"
 BG_IMG = "BG_IMG"
 SPRITE = "SPRITE"
 SPRITE_REMOVE = "SPRITE_REMOVE"

@@ -165,6 +165,10 @@ LOAD_BTN_THREE_ORIGIN = c.assets["LOAD_BTN_THREE_ORIGIN"]
 SCROLLBACK_BOX = pygame.image.load(c.SPRITE_PATH + c.assets["SCROLLBACK_BOX"])
 SCROLLBACK_LINE_SPACING = c.assets["SCROLLBACK_LINE_SPACING"]
 
+# Credits
+CREDITS_GALLERY = c.assets["CREDITS_GALLERY"]
+CREDITS_BGM = c.assets["CREDITS_BGM"]
+
 # General rectangles
 BACK_BTN_RECT = BACK_BTN.get_rect(topleft=c.assets["BACK_BTN_ORIGIN"])
 
@@ -1039,6 +1043,15 @@ while running:
   #
   ###################################################################
   elif current_state == State.CREDITS:
+    slide_index = 0
+    # Display slide in the credits gallery list
+    current_slide = pygame.image.load(c.BG_PATH + CREDITS_GALLERY[slide_index])
+    screen.blit(current_slide, (0, 0))
+
+    if CREDITS_BGM != "":
+      mixer.music.load(CREDITS_BGM)
+      mixer.music.play(-1)
+
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
         running = False
@@ -1046,6 +1059,12 @@ while running:
       if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
           current_state = State.TITLE
+
+        if event.key == pygame.K_SPACE:
+          slide_index += 1
+
+          if slide_index > len(CREDITS_GALLERY):
+            current_state = State.TITLE
 
   ###################################################################
   #
@@ -1134,10 +1153,10 @@ while running:
           current_state = State.GAME
 
         # Scroll log with arrow keys
-        if event.key == pygame.K_UP:
+        if event.key == pygame.K_DOWN:
           if not(scrollback_pos >= len(scrollback_log)-1):
             scrollback_pos += 1
-        if event.key == pygame.K_DOWN:
+        if event.key == pygame.K_UP:
           if not(scrollback_pos <= 0):
             scrollback_pos -= 1
 

@@ -273,10 +273,11 @@ the other important stuff is finished.""",
     ["SPRITE_REMOVE", {"reference": "frederica"}],
     ["TEXT", {
       "speaker": "",
-      "body": """Press the Escape key or the QUIT button to return to the menu.""",
+      "body": """Next are the credits""",
       "speaker_colour": COL_WHITE,
       "body_colour": COL_WHITE}
-    ]
+    ],
+    ["CREDITS", {}]
   ]
 
   for i in script:
@@ -300,6 +301,8 @@ def testScript():
     # Show or hide text box
     ["TEXT_BOX_HIDE", {}],
     ["TEXT_BOX_SHOW", {}],
+    # Move to credits
+    ["CREDITS", {}],
     # Update chapter
     ["CHAPTER", {"number": 1, "title": "This is chapter one"}],
     # Add / Update background image (Removal?)
