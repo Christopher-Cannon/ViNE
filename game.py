@@ -566,6 +566,7 @@ while running:
           if state_before_load == State.TITLE:
             current_state = State.TITLE
           else:
+            # Restore correct in-game background when leaving screen
             current_background = pygame.image.load(c.BG_PATH + current_bg_file)
             current_state = State.GAME
 
@@ -576,15 +577,18 @@ while running:
 
         # Detect which button was clicked
         if LOAD_BTN_ONE_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_click.play()
           # Should have a dialogue prompt here
           load_file = SAVE_FILE_ONE
           ready_to_load = True
 
         if LOAD_BTN_TWO_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_click.play()
           load_file = SAVE_FILE_TWO
           ready_to_load = True
 
         if LOAD_BTN_THREE_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_click.play()
           load_file = SAVE_FILE_THREE
           ready_to_load = True
 
@@ -593,11 +597,20 @@ while running:
         save_data = getSaveFileData(load_file)
 
         # Now load save data into state and return to game screen
+        current_chapter = save_data[1]
+        current_sprites = save_data[2]
+        current_text = save_data[3]
+        scrollback_log = save_data[4]
+        current_bgm = save_data[5]
+        current_bg_file = save_data[6]
+        current_index = save_data[7]
 
-        # Update stored save file details
-        save_details = getSaveFileDetails()
+        current_background = pygame.image.load(c.BG_PATH + current_bg_file)
 
-      ready_to_load = False
+        mixer.music.load(c.BGM_PATH + current_bgm)
+        mixer.music.play(-1)
+
+        current_state = State.GAME
 
   ###################################################################
   #
@@ -628,7 +641,6 @@ while running:
       if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
           current_background = pygame.image.load(c.BG_PATH + current_bg_file)
-
           current_state = State.GAME
 
       if (event.type == pygame.MOUSEBUTTONDOWN and
@@ -638,15 +650,18 @@ while running:
 
         # Detect which button was clicked
         if SAVE_BTN_ONE_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_click.play()
           # Should have a dialogue prompt here
           save_file = SAVE_FILE_ONE
           ready_to_save = True
         
         if SAVE_BTN_TWO_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_click.play()
           save_file = SAVE_FILE_TWO
           ready_to_save = True
 
         if SAVE_BTN_THREE_RECT.collidepoint(mouse_x, mouse_y):
+          sound_btn_click.play()
           save_file = SAVE_FILE_THREE
           ready_to_save = True
 
