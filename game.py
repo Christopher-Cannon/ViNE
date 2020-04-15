@@ -11,8 +11,6 @@ from pygame import mixer
 from enum import Enum
 
 pygame.init()
-pygame.display.set_caption("ViNE")
-
 clock = pygame.time.Clock()
 
 try:
@@ -23,42 +21,43 @@ except:
 
 WIDTH = 960
 HEIGHT = 720
-
 USER_SETTINGS = "user_settings.txt"
-
 SAVE_FILE_ONE = "save1.txt"
 SAVE_FILE_TWO = "save2.txt"
 SAVE_FILE_THREE = "save3.txt"
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
+pygame.display.set_caption("ViNE")
 ICON = pygame.image.load(c.SPRITE_PATH + 'icon-vine.png')
 pygame.display.set_icon(ICON)
 
 ###################################################################
 # Constants from config.py
 ###################################################################
-
 # General
-BACK_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["BACK_BTN"]).convert_alpha()
+BACK_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["BACK_BTN"]
+).convert_alpha()
+
 BACK_BTN_ORIGIN = c.assets["BACK_BTN_ORIGIN"]
 
 BODY_FONT_SMALL = pygame.font.Font(
     c.FONT_PATH + c.assets["BODY_FONT"], 
-    c.assets["FONT_SIZE_SMALL"])
-
+    c.assets["FONT_SIZE_SMALL"]
+)
 BODY_FONT_MEDIUM = pygame.font.Font(
     c.FONT_PATH + c.assets["BODY_FONT"], 
-    c.assets["FONT_SIZE_MEDIUM"])
-
+    c.assets["FONT_SIZE_MEDIUM"]
+)
 BODY_FONT_LARGE = pygame.font.Font(
     c.FONT_PATH + c.assets["BODY_FONT"], 
-    c.assets["FONT_SIZE_LARGE"])
-
+    c.assets["FONT_SIZE_LARGE"]
+)
 SPEAKER_FONT = pygame.font.Font(
     c.FONT_PATH + c.assets["SPEAKER_FONT"], 
-    c.assets["FONT_SIZE_MEDIUM"])
-
+    c.assets["FONT_SIZE_MEDIUM"]
+)
 SCROLLBACK_LIMIT = c.assets["SCROLLBACK_LIMIT"]
 BLANK_BG_FILE = c.assets["BLANK_BG"]
 HEADING_ORIGIN = c.assets["HEADING_ORIGIN"]
@@ -74,22 +73,42 @@ TEXT_UNDERLINE_PATTERN_START = "\[u\]"
 TEXT_UNDERLINE_PATTERN_END = "\[\/u\]"
 TEXT_COLOUR_PATTERN = "\((\W|\d)+\)"
 
-DIALOGUE_BOX = pygame.image.load(c.SPRITE_PATH + c.assets["DIALOGUE_BOX"]).convert_alpha()
-DIALOGUE_BOX_BTN_YES = pygame.image.load(c.SPRITE_PATH + c.assets["DIALOGUE_BOX_BTN_YES"]).convert_alpha()
-DIALOGUE_BOX_BTN_NO = pygame.image.load(c.SPRITE_PATH + c.assets["DIALOGUE_BOX_BTN_NO"]).convert_alpha()
+DIALOGUE_BOX = pygame.image.load(
+  c.SPRITE_PATH + c.assets["DIALOGUE_BOX"]
+).convert_alpha()
+
+DIALOGUE_BOX_BTN_YES = pygame.image.load(
+  c.SPRITE_PATH + c.assets["DIALOGUE_BOX_BTN_YES"]
+).convert_alpha()
+
+DIALOGUE_BOX_BTN_NO = pygame.image.load(
+  c.SPRITE_PATH + c.assets["DIALOGUE_BOX_BTN_NO"]
+).convert_alpha()
 
 DIALOGUE_BOX_TEXT = c.assets["DIALOGUE_BOX_TEXT"]
 
 DIALOGUE_BOX_ORIGIN = c.assets["DIALOGUE_BOX_ORIGIN"]
 DIALOGUE_BOX_BTN_YES_ORIGIN = c.assets["DIALOGUE_BOX_BTN_YES_ORIGIN"]
 DIALOGUE_BOX_BTN_NO_ORIGIN = c.assets["DIALOGUE_BOX_BTN_NO_ORIGIN"]
-
 # Title
-TITLE_BACKGROUND = pygame.image.load(c.BG_PATH + c.assets["TITLE_BG"])
-TITLE_START_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["TITLE_START_BTN"]).convert_alpha()
-TITLE_LOAD_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["TITLE_LOAD_BTN"]).convert_alpha()
-TITLE_SETTINGS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["TITLE_SETTINGS_BTN"]).convert_alpha()
-TITLE_QUIT_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["TITLE_QUIT_BTN"]).convert_alpha()
+TITLE_BACKGROUND = pygame.image.load(
+  c.BG_PATH + c.assets["TITLE_BG"]
+)
+TITLE_START_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["TITLE_START_BTN"]
+).convert_alpha()
+
+TITLE_LOAD_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["TITLE_LOAD_BTN"]
+).convert_alpha()
+
+TITLE_SETTINGS_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["TITLE_SETTINGS_BTN"]
+).convert_alpha()
+
+TITLE_QUIT_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["TITLE_QUIT_BTN"]
+).convert_alpha()
 
 TITLE_BGM = c.BGM_PATH + c.assets["TITLE_BGM"]
 
@@ -97,9 +116,11 @@ TITLE_START_BTN_ORIGIN = c.assets["TITLE_START_BTN_ORIGIN"]
 TITLE_LOAD_BTN_ORIGIN = c.assets["TITLE_LOAD_BTN_ORIGIN"]
 TITLE_SETTINGS_BTN_ORIGIN = c.assets["TITLE_SETTINGS_BTN_ORIGIN"]
 TITLE_QUIT_BTN_ORIGIN = c.assets["TITLE_QUIT_BTN_ORIGIN"]
-
 # Game
-TEXT_BOX = pygame.image.load(c.SPRITE_PATH + c.assets["TEXT_BOX"]).convert_alpha()
+TEXT_BOX = pygame.image.load(
+  c.SPRITE_PATH + c.assets["TEXT_BOX"]
+).convert_alpha()
+
 TEXT_BOX_ORIGIN = c.assets["TEXT_BOX_ORIGIN"]
 
 TEXT_BODY_ORIGIN = c.assets["TEXT_BODY_ORIGIN"]
@@ -108,23 +129,44 @@ TEXT_BODY_LINE_SPACING = c.assets["TEXT_BODY_LINE_SPACING"]
 
 SPEAKER_BOX_ORIGIN = c.assets["SPEAKER_BOX_ORIGIN"]
 
-GAME_SAVE_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["GAME_SAVE_BTN"]).convert_alpha()
-GAME_LOAD_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["GAME_LOAD_BTN"]).convert_alpha()
-GAME_LOG_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["GAME_LOG_BTN"]).convert_alpha()
-GAME_QUIT_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["GAME_QUIT_BTN"]).convert_alpha()
+GAME_SAVE_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["GAME_SAVE_BTN"]
+).convert_alpha()
+
+GAME_LOAD_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["GAME_LOAD_BTN"]
+).convert_alpha()
+
+GAME_LOG_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["GAME_LOG_BTN"]
+).convert_alpha()
+
+GAME_QUIT_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["GAME_QUIT_BTN"]
+).convert_alpha()
 
 GAME_SAVE_BTN_ORIGIN = c.assets["GAME_SAVE_BTN_ORIGIN"]
 GAME_LOAD_BTN_ORIGIN = c.assets["GAME_LOAD_BTN_ORIGIN"]
 GAME_LOG_BTN_ORIGIN = c.assets["GAME_LOG_BTN_ORIGIN"]
 GAME_QUIT_BTN_ORIGIN = c.assets["GAME_QUIT_BTN_ORIGIN"]
-
 # Settings
 SETTINGS_BG = pygame.image.load(c.BG_PATH + c.assets["SETTINGS_BG"])
 
-SETTINGS_BGM_PLUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_BGM_PLUS_BTN"]).convert_alpha()
-SETTINGS_BGM_MINUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_BGM_MINUS_BTN"]).convert_alpha()
-SETTINGS_SFX_PLUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_SFX_PLUS_BTN"]).convert_alpha()
-SETTINGS_SFX_MINUS_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SETTINGS_SFX_MINUS_BTN"]).convert_alpha()
+SETTINGS_BGM_PLUS_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["SETTINGS_BGM_PLUS_BTN"]
+).convert_alpha()
+
+SETTINGS_BGM_MINUS_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["SETTINGS_BGM_MINUS_BTN"]
+).convert_alpha()
+
+SETTINGS_SFX_PLUS_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["SETTINGS_SFX_PLUS_BTN"]
+).convert_alpha()
+
+SETTINGS_SFX_MINUS_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["SETTINGS_SFX_MINUS_BTN"]
+).convert_alpha()
 
 SETTINGS_BGM_PLUS_BTN_ORIGIN = c.assets["SETTINGS_BGM_PLUS_BTN_ORIGIN"]
 SETTINGS_BGM_MINUS_BTN_ORIGIN = c.assets["SETTINGS_BGM_MINUS_BTN_ORIGIN"]
@@ -137,17 +179,23 @@ SETTINGS_SFX_TEXT = c.assets["SETTINGS_SFX_TEXT"]
 
 SETTINGS_BGM_TEXT_ORIGIN = c.assets["SETTINGS_BGM_TEXT_ORIGIN"]
 SETTINGS_SFX_TEXT_ORIGIN = c.assets["SETTINGS_SFX_TEXT_ORIGIN"]
-
 # Save / Load
 SAVE_LOAD_BG = pygame.image.load(c.BG_PATH + c.assets["SAVE_LOAD_BG"])
 
 SAVE_HEADING_TEXT = c.assets["SAVE_HEADING_TEXT"]
 LOAD_HEADING_TEXT = c.assets["LOAD_HEADING_TEXT"]
 
-SAVE_LOAD_PANEL = pygame.image.load(c.SPRITE_PATH + c.assets["SAVE_LOAD_PANEL"]).convert_alpha()
+SAVE_LOAD_PANEL = pygame.image.load(
+  c.SPRITE_PATH + c.assets["SAVE_LOAD_PANEL"]
+).convert_alpha()
 
-SAVE_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["SAVE_BTN"]).convert_alpha()
-LOAD_BTN = pygame.image.load(c.SPRITE_PATH + c.assets["LOAD_BTN"]).convert_alpha()
+SAVE_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["SAVE_BTN"]
+).convert_alpha()
+
+LOAD_BTN = pygame.image.load(
+  c.SPRITE_PATH + c.assets["LOAD_BTN"]
+).convert_alpha()
 
 SAVE_LOAD_PANEL_ONE_ORIGIN = c.assets["SAVE_LOAD_PANEL_ONE_ORIGIN"]
 SAVE_BTN_ONE_ORIGIN = c.assets["SAVE_BTN_ONE_ORIGIN"]
@@ -160,59 +208,81 @@ LOAD_BTN_TWO_ORIGIN = c.assets["LOAD_BTN_TWO_ORIGIN"]
 SAVE_LOAD_PANEL_THREE_ORIGIN = c.assets["SAVE_LOAD_PANEL_THREE_ORIGIN"]
 SAVE_BTN_THREE_ORIGIN = c.assets["SAVE_BTN_THREE_ORIGIN"]
 LOAD_BTN_THREE_ORIGIN = c.assets["LOAD_BTN_THREE_ORIGIN"]
-
 # Scrollback
-SCROLLBACK_BOX = pygame.image.load(c.SPRITE_PATH + c.assets["SCROLLBACK_BOX"])
+SCROLLBACK_BOX = pygame.image.load(
+  c.SPRITE_PATH + c.assets["SCROLLBACK_BOX"]
+)
 SCROLLBACK_LINE_SPACING = c.assets["SCROLLBACK_LINE_SPACING"]
-
 # Credits
 CREDITS_GALLERY = c.assets["CREDITS_GALLERY"]
 CREDITS_BGM = c.assets["CREDITS_BGM"]
-
 # General rectangles
 BACK_BTN_RECT = BACK_BTN.get_rect(topleft=c.assets["BACK_BTN_ORIGIN"])
 
 DIALOGUE_BOX_BTN_YES_RECT = DIALOGUE_BOX_BTN_YES.get_rect(
-    topleft=c.assets["DIALOGUE_BOX_BTN_YES_ORIGIN"])
+    topleft=c.assets["DIALOGUE_BOX_BTN_YES_ORIGIN"]
+)
 DIALOGUE_BOX_BTN_NO_RECT = DIALOGUE_BOX_BTN_NO.get_rect(
-    topleft=c.assets["DIALOGUE_BOX_BTN_NO_ORIGIN"])
-
+    topleft=c.assets["DIALOGUE_BOX_BTN_NO_ORIGIN"]
+)
 # Title rectangles
-TITLE_START_BTN_RECT = TITLE_START_BTN.get_rect(topleft=TITLE_START_BTN_ORIGIN)
-TITLE_LOAD_BTN_RECT = TITLE_LOAD_BTN.get_rect(topleft=TITLE_LOAD_BTN_ORIGIN)
-TITLE_SETTINGS_BTN_RECT = TITLE_SETTINGS_BTN.get_rect(topleft=TITLE_SETTINGS_BTN_ORIGIN)
-TITLE_QUIT_BTN_RECT = TITLE_QUIT_BTN.get_rect(topleft=TITLE_QUIT_BTN_ORIGIN)
-
+TITLE_START_BTN_RECT = TITLE_START_BTN.get_rect(
+  topleft=TITLE_START_BTN_ORIGIN
+)
+TITLE_LOAD_BTN_RECT = TITLE_LOAD_BTN.get_rect(
+  topleft=TITLE_LOAD_BTN_ORIGIN
+)
+TITLE_SETTINGS_BTN_RECT = TITLE_SETTINGS_BTN.get_rect(
+  topleft=TITLE_SETTINGS_BTN_ORIGIN
+)
+TITLE_QUIT_BTN_RECT = TITLE_QUIT_BTN.get_rect(
+  topleft=TITLE_QUIT_BTN_ORIGIN
+)
 # Game rectangles
-GAME_SAVE_BTN_RECT = GAME_SAVE_BTN.get_rect(topleft=GAME_SAVE_BTN_ORIGIN)
-GAME_LOAD_BTN_RECT = GAME_LOAD_BTN.get_rect(topleft=GAME_LOAD_BTN_ORIGIN)
-GAME_LOG_BTN_RECT = GAME_LOG_BTN.get_rect(topleft=GAME_LOG_BTN_ORIGIN)
-GAME_QUIT_BTN_RECT = GAME_QUIT_BTN.get_rect(topleft=GAME_QUIT_BTN_ORIGIN)
-
+GAME_SAVE_BTN_RECT = GAME_SAVE_BTN.get_rect(
+  topleft=GAME_SAVE_BTN_ORIGIN
+)
+GAME_LOAD_BTN_RECT = GAME_LOAD_BTN.get_rect(
+  topleft=GAME_LOAD_BTN_ORIGIN
+)
+GAME_LOG_BTN_RECT = GAME_LOG_BTN.get_rect(
+  topleft=GAME_LOG_BTN_ORIGIN
+)
+GAME_QUIT_BTN_RECT = GAME_QUIT_BTN.get_rect(
+  topleft=GAME_QUIT_BTN_ORIGIN
+)
 # Setting rectangles
 SETTINGS_BGM_PLUS_BTN_RECT = SETTINGS_BGM_PLUS_BTN.get_rect(
-    topleft=SETTINGS_BGM_PLUS_BTN_ORIGIN)
+    topleft=SETTINGS_BGM_PLUS_BTN_ORIGIN
+)
 SETTINGS_BGM_MINUS_BTN_RECT = SETTINGS_BGM_MINUS_BTN.get_rect(
-    topleft=SETTINGS_BGM_MINUS_BTN_ORIGIN)
+    topleft=SETTINGS_BGM_MINUS_BTN_ORIGIN
+)
 SETTINGS_SFX_PLUS_BTN_RECT = SETTINGS_SFX_PLUS_BTN.get_rect(
-    topleft=SETTINGS_SFX_PLUS_BTN_ORIGIN)
+    topleft=SETTINGS_SFX_PLUS_BTN_ORIGIN
+)
 SETTINGS_SFX_MINUS_BTN_RECT = SETTINGS_SFX_MINUS_BTN.get_rect(
-    topleft=SETTINGS_SFX_MINUS_BTN_ORIGIN)
-
+    topleft=SETTINGS_SFX_MINUS_BTN_ORIGIN
+)
 # Save / Load rectangles
 SAVE_BTN_ONE_RECT = SAVE_BTN.get_rect(
-    topleft=SAVE_BTN_ONE_ORIGIN)
+    topleft=SAVE_BTN_ONE_ORIGIN
+)
 SAVE_BTN_TWO_RECT = SAVE_BTN.get_rect(
-    topleft=SAVE_BTN_TWO_ORIGIN)
+    topleft=SAVE_BTN_TWO_ORIGIN
+)
 SAVE_BTN_THREE_RECT = SAVE_BTN.get_rect(
-    topleft=SAVE_BTN_THREE_ORIGIN)
-
+    topleft=SAVE_BTN_THREE_ORIGIN
+)
 LOAD_BTN_ONE_RECT = LOAD_BTN.get_rect(
-    topleft=LOAD_BTN_ONE_ORIGIN)
+    topleft=LOAD_BTN_ONE_ORIGIN
+)
 LOAD_BTN_TWO_RECT = LOAD_BTN.get_rect(
-    topleft=LOAD_BTN_TWO_ORIGIN)
+    topleft=LOAD_BTN_TWO_ORIGIN
+)
 LOAD_BTN_THREE_RECT = LOAD_BTN.get_rect(
-    topleft=LOAD_BTN_THREE_ORIGIN)
+    topleft=LOAD_BTN_THREE_ORIGIN
+)
 
 # Functions
 def renderBodyText(text, font_size, origin, aa, fg, bg=None):
@@ -271,7 +341,6 @@ def drawDialogue(text, x, y, fg_colour):
   counter = 0
   cur_x = x
   colour = fg_colour
-
   split_text = text.split()
 
   for word in split_text:
@@ -301,7 +370,6 @@ def drawDialogue(text, x, y, fg_colour):
       word_to_draw, 
       (cur_x, y + (counter * TEXT_BODY_LINE_SPACING))
     )
-
     # Where to place the next word
     cur_x += word_width
 
@@ -325,6 +393,7 @@ def getUserSettings():
         settings.append(int(line.strip()))
 
     return settings
+
   # File doesn't exist, so make it and return defaults
   else:
     saveUserSettings(DEFAULT_BGM_VOLUME, DEFAULT_SFX_VOLUME)
@@ -366,9 +435,11 @@ def getSaveFileData(save_file):
         # Append dictionary or list
         if cnt in [1, 2, 3, 4]:
           output.append(ast.literal_eval(line.strip()))
+
         # Append integer
         elif cnt in [7, 8]:
           output.append(int(line.strip()))
+
         # Append string
         else:
           output.append(line.strip())
@@ -395,7 +466,6 @@ def outputSaveFileDetails():
   save_details_start_y = 160
   save_details_y = save_details_start_y
   save_details_y_increment = 150
-
   # Output save file details
   for elem in save_details:
     save_chapter = "NO FILE"
@@ -424,10 +494,18 @@ def displayDialogueBox():
     DIALOGUE_BOX_TEXT, True, c.WHITE
   )
   text_width = text_to_draw.get_width()
-
   # Ensure text is centered and at the top of the dialogue box
-  text_x = (math.floor(DIALOGUE_BOX.get_width() - text_width) / 2) + DIALOGUE_BOX_ORIGIN[0]
-  text_y = (math.floor(HEIGHT - DIALOGUE_BOX.get_height()) / 2) + 10
+  text_x = int(
+    math.floor(
+      DIALOGUE_BOX.get_width() - text_width
+    ) / 2
+  ) + DIALOGUE_BOX_ORIGIN[0]
+
+  text_y = int(
+    math.floor(
+      HEIGHT - DIALOGUE_BOX.get_height()
+    ) / 2
+  ) + 10
 
   screen.blit(text_to_draw, (text_x, text_y))
   screen.blit(DIALOGUE_BOX_BTN_YES, DIALOGUE_BOX_BTN_YES_ORIGIN)
@@ -438,13 +516,15 @@ volume = getUserSettings()
 
 volume_bgm = volume[0]
 volume_sfx = volume[1]
-
 # Sounds and volume
-sound_btn_click = mixer.Sound(c.SFX_PATH + c.assets["BTN_CLICK_SFX"])
-sound_btn_back = mixer.Sound(c.SFX_PATH + c.assets["BTN_BACK_SFX"])
+sound_btn_click = mixer.Sound(
+  c.SFX_PATH + c.assets["BTN_CLICK_SFX"]
+)
+sound_btn_back = mixer.Sound(
+  c.SFX_PATH + c.assets["BTN_BACK_SFX"]
+)
 
 setVolume(volume_bgm, volume_sfx)
-
 # Application state
 class State:
   TITLE = 0
@@ -456,17 +536,16 @@ class State:
   SCROLLBACK = 6
 
 current_state = State.TITLE
-
 current_background = TITLE_BACKGROUND
-# Holds only the filename of the current background
+# Just the filename of the current background
 current_bg_file = BLANK_BG_FILE
 # Current in-game BGM
 current_bgm = ""
 # Our current position in the script
 current_index = 0
-# Holds the current sprites to be displayed on the game screen
+# The current sprites to be displayed on the game screen
 current_sprites = {}
-# Holds the current chapter - number + 1 if CHAPTER cmd encountered in the script
+# Chapter number auto-increments per each CHAPTER script cmd
 current_chapter = {
   "number": 0,
   "title": ""
@@ -478,7 +557,7 @@ current_text = {
   "speaker_colour": c.WHITE,
   "body_colour": c.WHITE
 }
-# Holds the previous 100 TEXT lines
+# The previous 100 TEXT lines
 scrollback_log = []
 scrollback_pos = 0
 # When going to the load screen, which state did we come from?
@@ -489,12 +568,11 @@ ready_to_save = False
 ready_to_load = False
 save_file = ""
 dialogue_ok = False
-
 running = True
 title_bgm_playing = False
-
 display_text_box = 1
-
+# Credits bg image gallery index
+slide_index = 0
 # Game loop
 while running:
   # Draw black screen
@@ -508,8 +586,11 @@ while running:
   #
   ###################################################################
   if current_state == State.TITLE:
+    slide_index = 0
+
     if current_background != TITLE_BACKGROUND:
       current_background = TITLE_BACKGROUND
+
     # Set BG music - make sure it always plays on the title screen
     if not(title_bgm_playing):
       mixer.music.load(TITLE_BGM)
@@ -610,7 +691,9 @@ while running:
               current_state = State.TITLE
             else:
               # Restore correct in-game background when leaving screen
-              current_background = pygame.image.load(c.BG_PATH + current_bg_file)
+              current_background = pygame.image.load(
+                c.BG_PATH + current_bg_file
+              )
               current_state = State.GAME
 
       if (event.type == pygame.MOUSEBUTTONDOWN and
@@ -625,8 +708,11 @@ while running:
               current_state = State.TITLE
             else:
               # Restore correct in-game background when leaving screen
-              current_background = pygame.image.load(c.BG_PATH + current_bg_file)
+              current_background = pygame.image.load(
+                c.BG_PATH + current_bg_file
+              )
               current_state = State.GAME
+
           # Detect which button was clicked
           if LOAD_BTN_ONE_RECT.collidepoint(mouse_x, mouse_y):
             sound_btn_click.play()
@@ -668,6 +754,7 @@ while running:
         # Reset script command completion
         for i in script:
           i[0] = 0
+
         # Complete commands up till the current index
         cnt = 1
         for i in script:
@@ -677,11 +764,14 @@ while running:
           if cnt >= current_index:
             break
 
-        current_background = pygame.image.load(c.BG_PATH + current_bg_file)
+        current_background = pygame.image.load(
+          c.BG_PATH + current_bg_file
+        )
         # Start playing music if a file is given
         if current_bgm != "":
           mixer.music.load(c.BGM_PATH + current_bgm)
           mixer.music.play(-1)
+
         dialogue_ok = False
         ready_to_load = False
         # Back to game
@@ -745,7 +835,9 @@ while running:
             ready_to_save = False
           else:
             # Otherwise return to game
-            current_background = pygame.image.load(c.BG_PATH + current_bg_file)
+            current_background = pygame.image.load(
+              c.BG_PATH + current_bg_file
+            )
             current_state = State.GAME
 
       # Check for left clicks on save buttons and we aren't in save process
@@ -774,6 +866,7 @@ while running:
             sound_btn_click.play()
             save_file = SAVE_FILE_THREE
             ready_to_save = True
+
         # Save process has started and waiting for player decision
         elif ready_to_save and not(dialogue_ok):
           # Events checking for clicks on Yes or No
@@ -803,6 +896,7 @@ while running:
     if display_text_box != 0:
       # Draw text box
       screen.blit(TEXT_BOX, TEXT_BOX_ORIGIN)
+
     # Draw buttons
     screen.blit(GAME_SAVE_BTN, GAME_SAVE_BTN_ORIGIN)
     screen.blit(GAME_LOAD_BTN, GAME_LOAD_BTN_ORIGIN)
@@ -864,7 +958,6 @@ while running:
         )
         # Update scrollback log
         scrollback_log.insert(0, current_text)
-
         # Prune scrollback log if stored text exceeds limit
         if len(scrollback_log) > SCROLLBACK_LIMIT:
           scrollback_log.pop(-1)
@@ -893,9 +986,7 @@ while running:
         if current_index + 1 < len(script):
           current_index += 1
 
-    ###################################################################
     # Now handle player input
-    ###################################################################
     for event in pygame.event.get():
       # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
@@ -970,8 +1061,12 @@ while running:
     screen.blit(SETTINGS_SFX_PLUS_BTN, SETTINGS_SFX_PLUS_BTN_ORIGIN)
     screen.blit(SETTINGS_SFX_MINUS_BTN, SETTINGS_SFX_MINUS_BTN_ORIGIN)
 
-    renderBodyText(volume_bgm, "medium", (500, 200), True, c.WHITE, c.BLACK)
-    renderBodyText(volume_sfx, "medium", (500, 300), True, c.WHITE, c.BLACK)
+    renderBodyText(
+      volume_bgm, "medium", (500, 200), True, c.WHITE, c.BLACK
+    )
+    renderBodyText(
+      volume_sfx, "medium", (500, 300), True, c.WHITE, c.BLACK
+    )
     # Draw back button
     screen.blit(BACK_BTN, BACK_BTN_ORIGIN)
 
@@ -1043,9 +1138,10 @@ while running:
   #
   ###################################################################
   elif current_state == State.CREDITS:
-    slide_index = 0
     # Display slide in the credits gallery list
-    current_slide = pygame.image.load(c.BG_PATH + CREDITS_GALLERY[slide_index])
+    current_slide = pygame.image.load(
+      c.BG_PATH + CREDITS_GALLERY[slide_index]
+    )
     screen.blit(current_slide, (0, 0))
 
     if CREDITS_BGM != "":
@@ -1129,7 +1225,6 @@ while running:
             colour
           )
           word_width = word_to_draw.get_width()
-
           # Reset x and move a line down if line will be too long
           if cur_x + word_width > TEXT_BODY_BOUNDS:
             cur_x = start_x
@@ -1160,8 +1255,8 @@ while running:
           if not(scrollback_pos <= 0):
             scrollback_pos -= 1
 
+      # Scroll log with mousewheel
       if event.type == pygame.MOUSEBUTTONDOWN:
-        # Scroll log with mousewheel
         if event.button == 4:
           if not(scrollback_pos <= 0):
             scrollback_pos -= 1
