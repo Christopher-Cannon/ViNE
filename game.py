@@ -566,6 +566,8 @@ state_before_load = State.TITLE
 save_details = getSaveFileDetails()
 ready_to_save = False
 ready_to_load = False
+# Do you want to exit game screen?
+quit_dialogue = False
 save_file = ""
 dialogue_ok = False
 running = True
@@ -595,7 +597,6 @@ while running:
     if not(title_bgm_playing):
       mixer.music.load(TITLE_BGM)
       mixer.music.play(-1)
-
       title_bgm_playing = True
 
     # Draw buttons
@@ -617,26 +618,24 @@ while running:
 
         if TITLE_START_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
-
+          # Reset state for new game in case coming from loaded save
           current_bg_file = BLANK_BG_FILE
           # Reset to prevent any stored text flashing up briefly
           current_text["speaker"] = ""
           current_text["body"] = ""
           current_text["speaker_colour"] = c.WHITE
           current_text["body_colour"] = c.WHITE
-
-          mixer.music.stop()
-          title_bgm_playing = False
-
           current_sprites = {}
           current_index = 0
           current_chapter = {
             "number": 0,
             "title": ""
           }
-
           scrollback_log = []
           scrollback_pos = 0
+
+          mixer.music.stop()
+          title_bgm_playing = False
 
           current_state = State.GAME
 
@@ -920,6 +919,9 @@ while running:
         c.BLACK
       )
 
+    if quit_dialogue:
+      displayDialogueBox()
+
     ###################################################################
     # Run through game script
     ###################################################################
@@ -992,50 +994,60 @@ while running:
       if event.type == pygame.QUIT:
         running = False
 
-      if event.type == pygame.KEYDOWN:
-        # Let player advance to next line in script if current index is TEXT
-        if event.key == pygame.K_SPACE and script[current_index][1] is c.TEXT:
-          if current_index + 1 < len(script):
-            current_index += 1
+      if not(quit_dialogue):
+        if event.type == pygame.KEYDOWN:
+          # Let player advance to next line in script if current index is TEXT
+          if event.key == pygame.K_SPACE and script[current_index][1] is c.TEXT:
+            if current_index + 1 < len(script):
+              current_index += 1
 
-        if event.key == pygame.K_ESCAPE:
-          # Reset script progress for now
-          current_index = 0
+          if event.key == pygame.K_ESCAPE:
+            quit_dialogue = True
 
-          for i in script:
-            i[0] = 0
+        if (event.type == pygame.MOUSEBUTTONDOWN and 
+          event.button == 1
+          ):
+          mouse_x, mouse_y = event.pos
 
-          # Make sure to stop any music playing before returning to title
-          current_state = State.TITLE
-      if (event.type == pygame.MOUSEBUTTONDOWN and 
-        event.button == 1
-        ):
-        mouse_x, mouse_y = event.pos
+          if GAME_SAVE_BTN_RECT.collidepoint(mouse_x, mouse_y):
+            sound_btn_click.play()
+            current_background = SAVE_LOAD_BG
+            current_state = State.SAVE
 
-        if GAME_SAVE_BTN_RECT.collidepoint(mouse_x, mouse_y):
-          sound_btn_click.play()
-          current_background = SAVE_LOAD_BG
-          current_state = State.SAVE
+          if GAME_LOAD_BTN_RECT.collidepoint(mouse_x, mouse_y):
+            sound_btn_click.play()
+            current_background = SAVE_LOAD_BG
+            state_before_load = State.GAME
+            current_state = State.LOAD
 
-        if GAME_LOAD_BTN_RECT.collidepoint(mouse_x, mouse_y):
-          sound_btn_click.play()
-          current_background = SAVE_LOAD_BG
-          state_before_load = State.GAME
-          current_state = State.LOAD
+          if GAME_LOG_BTN_RECT.collidepoint(mouse_x, mouse_y):
+            sound_btn_click.play()
+            current_state = State.SCROLLBACK
 
-        if GAME_LOG_BTN_RECT.collidepoint(mouse_x, mouse_y):
-          sound_btn_click.play()
-          current_state = State.SCROLLBACK
+          if GAME_QUIT_BTN_RECT.collidepoint(mouse_x, mouse_y):
+            sound_btn_back.play()
+            quit_dialogue = True
 
-        if GAME_QUIT_BTN_RECT.collidepoint(mouse_x, mouse_y):
-          sound_btn_back.play()
+      else:
+        if (event.type == pygame.MOUSEBUTTONDOWN and 
+          event.button == 1
+          ):
+          mouse_x, mouse_y = event.pos
+          # Events checking for clicks on Yes or No
+          if DIALOGUE_BOX_BTN_YES_RECT.collidepoint(mouse_x, mouse_y):
+            sound_btn_click.play()
+            # Reset script progress for now
+            current_index = 0
 
-          current_index = 0
+            for i in script:
+              i[0] = 0
 
-          for i in script:
-            i[0] = 0
+            quit_dialogue = False
+            current_state = State.TITLE
 
-          current_state = State.TITLE
+          if DIALOGUE_BOX_BTN_NO_RECT.collidepoint(mouse_x, mouse_y):
+            sound_btn_back.play()
+            quit_dialogue = False
 
   ###################################################################
   #
