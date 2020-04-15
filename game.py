@@ -2,6 +2,7 @@ import script as s
 import config as c
 import pygame
 import math
+import ast
 from datetime import datetime
 import os.path
 from os import path
@@ -206,43 +207,6 @@ DELETE_BTN_THREE_RECT = DELETE_BTN.get_rect(
     topleft=DELETE_BTN_THREE_ORIGIN)
 
 # Functions
-# Returns an array containing two integers
-def getUserSettings():
-  # If settings file exists, get values
-  if path.exists(USER_SETTINGS):
-    settings = []
-
-    with open(USER_SETTINGS, "rt") as in_file:
-      for cnt, line in enumerate(in_file):
-        settings.append(int(line.strip()))
-
-    return settings
-  # File doesn't exist, so make it and return defaults
-  else:
-    saveUserSettings(DEFAULT_BGM_VOLUME, DEFAULT_SFX_VOLUME)
-    return [DEFAULT_BGM_VOLUME, DEFAULT_SFX_VOLUME]
-
-# Write volume settings to settings file - accepts two integers
-def saveUserSettings(bgm, sfx):  
-  with open(USER_SETTINGS, "wt") as out_file:
-    out_file.write("{}\n{}".format(bgm, sfx))
-
-# Set BGM / SFX volume - accepts two integers
-def setVolume(bgm, sfx):
-  mixer.music.set_volume(bgm / 10)
-  sound_btn_click.set_volume(sfx / 10)
-  sound_btn_back.set_volume(sfx / 10)
-
-# Write to a save file
-def saveToFile(file, payload):
-  with open(file, "wt") as out_file:
-    write_string = ""
-
-    for elem in payload:
-      write_string += "{}\n".format(elem)
-
-    out_file.write("{}".format(write_string))
-
 def renderBodyText(text, font_size, origin, aa, fg, bg=None):
   if font_size == "large":
     output = BODY_FONT_LARGE.render("{}".format(text), aa, fg, bg)
@@ -342,6 +306,43 @@ def drawSpeaker(name, x, y, fg_colour, bg_colour=None):
   )
   screen.blit(speaker_box, (x, y))
 
+# Returns an array containing two integers
+def getUserSettings():
+  # If settings file exists, get values
+  if path.exists(USER_SETTINGS):
+    settings = []
+
+    with open(USER_SETTINGS, "rt") as in_file:
+      for cnt, line in enumerate(in_file):
+        settings.append(int(line.strip()))
+
+    return settings
+  # File doesn't exist, so make it and return defaults
+  else:
+    saveUserSettings(DEFAULT_BGM_VOLUME, DEFAULT_SFX_VOLUME)
+    return [DEFAULT_BGM_VOLUME, DEFAULT_SFX_VOLUME]
+
+# Write volume settings to settings file - accepts two integers
+def saveUserSettings(bgm, sfx):  
+  with open(USER_SETTINGS, "wt") as out_file:
+    out_file.write("{}\n{}".format(bgm, sfx))
+
+# Set BGM / SFX volume - accepts two integers
+def setVolume(bgm, sfx):
+  mixer.music.set_volume(bgm / 10)
+  sound_btn_click.set_volume(sfx / 10)
+  sound_btn_back.set_volume(sfx / 10)
+
+# Write to a save file
+def saveToFile(file, payload):
+  with open(file, "wt") as out_file:
+    write_string = ""
+
+    for elem in payload:
+      write_string += "{}\n".format(elem)
+
+    out_file.write("{}".format(write_string))
+
 def commonSaveLoadGUI():
   screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_ONE_ORIGIN)
   screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_TWO_ORIGIN)
@@ -350,6 +351,67 @@ def commonSaveLoadGUI():
   screen.blit(DELETE_BTN, DELETE_BTN_ONE_ORIGIN)
   screen.blit(DELETE_BTN, DELETE_BTN_TWO_ORIGIN)
   screen.blit(DELETE_BTN, DELETE_BTN_THREE_ORIGIN)
+
+# Retrieve save data from save files, return as a list
+def getSaveFileData(save_file):
+  output = []
+
+  if path.exists(save_file):
+    with open(save_file, "rt") as in_file:
+      for cnt, line in enumerate(in_file):
+        # Append dictionary or list
+        if cnt in [1, 2, 3, 4]:
+          output.append(ast.literal_eval(line.strip()))
+        # Append integer
+        elif cnt == 7:
+          output.append(int(line.strip()))
+        # Append string
+        else:
+          output.append(line.strip())
+
+    return output
+  else:
+    return 0
+
+# Get the chapter and datetime info for each save file if they exist
+def getSaveFileDetails():
+  save_files = [SAVE_FILE_ONE, SAVE_FILE_TWO, SAVE_FILE_THREE]
+  output = []
+
+  for save in save_files:
+    if getSaveFileData(save):
+      data = getSaveFileData(save)
+      output.append([data[0], data[1]])
+    else:
+      output.append(False)
+
+  return output
+
+def outputSaveFileDetails():
+  save_details_start_y = 160
+  save_details_y = save_details_start_y
+  save_details_y_increment = 150
+
+  # Output save file details
+  for elem in save_details:
+    save_chapter = "NO FILE"
+    save_datetime = ""
+
+    if elem:
+      save_chapter = "Chapter {}: {}".format(
+        elem[1]["number"],
+        elem[1]["title"]
+      )
+      save_datetime = elem[0]
+
+    renderBodyText(save_chapter, "small",
+      (90, save_details_y), True, c.WHITE
+    )
+    renderBodyText(save_datetime, "small",
+      (90, save_details_y + 30), True, c.WHITE
+    )
+    # Set y pos for next save panel
+    save_details_y += save_details_y_increment
 
 # Game settings - get these from user_settings.txt
 volume = getUserSettings()
@@ -377,7 +439,7 @@ current_state = State.TITLE
 
 current_background = TITLE_BACKGROUND
 # Holds only the filename of the current background
-current_bg_file = c.BG_PATH + BLANK_BG_FILE
+current_bg_file = BLANK_BG_FILE
 # Current in-game BGM
 current_bgm = ""
 # Our current position in the script
@@ -399,6 +461,10 @@ current_text = {
 # Holds the previous 100 TEXT lines
 scrollback_log = []
 scrollback_pos = 0
+# When going to the load screen, which state did we come from?
+state_before_load = State.TITLE
+# Get save file chapters and datetime if they exist
+save_details = getSaveFileDetails()
 
 running = True
 title_bgm_playing = False
@@ -458,6 +524,7 @@ while running:
         if TITLE_LOAD_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
 
+          state_before_load = State.TITLE
           current_state = State.LOAD
 
         if TITLE_SETTINGS_BTN_RECT.collidepoint(mouse_x, mouse_y):
@@ -475,6 +542,8 @@ while running:
   ###################################################################
   elif current_state == State.LOAD:
     current_background = SAVE_LOAD_BG
+    ready_to_load = False
+    load_file = ""
 
     # Output the heading
     renderBodyText(LOAD_HEADING_TEXT, "large",
@@ -486,14 +555,19 @@ while running:
     screen.blit(LOAD_BTN, LOAD_BTN_TWO_ORIGIN)
     screen.blit(LOAD_BTN, LOAD_BTN_THREE_ORIGIN)
 
+    outputSaveFileDetails()
+
     for event in pygame.event.get():
-      # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
         running = False
 
       if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
-          current_state = State.TITLE
+          if state_before_load == State.TITLE:
+            current_state = State.TITLE
+          else:
+            current_background = pygame.image.load(c.BG_PATH + current_bg_file)
+            current_state = State.GAME
 
       if (event.type == pygame.MOUSEBUTTONDOWN and
         event.button == 1
@@ -501,13 +575,29 @@ while running:
         mouse_x, mouse_y = event.pos
 
         # Detect which button was clicked
+        if LOAD_BTN_ONE_RECT.collidepoint(mouse_x, mouse_y):
+          # Should have a dialogue prompt here
+          load_file = SAVE_FILE_ONE
+          ready_to_load = True
 
-        # Attempt to open specified save file
-          # On error, display error message
-        
-        # Read file, parse each line back into state variables
+        if LOAD_BTN_TWO_RECT.collidepoint(mouse_x, mouse_y):
+          load_file = SAVE_FILE_TWO
+          ready_to_load = True
 
-        # Go to GAME state
+        if LOAD_BTN_THREE_RECT.collidepoint(mouse_x, mouse_y):
+          load_file = SAVE_FILE_THREE
+          ready_to_load = True
+
+    if ready_to_load:
+      if getSaveFileData(load_file):
+        save_data = getSaveFileData(load_file)
+
+        # Now load save data into state and return to game screen
+
+        # Update stored save file details
+        save_details = getSaveFileDetails()
+
+      ready_to_load = False
 
   ###################################################################
   #
@@ -529,8 +619,9 @@ while running:
     screen.blit(SAVE_BTN, SAVE_BTN_TWO_ORIGIN)
     screen.blit(SAVE_BTN, SAVE_BTN_THREE_ORIGIN)
 
+    outputSaveFileDetails()
+
     for event in pygame.event.get():
-      # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
         running = False
 
@@ -567,15 +658,18 @@ while running:
         save_file,
         [
             dt,
+            current_chapter,
             current_sprites,
             current_text,
             scrollback_log,
-            current_chapter,
             current_bgm,
             current_bg_file,
             current_index
         ]
       )
+      # Update stored save file details
+      save_details = getSaveFileDetails()
+
       ready_to_save = False
       # Now update display of save chapter number + title and time saved
 
@@ -721,6 +815,7 @@ while running:
 
         if GAME_LOAD_BTN_RECT.collidepoint(mouse_x, mouse_y):
           sound_btn_click.play()
+          state_before_load = State.GAME
           current_state = State.LOAD
 
         if GAME_LOG_BTN_RECT.collidepoint(mouse_x, mouse_y):
