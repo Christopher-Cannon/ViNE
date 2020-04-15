@@ -581,7 +581,6 @@ while running:
   screen.fill(c.BLACK)
   # Set BG image
   screen.blit(current_background, (0, 0))
-
   ###################################################################
   #
   # TITLE SCREEN
@@ -982,6 +981,15 @@ while running:
 
       elif cmd is c.TEXT_BOX_SHOW:
         display_text_box = 1
+        
+      elif cmd is c.CREDITS:
+        # Reset script progress
+        current_index = 0
+
+        for i in script:
+          i[0] = 0
+
+        current_state = State.CREDITS
 
       # Do not advance if current index is TEXT
       if not(script[current_index][1] is c.TEXT):
