@@ -1,8 +1,9 @@
-2020 Apr 15 - 18:35:04
+2020 Apr 15 - 19:16:50
 {'number': 1, 'title': 'Introduction'}
 {'bob': {'file': 'spr-bob-happy.png', 'x': 50, 'y': 120}, 'jane': {'file': 'spr-jane-shocked.png', 'x': 670, 'y': 220}}
-{'speaker': 'Jane', 'body': 'Ah.', 'speaker_colour': (250, 40, 55), 'body_colour': (250, 250, 250)}
-[{'speaker': 'Jane', 'body': 'Ah.', 'speaker_colour': (250, 40, 55), 'body_colour': (250, 250, 250)}, {'speaker': 'Bob', 'body': 'Hello and "welcome to ViNE", A.K.A Visual Novel Engine. \nIt\'s a little basic right now but that should hopefully change in time.', 'speaker_colour': (250, 250, 250), 'body_colour': (250, 250, 250)}, {'speaker': '', 'body': 'Ok, done. Time to play some music and brighten this place up a bit.', 'speaker_colour': (250, 250, 250), 'body_colour': (250, 250, 250)}, {'speaker': '', 'body': 'A little more...', 'speaker_colour': (250, 250, 250), 'body_colour': (250, 250, 250)}, {'speaker': '', 'body': 'Just a little more...', 'speaker_colour': (250, 250, 250), 'body_colour': (250, 250, 250)}, {'speaker': '', 'body': "[b] Wait [i] a [u] (40,250,55) second, [/b] we're [/u] not [/i] (250,250,250) ready yet.", 'speaker_colour': (250, 250, 250), 'body_colour': (250, 250, 250)}]
+{'speaker': '', 'body': '', 'speaker_colour': (250, 40, 55), 'body_colour': (250, 250, 250)}
+[{'speaker': '', 'body': '', 'speaker_colour': (250, 40, 55), 'body_colour': (250, 250, 250)}, {'speaker': 'Jane', 'body': 'Ah.', 'speaker_colour': (250, 40, 55), 'body_colour': (250, 250, 250)}, {'speaker': 'Bob', 'body': 'Hello and "welcome to ViNE", A.K.A Visual Novel Engine. \nIt\'s a little basic right now but that should hopefully change in time.', 'speaker_colour': (250, 250, 250), 'body_colour': (250, 250, 250)}, {'speaker': '', 'body': 'Ok, done. Time to play some music and brighten this place up a bit.', 'speaker_colour': (250, 250, 250), 'body_colour': (250, 250, 250)}, {'speaker': '', 'body': 'A little more...', 'speaker_colour': (250, 250, 250), 'body_colour': (250, 250, 250)}, {'speaker': '', 'body': 'Just a little more...', 'speaker_colour': (250, 250, 250), 'body_colour': (250, 250, 250)}, {'speaker': '', 'body': "[b] Wait [i] a [u] (40,250,55) second, [/b] we're [/u] not [/i] (250,250,250) ready yet.", 'speaker_colour': (250, 250, 250), 'body_colour': (250, 250, 250)}]
 kaleetan.ogg
 bg-sea.png
-11
+13
+0

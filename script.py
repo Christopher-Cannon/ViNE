@@ -75,9 +75,17 @@ It's a little basic right now but that should hopefully change in time.""",
       "speaker_colour": COL_RED,
       "body_colour": COL_WHITE}
     ],
+    ["TEXT_BOX_HIDE", {}],
+    ["TEXT", {
+      "speaker": "", 
+      "body": "", 
+      "speaker_colour": COL_RED,
+      "body_colour": COL_WHITE}
+    ],
     ["SPRITE",
       {"reference": "jane", "file": SPR_JANE_HAPPY, "x": 640, "y": 220}
     ],
+    ["TEXT_BOX_SHOW", {}],
     ["TEXT", {
       "speaker": "Jane", 
       "body": "Hello.", 
@@ -289,8 +297,10 @@ def testScript():
   SPR_JANE_HAPPY = "spr-jane-happy.png"
 
   script = [
+    # Show or hide text box
+    ["TEXT_BOX_HIDE", {}],
+    ["TEXT_BOX_SHOW", {}],
     # Update chapter
-    # Could numbering be done automatically?
     ["CHAPTER", {"number": 1, "title": "This is chapter one"}],
     # Add / Update background image (Removal?)
     ["BG_IMG", {"file": "bg-sea.png"}],

@@ -55,19 +55,15 @@ assets = {
   "SAVE_LOAD_PANEL": "panel.png",
   "SAVE_BTN": "btn-save.png",
   "LOAD_BTN": "btn-load.png",
-  "DELETE_BTN": "btn-delete.png",
   "SAVE_LOAD_PANEL_ONE_ORIGIN": (80, 150),
-  "SAVE_BTN_ONE_ORIGIN": (610, 160),
-  "LOAD_BTN_ONE_ORIGIN": (610, 160),
-  "DELETE_BTN_ONE_ORIGIN": (820, 160),
+  "SAVE_BTN_ONE_ORIGIN": (670, 160),
+  "LOAD_BTN_ONE_ORIGIN": (670, 160),
   "SAVE_LOAD_PANEL_TWO_ORIGIN": (80, 300),
-  "SAVE_BTN_TWO_ORIGIN": (610, 310),
-  "LOAD_BTN_TWO_ORIGIN": (610, 310),
-  "DELETE_BTN_TWO_ORIGIN": (820, 310),
+  "SAVE_BTN_TWO_ORIGIN": (670, 310),
+  "LOAD_BTN_TWO_ORIGIN": (670, 310),
   "SAVE_LOAD_PANEL_THREE_ORIGIN": (80, 450),
-  "SAVE_BTN_THREE_ORIGIN": (610, 460),
-  "LOAD_BTN_THREE_ORIGIN": (610, 460),
-  "DELETE_BTN_THREE_ORIGIN": (820, 460),
+  "SAVE_BTN_THREE_ORIGIN": (670, 460),
+  "LOAD_BTN_THREE_ORIGIN": (670, 460),
   # Game screen
   "TEXT_BOX": "text-box.png",
   "TEXT_BOX_ORIGIN": (0, 550),
@@ -98,6 +94,8 @@ SPRITE_PATH = 'sprites/'
 
 # Various commands that can be included in scripts
 # These can be changes so long as they are followed in the script
+TEXT_BOX_HIDE = "TEXT_BOX_HIDE"
+TEXT_BOX_SHOW = "TEXT_BOX_SHOW"
 CHAPTER = "CHAPTER"
 BG_IMG = "BG_IMG"
 SPRITE = "SPRITE"
