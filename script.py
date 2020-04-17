@@ -304,7 +304,7 @@ def testScript():
     # Move to credits
     ["CREDITS", {}],
     # Update chapter title and splash
-    ["CHAPTER", {"title": "This is chapter one", "file", "bg-chapter-1.png"}],
+    ["CHAPTER", {"title": "This is chapter one", "file": "bg-chapter-1.png"}],
     # Add / Update background image (Removal?)
     ["BG_IMG", {"file": "bg-sea.png"}],
     # Add / Update sprite

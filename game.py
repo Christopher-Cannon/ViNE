@@ -885,7 +885,7 @@ while running:
   ###################################################################
   elif current_state == State.GAME:
     # If we're starting a new chapter, hide UI
-    if not(display_game_ui):
+    if display_game_ui:
       # Loop through and blit current sprites
       if len(current_sprites) > 0:
         for spr in current_sprites.values():
