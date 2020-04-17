@@ -57,7 +57,7 @@ def getScript():
     ["SPRITE", 
       {"reference": "bob", "file": SPR_BOB_HAPPY, "x": 50, "y": 120}
     ],
-    ["CHAPTER", {"title": "Introduction"}],
+    ["CHAPTER", {"title": "Introduction", "file": "bg-title.png"}],
     ["TEXT", {
       "speaker": "Bob", 
       # Multi-line strings are good for long lines
@@ -195,7 +195,7 @@ can see the current sprites in the console.""",
     ],
     ["SPRITE_REMOVE", {"reference": "jane"}],
     ["BG_IMG", {"file": "bg-trees.png"}],
-    ["CHAPTER", {"title": "The second part"}],
+    ["CHAPTER", {"title": "The second part", "file": "bg-title.png"}],
     ["TEXT", {
       "speaker": "Frederica",
       "body": "The scenery changes fast around here doesn't it.",
@@ -303,8 +303,8 @@ def testScript():
     ["TEXT_BOX_SHOW", {}],
     # Move to credits
     ["CREDITS", {}],
-    # Update chapter
-    ["CHAPTER", {"number": 1, "title": "This is chapter one"}],
+    # Update chapter title and splash
+    ["CHAPTER", {"title": "This is chapter one", "file", "bg-chapter-1.png"}],
     # Add / Update background image (Removal?)
     ["BG_IMG", {"file": "bg-sea.png"}],
     # Add / Update sprite

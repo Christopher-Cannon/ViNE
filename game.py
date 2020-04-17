@@ -31,7 +31,6 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("ViNE")
 ICON = pygame.image.load(c.SPRITE_PATH + 'icon-vine.png')
 pygame.display.set_icon(ICON)
-
 ###################################################################
 # Constants from config.py
 ###################################################################
@@ -43,20 +42,20 @@ BACK_BTN = pygame.image.load(
 BACK_BTN_ORIGIN = c.assets["BACK_BTN_ORIGIN"]
 
 BODY_FONT_SMALL = pygame.font.Font(
-    c.FONT_PATH + c.assets["BODY_FONT"], 
-    c.assets["FONT_SIZE_SMALL"]
+  c.FONT_PATH + c.assets["BODY_FONT"], 
+  c.assets["FONT_SIZE_SMALL"]
 )
 BODY_FONT_MEDIUM = pygame.font.Font(
-    c.FONT_PATH + c.assets["BODY_FONT"], 
-    c.assets["FONT_SIZE_MEDIUM"]
+  c.FONT_PATH + c.assets["BODY_FONT"], 
+  c.assets["FONT_SIZE_MEDIUM"]
 )
 BODY_FONT_LARGE = pygame.font.Font(
-    c.FONT_PATH + c.assets["BODY_FONT"], 
-    c.assets["FONT_SIZE_LARGE"]
+  c.FONT_PATH + c.assets["BODY_FONT"], 
+  c.assets["FONT_SIZE_LARGE"]
 )
 SPEAKER_FONT = pygame.font.Font(
-    c.FONT_PATH + c.assets["SPEAKER_FONT"], 
-    c.assets["FONT_SIZE_MEDIUM"]
+  c.FONT_PATH + c.assets["SPEAKER_FONT"], 
+  c.assets["FONT_SIZE_MEDIUM"]
 )
 SCROLLBACK_LIMIT = c.assets["SCROLLBACK_LIMIT"]
 BLANK_BG_FILE = c.assets["BLANK_BG"]
@@ -548,7 +547,8 @@ current_sprites = {}
 # Chapter number auto-increments per each CHAPTER script cmd
 current_chapter = {
   "number": 0,
-  "title": ""
+  "title": "",
+  "file": ""
 }
 # Current text and speaker to display
 current_text = {
@@ -573,6 +573,7 @@ dialogue_ok = False
 running = True
 title_bgm_playing = False
 display_text_box = 1
+display_game_ui = True
 # Credits bg image gallery index
 slide_index = 0
 # Game loop
@@ -628,7 +629,8 @@ while running:
           current_index = 0
           current_chapter = {
             "number": 0,
-            "title": ""
+            "title": "",
+            "file": ""
           }
           scrollback_log = []
           scrollback_pos = 0
@@ -882,41 +884,43 @@ while running:
   #
   ###################################################################
   elif current_state == State.GAME:
-    # Loop through and blit current sprites
-    if len(current_sprites) > 0:
-      for spr in current_sprites.values():
-        sprite_to_draw = pygame.image.load(
-          c.SPRITE_PATH + spr["file"]
-        ).convert_alpha()
-        
-        screen.blit(sprite_to_draw, (spr["x"], spr["y"]))
+    # If we're starting a new chapter, hide UI
+    if not(display_game_ui):
+      # Loop through and blit current sprites
+      if len(current_sprites) > 0:
+        for spr in current_sprites.values():
+          sprite_to_draw = pygame.image.load(
+            c.SPRITE_PATH + spr["file"]
+          ).convert_alpha()
+          
+          screen.blit(sprite_to_draw, (spr["x"], spr["y"]))
 
-    if display_text_box != 0:
-      # Draw text box
-      screen.blit(TEXT_BOX, TEXT_BOX_ORIGIN)
+      if display_text_box != 0:
+        # Draw text box
+        screen.blit(TEXT_BOX, TEXT_BOX_ORIGIN)
 
-    # Draw buttons
-    screen.blit(GAME_SAVE_BTN, GAME_SAVE_BTN_ORIGIN)
-    screen.blit(GAME_LOAD_BTN, GAME_LOAD_BTN_ORIGIN)
-    screen.blit(GAME_LOG_BTN, GAME_LOG_BTN_ORIGIN)
-    screen.blit(GAME_QUIT_BTN, GAME_QUIT_BTN_ORIGIN)
-    # Draw current text and speaker into the text box
-    if current_text["body"] != "":
-      drawDialogue(
-          current_text["body"],
-          c.assets["TEXT_BODY_ORIGIN"][0],
-          c.assets["TEXT_BODY_ORIGIN"][1],
-          current_text["body_colour"]
-      )
+      # Draw buttons
+      screen.blit(GAME_SAVE_BTN, GAME_SAVE_BTN_ORIGIN)
+      screen.blit(GAME_LOAD_BTN, GAME_LOAD_BTN_ORIGIN)
+      screen.blit(GAME_LOG_BTN, GAME_LOG_BTN_ORIGIN)
+      screen.blit(GAME_QUIT_BTN, GAME_QUIT_BTN_ORIGIN)
+      # Draw current text and speaker into the text box
+      if current_text["body"] != "":
+        drawDialogue(
+            current_text["body"],
+            c.assets["TEXT_BODY_ORIGIN"][0],
+            c.assets["TEXT_BODY_ORIGIN"][1],
+            current_text["body_colour"]
+        )
 
-    if current_text["speaker"] != "":
-      drawSpeaker(
-        " " + current_text["speaker"] + " ", 
-        SPEAKER_BOX_ORIGIN[0],
-        SPEAKER_BOX_ORIGIN[1],
-        current_text["speaker_colour"],
-        c.BLACK
-      )
+      if current_text["speaker"] != "":
+        drawSpeaker(
+          " " + current_text["speaker"] + " ", 
+          SPEAKER_BOX_ORIGIN[0],
+          SPEAKER_BOX_ORIGIN[1],
+          current_text["speaker_colour"],
+          c.BLACK
+        )
 
     if quit_dialogue:
       displayDialogueBox()
@@ -948,6 +952,11 @@ while running:
       elif cmd is c.CHAPTER:
         current_chapter["number"] = current_chapter["number"] + 1
         current_chapter["title"] = obj["title"]
+        current_chapter["file"] = obj["file"]
+
+        current_background = pygame.image.load(c.BG_PATH + obj["file"])
+        # Show chapter splash
+        display_game_ui = False
 
       elif cmd is c.TEXT:
         # Update the current text
@@ -992,7 +1001,9 @@ while running:
         current_state = State.CREDITS
 
       # Do not advance if current index is TEXT
-      if not(script[current_index][1] is c.TEXT):
+      if (not(script[current_index][1] is c.TEXT) and 
+        not(script[current_index][1] is c.CHAPTER)
+        ):
         if current_index + 1 < len(script):
           current_index += 1
 
@@ -1005,7 +1016,13 @@ while running:
       if not(quit_dialogue):
         if event.type == pygame.KEYDOWN:
           # Let player advance to next line in script if current index is TEXT
-          if event.key == pygame.K_SPACE and script[current_index][1] is c.TEXT:
+          if (event.key == pygame.K_SPACE and 
+            (script[current_index][1] is c.TEXT or 
+              script[current_index][1] is c.CHAPTER)
+            ):
+            # Reset UI if moving from chapter transition
+            display_game_ui = True
+
             if current_index + 1 < len(script):
               current_index += 1
 
