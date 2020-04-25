@@ -299,30 +299,23 @@ def inlineTextFormat(word):
   if re.search(TEXT_BOLD_PATTERN_START, word):
     BODY_FONT_SMALL.set_bold(1)
     return 1
-
-  if re.search(TEXT_BOLD_PATTERN_END, word):
+  elif re.search(TEXT_BOLD_PATTERN_END, word):
     BODY_FONT_SMALL.set_bold(0)
     return 1
-
-  # Italic
-  if re.search(TEXT_ITALIC_PATTERN_START, word):
+  elif re.search(TEXT_ITALIC_PATTERN_START, word):
     BODY_FONT_SMALL.set_italic(1)
     return 1
-
-  if re.search(TEXT_ITALIC_PATTERN_END, word):
+  elif re.search(TEXT_ITALIC_PATTERN_END, word):
     BODY_FONT_SMALL.set_italic(0)
     return 1
-
-  # Underline
-  if re.search(TEXT_UNDERLINE_PATTERN_START, word):
+  elif re.search(TEXT_UNDERLINE_PATTERN_START, word):
     BODY_FONT_SMALL.set_underline(1)
     return 1
-
-  if re.search(TEXT_UNDERLINE_PATTERN_END, word):
+  elif re.search(TEXT_UNDERLINE_PATTERN_END, word):
     BODY_FONT_SMALL.set_underline(0)
     return 1
-
-  return 0
+  else:
+    return 0
 
 # Get colour for inline dialogue formatting
 def getColour(word):
@@ -332,8 +325,8 @@ def getColour(word):
     match = match.replace(')', '')
 
     return tuple(map(int, match.split(',')))
-  
-  return 0
+  else:
+    return 0
 
 # Output text box dialogue (all at once)
 def drawDialogue(text, x, y, fg_colour):
