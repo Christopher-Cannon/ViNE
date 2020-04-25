@@ -1182,7 +1182,7 @@ while running:
     screen.blit(current_slide, (0, 0))
 
     if CREDITS_BGM != "":
-      mixer.music.load(CREDITS_BGM)
+      mixer.music.load(c.BGM_PATH + CREDITS_BGM)
       mixer.music.play(-1)
 
     for event in pygame.event.get():
@@ -1194,10 +1194,10 @@ while running:
           current_state = State.TITLE
 
         if event.key == pygame.K_SPACE:
-          slide_index += 1
-
-          if slide_index > len(CREDITS_GALLERY):
+          if slide_index + 1 >= len(CREDITS_GALLERY):
             current_state = State.TITLE
+          else:
+            slide_index += 1
 
   ###################################################################
   #

@@ -89,7 +89,7 @@ assets = {
     "credits-2.png",
     "credits-3.png"
   ],
-  "CREDITS_BGM": ""
+  "CREDITS_BGM": "kaleetan.ogg"
 }
 
 # Paths to assets
