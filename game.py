@@ -31,10 +31,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("ViNE")
 ICON = pygame.image.load(c.SPRITE_PATH + 'icon-vine.png')
 pygame.display.set_icon(ICON)
-###################################################################
-# Constants from config.py
-###################################################################
-# General
+
 BACK_BTN = pygame.image.load(
   c.SPRITE_PATH + c.assets["BACK_BTN"]
 ).convert_alpha()
@@ -89,7 +86,7 @@ DIALOGUE_BOX_TEXT = c.assets["DIALOGUE_BOX_TEXT"]
 DIALOGUE_BOX_ORIGIN = c.assets["DIALOGUE_BOX_ORIGIN"]
 DIALOGUE_BOX_BTN_YES_ORIGIN = c.assets["DIALOGUE_BOX_BTN_YES_ORIGIN"]
 DIALOGUE_BOX_BTN_NO_ORIGIN = c.assets["DIALOGUE_BOX_BTN_NO_ORIGIN"]
-# Title
+
 TITLE_BACKGROUND = pygame.image.load(
   c.BG_PATH + c.assets["TITLE_BG"]
 )
@@ -115,7 +112,7 @@ TITLE_START_BTN_ORIGIN = c.assets["TITLE_START_BTN_ORIGIN"]
 TITLE_LOAD_BTN_ORIGIN = c.assets["TITLE_LOAD_BTN_ORIGIN"]
 TITLE_SETTINGS_BTN_ORIGIN = c.assets["TITLE_SETTINGS_BTN_ORIGIN"]
 TITLE_QUIT_BTN_ORIGIN = c.assets["TITLE_QUIT_BTN_ORIGIN"]
-# Game
+
 TEXT_BOX = pygame.image.load(
   c.SPRITE_PATH + c.assets["TEXT_BOX"]
 ).convert_alpha()
@@ -148,7 +145,7 @@ GAME_SAVE_BTN_ORIGIN = c.assets["GAME_SAVE_BTN_ORIGIN"]
 GAME_LOAD_BTN_ORIGIN = c.assets["GAME_LOAD_BTN_ORIGIN"]
 GAME_LOG_BTN_ORIGIN = c.assets["GAME_LOG_BTN_ORIGIN"]
 GAME_QUIT_BTN_ORIGIN = c.assets["GAME_QUIT_BTN_ORIGIN"]
-# Settings
+
 SETTINGS_BG = pygame.image.load(c.BG_PATH + c.assets["SETTINGS_BG"])
 
 SETTINGS_BGM_PLUS_BTN = pygame.image.load(
@@ -178,7 +175,7 @@ SETTINGS_SFX_TEXT = c.assets["SETTINGS_SFX_TEXT"]
 
 SETTINGS_BGM_TEXT_ORIGIN = c.assets["SETTINGS_BGM_TEXT_ORIGIN"]
 SETTINGS_SFX_TEXT_ORIGIN = c.assets["SETTINGS_SFX_TEXT_ORIGIN"]
-# Save / Load
+
 SAVE_LOAD_BG = pygame.image.load(c.BG_PATH + c.assets["SAVE_LOAD_BG"])
 
 SAVE_HEADING_TEXT = c.assets["SAVE_HEADING_TEXT"]
@@ -207,24 +204,24 @@ LOAD_BTN_TWO_ORIGIN = c.assets["LOAD_BTN_TWO_ORIGIN"]
 SAVE_LOAD_PANEL_THREE_ORIGIN = c.assets["SAVE_LOAD_PANEL_THREE_ORIGIN"]
 SAVE_BTN_THREE_ORIGIN = c.assets["SAVE_BTN_THREE_ORIGIN"]
 LOAD_BTN_THREE_ORIGIN = c.assets["LOAD_BTN_THREE_ORIGIN"]
-# Scrollback
+
 SCROLLBACK_BOX = pygame.image.load(
   c.SPRITE_PATH + c.assets["SCROLLBACK_BOX"]
 )
 SCROLLBACK_LINE_SPACING = c.assets["SCROLLBACK_LINE_SPACING"]
-# Credits
+
 CREDITS_GALLERY = c.assets["CREDITS_GALLERY"]
 CREDITS_BGM = c.assets["CREDITS_BGM"]
-# General rectangles
-BACK_BTN_RECT = BACK_BTN.get_rect(topleft=c.assets["BACK_BTN_ORIGIN"])
 
+BACK_BTN_RECT = BACK_BTN.get_rect(
+  topleft=c.assets["BACK_BTN_ORIGIN"]
+)
 DIALOGUE_BOX_BTN_YES_RECT = DIALOGUE_BOX_BTN_YES.get_rect(
-    topleft=c.assets["DIALOGUE_BOX_BTN_YES_ORIGIN"]
+  topleft=c.assets["DIALOGUE_BOX_BTN_YES_ORIGIN"]
 )
 DIALOGUE_BOX_BTN_NO_RECT = DIALOGUE_BOX_BTN_NO.get_rect(
-    topleft=c.assets["DIALOGUE_BOX_BTN_NO_ORIGIN"]
+  topleft=c.assets["DIALOGUE_BOX_BTN_NO_ORIGIN"]
 )
-# Title rectangles
 TITLE_START_BTN_RECT = TITLE_START_BTN.get_rect(
   topleft=TITLE_START_BTN_ORIGIN
 )
@@ -237,7 +234,6 @@ TITLE_SETTINGS_BTN_RECT = TITLE_SETTINGS_BTN.get_rect(
 TITLE_QUIT_BTN_RECT = TITLE_QUIT_BTN.get_rect(
   topleft=TITLE_QUIT_BTN_ORIGIN
 )
-# Game rectangles
 GAME_SAVE_BTN_RECT = GAME_SAVE_BTN.get_rect(
   topleft=GAME_SAVE_BTN_ORIGIN
 )
@@ -250,40 +246,37 @@ GAME_LOG_BTN_RECT = GAME_LOG_BTN.get_rect(
 GAME_QUIT_BTN_RECT = GAME_QUIT_BTN.get_rect(
   topleft=GAME_QUIT_BTN_ORIGIN
 )
-# Setting rectangles
 SETTINGS_BGM_PLUS_BTN_RECT = SETTINGS_BGM_PLUS_BTN.get_rect(
-    topleft=SETTINGS_BGM_PLUS_BTN_ORIGIN
+  topleft=SETTINGS_BGM_PLUS_BTN_ORIGIN
 )
 SETTINGS_BGM_MINUS_BTN_RECT = SETTINGS_BGM_MINUS_BTN.get_rect(
-    topleft=SETTINGS_BGM_MINUS_BTN_ORIGIN
+  topleft=SETTINGS_BGM_MINUS_BTN_ORIGIN
 )
 SETTINGS_SFX_PLUS_BTN_RECT = SETTINGS_SFX_PLUS_BTN.get_rect(
-    topleft=SETTINGS_SFX_PLUS_BTN_ORIGIN
+  topleft=SETTINGS_SFX_PLUS_BTN_ORIGIN
 )
 SETTINGS_SFX_MINUS_BTN_RECT = SETTINGS_SFX_MINUS_BTN.get_rect(
-    topleft=SETTINGS_SFX_MINUS_BTN_ORIGIN
+  topleft=SETTINGS_SFX_MINUS_BTN_ORIGIN
 )
-# Save / Load rectangles
 SAVE_BTN_ONE_RECT = SAVE_BTN.get_rect(
-    topleft=SAVE_BTN_ONE_ORIGIN
+  topleft=SAVE_BTN_ONE_ORIGIN
 )
 SAVE_BTN_TWO_RECT = SAVE_BTN.get_rect(
-    topleft=SAVE_BTN_TWO_ORIGIN
+  topleft=SAVE_BTN_TWO_ORIGIN
 )
 SAVE_BTN_THREE_RECT = SAVE_BTN.get_rect(
-    topleft=SAVE_BTN_THREE_ORIGIN
+  topleft=SAVE_BTN_THREE_ORIGIN
 )
 LOAD_BTN_ONE_RECT = LOAD_BTN.get_rect(
-    topleft=LOAD_BTN_ONE_ORIGIN
+  topleft=LOAD_BTN_ONE_ORIGIN
 )
 LOAD_BTN_TWO_RECT = LOAD_BTN.get_rect(
-    topleft=LOAD_BTN_TWO_ORIGIN
+  topleft=LOAD_BTN_TWO_ORIGIN
 )
 LOAD_BTN_THREE_RECT = LOAD_BTN.get_rect(
-    topleft=LOAD_BTN_THREE_ORIGIN
+  topleft=LOAD_BTN_THREE_ORIGIN
 )
-
-# Functions
+# Render text of a given size to a given screen coordinate
 def renderBodyText(text, font_size, origin, aa, fg, bg=None):
   if font_size == "large":
     output = BODY_FONT_LARGE.render("{}".format(text), aa, fg, bg)
@@ -336,25 +329,21 @@ def drawDialogue(text, x, y, fg_colour):
   split_text = text.split()
 
   for word in split_text:
-    # Bold
     if inlineTextFormat(word):
       continue
 
-    # Colour
     if getColour(word):
       colour = getColour(word)
       continue
 
-    # Render word to surface for drawing
     word_to_draw = BODY_FONT_SMALL.render(
       "{} ".format(word), 
       True, 
       colour
     )
     word_width = word_to_draw.get_width()
-
+    # Dialogue goes to new line if word overlaps visible boundary
     if cur_x + word_width > TEXT_BODY_BOUNDS:
-      # Reset x back to start, increment counter
       cur_x = x
       counter += 1
 
@@ -362,7 +351,7 @@ def drawDialogue(text, x, y, fg_colour):
       word_to_draw, 
       (cur_x, y + (counter * TEXT_BODY_LINE_SPACING))
     )
-    # Where to place the next word
+    # Place next word after this word
     cur_x += word_width
 
 def drawSpeaker(name, x, y, fg_colour, bg_colour=None):
@@ -374,9 +363,8 @@ def drawSpeaker(name, x, y, fg_colour, bg_colour=None):
   )
   screen.blit(speaker_box, (x, y))
 
-# Returns an array containing two integers
-def getUserSettings():
-  # If settings file exists, get values
+def loadUserSettings():
+  # If settings file exists, load and return settings
   if path.exists(USER_SETTINGS):
     settings = []
 
@@ -391,12 +379,12 @@ def getUserSettings():
     saveUserSettings(DEFAULT_BGM_VOLUME, DEFAULT_SFX_VOLUME)
     return [DEFAULT_BGM_VOLUME, DEFAULT_SFX_VOLUME]
 
-# Write volume settings to settings file - accepts two integers
+# Write volume settings to settings file
 def saveUserSettings(bgm, sfx):  
   with open(USER_SETTINGS, "wt") as out_file:
     out_file.write("{}\n{}".format(bgm, sfx))
 
-# Set BGM / SFX volume - accepts two integers
+# Set BGM / SFX volume
 def setVolume(bgm, sfx):
   mixer.music.set_volume(bgm / 10)
   sound_btn_click.set_volume(sfx / 10)
@@ -418,7 +406,7 @@ def commonSaveLoadGUI():
   screen.blit(SAVE_LOAD_PANEL, SAVE_LOAD_PANEL_THREE_ORIGIN)
 
 # Retrieve save data from save files, return as a list
-def getSaveFileData(save_file):
+def loadSaveFileData(save_file):
   output = []
 
   if path.exists(save_file):
@@ -441,24 +429,24 @@ def getSaveFileData(save_file):
     return 0
 
 # Get the chapter and datetime info for each save file if they exist
-def getSaveFileDetails():
+def saveFileChapterDate():
   save_files = [SAVE_FILE_ONE, SAVE_FILE_TWO, SAVE_FILE_THREE]
   output = []
 
   for save in save_files:
-    if getSaveFileData(save):
-      data = getSaveFileData(save)
+    if loadSaveFileData(save):
+      data = loadSaveFileData(save)
       output.append([data[0], data[1]])
     else:
       output.append(False)
 
   return output
-
-def outputSaveFileDetails():
+# Output save file chapter and date to save/load screen
+def drawSaveFileChapterDate():
   save_details_start_y = 160
   save_details_y = save_details_start_y
   save_details_y_increment = 150
-  # Output save file details
+
   for elem in save_details:
     save_chapter = "NO FILE"
     save_datetime = ""
@@ -476,7 +464,7 @@ def outputSaveFileDetails():
     renderBodyText(save_datetime, "small",
       (90, save_details_y + 30), True, c.WHITE
     )
-    # Set y pos for next save panel
+    # Set vertical position for next save panel
     save_details_y += save_details_y_increment
 
 def displayDialogueBox():
@@ -503,21 +491,19 @@ def displayDialogueBox():
   screen.blit(DIALOGUE_BOX_BTN_YES, DIALOGUE_BOX_BTN_YES_ORIGIN)
   screen.blit(DIALOGUE_BOX_BTN_NO, DIALOGUE_BOX_BTN_NO_ORIGIN)
 
-# Game settings - get these from user_settings.txt
-volume = getUserSettings()
+volume = loadUserSettings()
 
 volume_bgm = volume[0]
 volume_sfx = volume[1]
-# Sounds and volume
+
 sound_btn_click = mixer.Sound(
   c.SFX_PATH + c.assets["BTN_CLICK_SFX"]
 )
 sound_btn_back = mixer.Sound(
   c.SFX_PATH + c.assets["BTN_BACK_SFX"]
 )
-
 setVolume(volume_bgm, volume_sfx)
-# Application state
+
 class State:
   TITLE = 0
   LOAD = 1
@@ -529,37 +515,29 @@ class State:
 
 current_state = State.TITLE
 current_background = TITLE_BACKGROUND
-# Just the filename of the current background
 current_bg_file = BLANK_BG_FILE
-# Current in-game BGM
 current_bgm = ""
-# Our current position in the script
+# Holds which line of the script we're on
 current_index = 0
-# The current sprites to be displayed on the game screen
 current_sprites = {}
-# Chapter number auto-increments per each CHAPTER script cmd
 current_chapter = {
   "number": 0,
   "title": "",
   "file": ""
 }
-# Current text and speaker to display
 current_text = {
   "speaker": "",
   "body": "",
   "speaker_colour": c.WHITE,
   "body_colour": c.WHITE
 }
-# The previous 100 TEXT lines
 scrollback_log = []
 scrollback_pos = 0
 # When going to the load screen, which state did we come from?
 state_before_load = State.TITLE
-# Get save file chapters and datetime if they exist
-save_details = getSaveFileDetails()
+save_details = saveFileChapterDate()
 ready_to_save = False
 ready_to_load = False
-# Do you want to exit game screen?
 quit_dialogue = False
 save_file = ""
 dialogue_ok = False
@@ -567,43 +545,33 @@ running = True
 title_bgm_playing = False
 display_text_box = 1
 display_game_ui = True
-# Credits bg image gallery index
+# Determines which credits slide to display
 slide_index = 0
-# Game loop
+
 while running:
-  # Draw black screen
   screen.fill(c.BLACK)
-  # Set BG image
   screen.blit(current_background, (0, 0))
-  ###################################################################
-  #
-  # TITLE SCREEN
-  #
-  ###################################################################
+
   if current_state == State.TITLE:
     slide_index = 0
 
     if current_background != TITLE_BACKGROUND:
       current_background = TITLE_BACKGROUND
 
-    # Set BG music - make sure it always plays on the title screen
     if not(title_bgm_playing):
       mixer.music.load(TITLE_BGM)
       mixer.music.play(-1)
       title_bgm_playing = True
 
-    # Draw buttons
     screen.blit(TITLE_START_BTN, TITLE_START_BTN_ORIGIN)
     screen.blit(TITLE_LOAD_BTN, TITLE_LOAD_BTN_ORIGIN)
     screen.blit(TITLE_SETTINGS_BTN, TITLE_SETTINGS_BTN_ORIGIN)
     screen.blit(TITLE_QUIT_BTN, TITLE_QUIT_BTN_ORIGIN)
 
     for event in pygame.event.get():
-      # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
         running = False
 
-      # Detect button clicks
       if (event.type == pygame.MOUSEBUTTONDOWN and 
         event.button == 1
         ):
@@ -613,7 +581,6 @@ while running:
           sound_btn_click.play()
           # Reset state for new game in case coming from loaded save
           current_bg_file = BLANK_BG_FILE
-          # Reset to prevent any stored text flashing up briefly
           current_text["speaker"] = ""
           current_text["body"] = ""
           current_text["speaker_colour"] = c.WHITE
@@ -627,10 +594,8 @@ while running:
           }
           scrollback_log = []
           scrollback_pos = 0
-
           mixer.music.stop()
           title_bgm_playing = False
-
           current_state = State.GAME
 
         if TITLE_LOAD_BTN_RECT.collidepoint(mouse_x, mouse_y):
@@ -647,13 +612,7 @@ while running:
         if TITLE_QUIT_BTN_RECT.collidepoint(mouse_x, mouse_y):
           running = False
 
-  ###################################################################
-  #
-  # LOAD SCREEN
-  #
-  ###################################################################
   elif current_state == State.LOAD:
-    # Output the heading
     renderBodyText(LOAD_HEADING_TEXT, "large",
       HEADING_ORIGIN, True, c.WHITE, c.BLACK
     )
@@ -663,7 +622,7 @@ while running:
     screen.blit(LOAD_BTN, LOAD_BTN_TWO_ORIGIN)
     screen.blit(LOAD_BTN, LOAD_BTN_THREE_ORIGIN)
 
-    outputSaveFileDetails()
+    drawSaveFileChapterDate()
 
     screen.blit(BACK_BTN, BACK_BTN_ORIGIN)
 
@@ -706,7 +665,6 @@ while running:
               )
               current_state = State.GAME
 
-          # Detect which button was clicked
           if LOAD_BTN_ONE_RECT.collidepoint(mouse_x, mouse_y):
             sound_btn_click.play()
             save_file = SAVE_FILE_ONE
@@ -723,7 +681,6 @@ while running:
             ready_to_load = True
 
         elif ready_to_load and not(dialogue_ok):
-          # Events checking for clicks on Yes or No
           if DIALOGUE_BOX_BTN_YES_RECT.collidepoint(mouse_x, mouse_y):
             sound_btn_click.play()
             dialogue_ok = True
@@ -733,9 +690,8 @@ while running:
             ready_to_load = False
 
     if ready_to_load and dialogue_ok:
-      if getSaveFileData(save_file):
-        save_data = getSaveFileData(save_file)
-        # Now load save data into state and return to game screen
+      if loadSaveFileData(save_file):
+        save_data = loadSaveFileData(save_file)
         current_chapter = save_data[1]
         current_sprites = save_data[2]
         current_text = save_data[3]
@@ -744,11 +700,10 @@ while running:
         current_bg_file = save_data[6]
         current_index = save_data[7]
         display_text_box = save_data[8]
-        # Reset script command completion
+        # Restore script command completion to loaded current_index
         for i in script:
           i[0] = 0
 
-        # Complete commands up till the current index
         cnt = 1
         for i in script:
           i[0] = 1
@@ -760,23 +715,15 @@ while running:
         current_background = pygame.image.load(
           c.BG_PATH + current_bg_file
         )
-        # Start playing music if a file is given
         if current_bgm != "":
           mixer.music.load(c.BGM_PATH + current_bgm)
           mixer.music.play(-1)
 
         dialogue_ok = False
         ready_to_load = False
-        # Back to game
         current_state = State.GAME
 
-  ###################################################################
-  #
-  # SAVE SCREEN
-  #
-  ###################################################################
   elif current_state == State.SAVE:
-    # Output the heading
     renderBodyText(SAVE_HEADING_TEXT, "large",
       HEADING_ORIGIN, True, c.WHITE, c.BLACK
     )
@@ -786,14 +733,12 @@ while running:
     screen.blit(SAVE_BTN, SAVE_BTN_TWO_ORIGIN)
     screen.blit(SAVE_BTN, SAVE_BTN_THREE_ORIGIN)
 
-    outputSaveFileDetails()
+    drawSaveFileChapterDate()
 
     screen.blit(BACK_BTN, BACK_BTN_ORIGIN)
-    # Show dialogue box
     if ready_to_save:
       displayDialogueBox()
 
-    # Only save if player gives the go-ahead
     if ready_to_save and dialogue_ok:
       now = datetime.now()
       dt = now.strftime("%Y %b %d - %H:%M:%S")
@@ -812,8 +757,8 @@ while running:
             display_text_box
         ]
       )
-      # Update stored save file details
-      save_details = getSaveFileDetails()
+      # Update stored save file chapter and date display
+      save_details = saveFileChapterDate()
       dialogue_ok = False
       ready_to_save = False
 
@@ -833,7 +778,6 @@ while running:
             )
             current_state = State.GAME
 
-      # Check for left clicks on save buttons and we aren't in save process
       if (event.type == pygame.MOUSEBUTTONDOWN and
         event.button == 1
         ):
@@ -844,7 +788,6 @@ while running:
             sound_btn_back.play()
             current_state = State.GAME
 
-          # Detect which button was clicked
           if SAVE_BTN_ONE_RECT.collidepoint(mouse_x, mouse_y):
             sound_btn_click.play()
             save_file = SAVE_FILE_ONE
@@ -862,7 +805,6 @@ while running:
 
         # Save process has started and waiting for player decision
         elif ready_to_save and not(dialogue_ok):
-          # Events checking for clicks on Yes or No
           if DIALOGUE_BOX_BTN_YES_RECT.collidepoint(mouse_x, mouse_y):
             sound_btn_click.play()
             dialogue_ok = True
@@ -871,15 +813,10 @@ while running:
             sound_btn_back.play()
             ready_to_save = False
 
-  ###################################################################
-  #
-  # GAME SCREEN
-  #
-  ###################################################################
   elif current_state == State.GAME:
     # If we're starting a new chapter, hide UI
     if display_game_ui:
-      # Loop through and blit current sprites
+      # Output sprites to game screen
       if len(current_sprites) > 0:
         for spr in current_sprites.values():
           sprite_to_draw = pygame.image.load(
@@ -889,15 +826,13 @@ while running:
           screen.blit(sprite_to_draw, (spr["x"], spr["y"]))
 
       if display_text_box != 0:
-        # Draw text box
         screen.blit(TEXT_BOX, TEXT_BOX_ORIGIN)
 
-      # Draw buttons
       screen.blit(GAME_SAVE_BTN, GAME_SAVE_BTN_ORIGIN)
       screen.blit(GAME_LOAD_BTN, GAME_LOAD_BTN_ORIGIN)
       screen.blit(GAME_LOG_BTN, GAME_LOG_BTN_ORIGIN)
       screen.blit(GAME_QUIT_BTN, GAME_QUIT_BTN_ORIGIN)
-      # Draw current text and speaker into the text box
+      
       if current_text["body"] != "":
         drawDialogue(
             current_text["body"],
@@ -918,16 +853,14 @@ while running:
     if quit_dialogue:
       displayDialogueBox()
 
-    ###################################################################
-    # Run through game script
-    ###################################################################
+    # Traverse through game script
     if script[current_index][0] == 0:
       # Set current instruction to complete to prevent repeat execution
       script[current_index][0] = 1
-      # Get the current command and payload object
+      # Get the current command and payload dictionary
       cmd = script[current_index][1]
       obj = script[current_index][-1]
-      # Carry out actions according to the script
+
       if cmd is c.SPRITE:
         current_sprites[obj["reference"]] = dict(
           file=obj["file"], 
@@ -946,22 +879,18 @@ while running:
         current_chapter["number"] = current_chapter["number"] + 1
         current_chapter["title"] = obj["title"]
         current_chapter["file"] = obj["file"]
-
         current_background = pygame.image.load(c.BG_PATH + obj["file"])
-        # Show chapter splash
         display_game_ui = False
 
       elif cmd is c.TEXT:
-        # Update the current text
         current_text = dict(
           speaker=obj["speaker"],
           body=obj["body"], 
           speaker_colour=obj["speaker_colour"],
           body_colour=obj["body_colour"]
         )
-        # Update scrollback log
         scrollback_log.insert(0, current_text)
-        # Prune scrollback log if stored text exceeds limit
+
         if len(scrollback_log) > SCROLLBACK_LIMIT:
           scrollback_log.pop(-1)
         
@@ -993,22 +922,20 @@ while running:
 
         current_state = State.CREDITS
 
-      # Do not advance if current index is TEXT
+      # Do not advance if TEXT or CHAPTER command
       if (not(script[current_index][1] is c.TEXT) and 
         not(script[current_index][1] is c.CHAPTER)
         ):
         if current_index + 1 < len(script):
           current_index += 1
 
-    # Now handle player input
     for event in pygame.event.get():
-      # Stop running if QUIT event detected
       if event.type == pygame.QUIT:
         running = False
 
       if not(quit_dialogue):
         if event.type == pygame.KEYDOWN:
-          # Let player advance to next line in script if current index is TEXT
+          # Let player advance to next line in script if TEXT or CHAPTER command
           if (event.key == pygame.K_SPACE and 
             (script[current_index][1] is c.TEXT or 
               script[current_index][1] is c.CHAPTER)
@@ -1051,10 +978,10 @@ while running:
           event.button == 1
           ):
           mouse_x, mouse_y = event.pos
-          # Events checking for clicks on Yes or No
+
           if DIALOGUE_BOX_BTN_YES_RECT.collidepoint(mouse_x, mouse_y):
             sound_btn_click.play()
-            # Reset script progress for now
+            # Reset script progress and return to title
             current_index = 0
 
             for i in script:
@@ -1067,24 +994,16 @@ while running:
             sound_btn_back.play()
             quit_dialogue = False
 
-  ###################################################################
-  #
-  # SETTINGS SCREEN
-  #
-  ###################################################################
   elif current_state == State.SETTINGS:
-    # Output the heading
     renderBodyText(SETTINGS_HEADING_TEXT, "large", 
       HEADING_ORIGIN, True, c.WHITE, c.BLACK
     )
-    # Output text for each setting
     renderBodyText(SETTINGS_BGM_TEXT, "medium", 
       SETTINGS_BGM_TEXT_ORIGIN, True, c.WHITE, c.BLACK
     )
     renderBodyText(SETTINGS_SFX_TEXT, "medium", 
       SETTINGS_SFX_TEXT_ORIGIN, True, c.WHITE, c.BLACK
     )
-    # Output plus / minus buttons
     screen.blit(SETTINGS_BGM_PLUS_BTN, SETTINGS_BGM_PLUS_BTN_ORIGIN)
     screen.blit(SETTINGS_BGM_MINUS_BTN, SETTINGS_BGM_MINUS_BTN_ORIGIN)
 
@@ -1097,7 +1016,6 @@ while running:
     renderBodyText(
       volume_sfx, "medium", (500, 300), True, c.WHITE, c.BLACK
     )
-    # Draw back button
     screen.blit(BACK_BTN, BACK_BTN_ORIGIN)
 
     for event in pygame.event.get():
@@ -1162,13 +1080,8 @@ while running:
         if event.key == pygame.K_ESCAPE:
           current_state = State.TITLE
 
-  ###################################################################
-  #
-  # CREDITS SCREEN
-  #
-  ###################################################################
   elif current_state == State.CREDITS:
-    # Display slide in the credits gallery list
+    # Display each slide in the credits gallery
     current_slide = pygame.image.load(
       c.BG_PATH + CREDITS_GALLERY[slide_index]
     )
@@ -1192,13 +1105,7 @@ while running:
           else:
             slide_index += 1
 
-  ###################################################################
-  #
-  # SCROLLBACK SCREEN
-  #
-  ###################################################################
   elif current_state == State.SCROLLBACK:
-    # Loop through and blit current sprites
     if len(current_sprites) > 0:
       for spr in current_sprites.values():
         sprite_to_draw = pygame.image.load(
@@ -1207,13 +1114,12 @@ while running:
 
         screen.blit(sprite_to_draw, (spr["x"], spr["y"]))
 
-    # Output translucent box over current background image
+    # Draw translucent box over current background image
     screen.blit(SCROLLBACK_BOX, (0, 0))
     # Current position to draw text
     start_x = 80
     cur_y = 20
 
-    # Iterate through the entire scrollback log
     for i in range(len(scrollback_log)):
       pos = i + scrollback_pos
       cur_x = start_x
@@ -1221,7 +1127,6 @@ while running:
       if cur_y + SCROLLBACK_LINE_SPACING > HEIGHT:
         break
 
-      # Output the speaker
       try:
         scrollback_speaker = BODY_FONT_SMALL.render(
           "{}".format(scrollback_log[pos]["speaker"]), 
@@ -1240,11 +1145,9 @@ while running:
         colour = scrollback_log[pos]["body_colour"]
 
         for j in range(len(current_line)):
-          # Bold
           if inlineTextFormat(current_line[j]):
             continue
 
-          # Colour
           if getColour(current_line[j]):
             colour = getColour(current_line[j])
             continue
@@ -1255,7 +1158,7 @@ while running:
             colour
           )
           word_width = word_to_draw.get_width()
-          # Reset x and move a line down if line will be too long
+
           if cur_x + word_width > TEXT_BODY_BOUNDS:
             cur_x = start_x
             cur_y += SCROLLBACK_LINE_SPACING
@@ -1263,6 +1166,7 @@ while running:
           screen.blit(word_to_draw, (cur_x, cur_y))
 
           cur_x += word_width
+
         cur_y += SCROLLBACK_LINE_SPACING
 
       except:
@@ -1281,6 +1185,7 @@ while running:
         if event.key == pygame.K_DOWN:
           if not(scrollback_pos >= len(scrollback_log)-1):
             scrollback_pos += 1
+
         if event.key == pygame.K_UP:
           if not(scrollback_pos <= 0):
             scrollback_pos -= 1
@@ -1290,6 +1195,7 @@ while running:
         if event.button == 4:
           if not(scrollback_pos <= 0):
             scrollback_pos -= 1
+
         if event.button == 5:
           if not(scrollback_pos >= len(scrollback_log)-1):
             scrollback_pos += 1
